@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//‰æ‘œ“Ç‚İ‚İ
-	int image = LoadGraph("image\\pic.png");
+	int image = LoadGraph("image\\Frisk.png");
 
 	//‰æ‘œ‚ÌˆÊ’uî•ñ
 	float x, y;
