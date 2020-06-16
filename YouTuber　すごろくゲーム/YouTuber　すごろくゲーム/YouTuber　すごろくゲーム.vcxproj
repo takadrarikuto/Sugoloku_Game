@@ -89,11 +89,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\GA3\source\repos\Sugoloku_Game\YouTuber　すごろくゲーム\YouTuber　すごろくゲーム\DXlib_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GA3\Desktop\GA3 高寺\ネットワークゲーム開発基礎\Sugoloku_Game\YouTuber　すごろくゲーム\YouTuber　すごろくゲーム\DXlib_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\GA3\source\repos\Sugoloku_Game\YouTuber　すごろくゲーム\YouTuber　すごろくゲーム\DXlib_VC用;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\GA3\Desktop\GA3 高寺\ネットワークゲーム開発基礎\Sugoloku_Game\YouTuber　すごろくゲーム\YouTuber　すごろくゲーム\DXlib_VC用;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
