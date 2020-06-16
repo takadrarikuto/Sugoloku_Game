@@ -129,8 +129,13 @@
   <ItemGroup>
     <ClCompile Include="Data.cpp" />
     <ClCompile Include="InputR.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="main2.cpp" />
+    <ClCompile Include="main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="main2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Sugoloku_Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h" />
