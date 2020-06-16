@@ -56,7 +56,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		}
 		
 		//İ’è‚µ‚½ˆÚ“®‹——£‚Ü‚Å‚ÉˆÚ“®
-		if (vx =! x)
+		if (vx != x)
 		{
 			x += 2.0f;
 		}
