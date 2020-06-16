@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	SetGraphMode(800, 600, 32); //windowサイズ640*480 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
-
+	
 	//初期化
 	if (DxLib_Init() == -1)return -1; //エラーが出たら終了
 
