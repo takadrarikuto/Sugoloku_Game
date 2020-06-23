@@ -101,15 +101,9 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 				vy_max = 2.0f;
 			}
 			Forward_flg = true;
-			/*vx = -64;*/
 		}
 		
 		//設定した移動距離までに移動
-		/*if (vx < 0)
-		{
-			x += 2.0f;
-			vx += 2.0f;
-		}*/
 		//左右
 		if (vx != x)
 		{
@@ -121,15 +115,18 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			y += vy_max;
 		}	
 		//設定した移動距離に到着すると停止(Enterを押しっぱなしによる連続移動を止める処理付き)
-		else if ((vx == x || vy == y) && CheckHitKey(KEY_INPUT_RETURN) == false)
+		if (CheckHitKey(KEY_INPUT_RETURN) == false)
 		{
+			//初期化 
+			if (vx == x)
+			{
+				vx_max = 0.0f;
+			}
+			else if (vy == y)
+			{
+				vy_max = 0.0f;
+			}
 			Forward_flg = false;
-			vx_max = 0.0f;
-			vy_max = 0.0f;
-		}
-		else {
-			anim_cnt = 0;
-			rect_x = 0;
 		}
 		
 		ClearDrawScreen(); //画像クリア
