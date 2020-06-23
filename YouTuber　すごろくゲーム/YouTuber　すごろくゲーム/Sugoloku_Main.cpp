@@ -28,13 +28,25 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	//画像の位置情報
 	float x, y;
+	//画像の移動距離情報
+	float vx, vy;
+	//画像の移動ベクトル最大値
+	float vx_max, vy_max;
 	//初期化 
 	x = 0.0f;
 	y = 536.0f;
-	//向きフラグ
-	bool LR_flg = 0;
-	//ジャンプフラグ
-	bool Ja_flg = 0;
+	vx = 0.0f;
+	vy = 0.0f;
+	vx_max = 0.0f;
+	vy_max = 0.0f;
+	//左右向きフラグ
+	bool LR_flg = 1;
+	//上下向きフラグ
+	bool UD_flg = 0;
+	//進行方向管理変数
+	int Direction_of_Travel_num = 0; //0:右 1:左 2:上 3:下
+	//前進フラグ
+	bool Forward_flg = false;
 
 	//アニメーション用カウント
 	int anim_cnt = 0;
@@ -43,44 +55,83 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-
+		//方向設定
 		//右
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
-			x += 2.0f;
-			if (x > 800 - 64) x = 800 - 64; //画面端の判定
-			anim_cnt += 8;
-			if (anim_cnt % 64 == 0)rect_x = 192 + anim_cnt;
-			if (anim_cnt == 128)anim_cnt = 0;
-			LR_flg = 0;
+			LR_flg = 1;
+			Direction_of_Travel_num = 0;
 		}
 		//左
 		else if (CheckHitKey(KEY_INPUT_LEFT)) {
-			x -= 2.0f;
-			if (x < 0)x = 0;  //画面端の判定
-			if (anim_cnt % 64 == 0)rect_x = 192 + anim_cnt;
-			anim_cnt += 8;
-			if (anim_cnt == 128)anim_cnt = 0;
-			LR_flg = 1;
+			LR_flg = 0;
+			Direction_of_Travel_num = 1;
+		}
+		//上
+		else if (CheckHitKey(KEY_INPUT_UP)) {
+			UD_flg = 1;
+			Direction_of_Travel_num = 2;
+		}
+		//下
+		else if (CheckHitKey(KEY_INPUT_DOWN)) {
+			UD_flg = 0;
+			Direction_of_Travel_num = 3;
+		}
+
+		//Enterで前進フラグをtrue、1P移動距離を設定
+		if (CheckHitKey(KEY_INPUT_RETURN) && Forward_flg == false)
+		{
+			if (Direction_of_Travel_num == 0)
+			{
+				vx = x + 64; //右
+				vx_max = 2.0f;
+			}
+			else if (Direction_of_Travel_num == 1)
+			{
+				vx = x - 64;//左
+				vx_max = -2.0f;
+			}
+			else if (Direction_of_Travel_num == 2)
+			{
+				vy = y - 64;//上
+				vy_max = -2.0f;
+			}
+			else if (Direction_of_Travel_num == 3)
+			{
+				vy = y + 64;//下
+				vy_max = 2.0f;
+			}
+			Forward_flg = true;
+			/*vx = -64;*/
+		}
+		
+		//設定した移動距離までに移動
+		/*if (vx < 0)
+		{
+			x += 2.0f;
+			vx += 2.0f;
+		}*/
+		//左右
+		if (vx != x)
+		{
+			x += vx_max;
+		}
+		//上下
+		else if (vy != y)
+		{
+			y += vy_max;
+		}	
+		//設定した移動距離に到着すると停止(Enterを押しっぱなしによる連続移動を止める処理付き)
+		else if ((vx == x || vy == y) && CheckHitKey(KEY_INPUT_RETURN) == false)
+		{
+			Forward_flg = false;
+			vx_max = 0.0f;
+			vy_max = 0.0f;
 		}
 		else {
 			anim_cnt = 0;
 			rect_x = 0;
-			Ja_flg = 0;
 		}
-		//ジャンプ
-		if (CheckHitKey(KEY_INPUT_UP)) {
-			if (Ja_flg == 0)y -= 4.0f;
-			if (y < 0)y = 0;
-			Ja_flg = 1;
-			rect_x = 390;
-		}
-
-		//自由落下処理
-		if (y < 600 - 64 && Ja_flg == 0) {
-			y += 4.0f;
-			rect_x = 390;
-		}
-
+		
 		ClearDrawScreen(); //画像クリア
 		//描画処理
 		DrawRectGraphF(
