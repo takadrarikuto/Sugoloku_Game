@@ -2,6 +2,27 @@
 #include "DxLib.h"
 #include "Header.h"
 
+#define MAP_SIZE	50 //マップチップ一つのドットサイズ
+#define MAP_WIDTH	16 //マップの幅
+#define MAP_HEIGHT	12 //マップの縦長さ
+
+// マップのデータ(16マス×12マス)(0 = 描画マス、1 = 壁)
+int MapData[MAP_HEIGHT][MAP_WIDTH] =
+{
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } ,
+	{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } ,
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 } ,
+	{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 } ,
+	{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 } ,
+	{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } ,
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } ,
+};
+
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
@@ -18,20 +39,20 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
 
 	//初期化
-	if (DxLib_Init() == -1)return -1; //エラーが出たら終了
+	if (DxLib_Init() == -1)return -1; //エラーが出たら終
 
-	//SetBackgroundColor(0, 255, 255);
+	SetBackgroundColor(0, 100, 0);
 	if (DxLib_Init() < 0) return -1;
 
 	//バックバッファを使う設定
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//LoadGraphScreen(0, 0, "背景テスト用.png", TRUE);
-
 	//画像読み込み
 	int image = LoadGraph("image\\Frisk.png");
 	int back_img1 = LoadGraph("image\\背景テスト用.png");
-	DrawGraph(0, 0, back_img1, TRUE);
+	int squares_img1 = LoadGraph("image\\マス.png");
+
+	int i, j;
 
 	//画像の位置情報
 	float x, y;
@@ -40,8 +61,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	//画像の移動ベクトル最大値
 	float vx_max, vy_max;
 	//初期化 
-	x = 0.0f;
-	y = 536.0f;
+	x = 50.0f;
+	y = 5.0f;
 	vx = 0.0f;
 	vy = 0.0f;
 	vx_max = 0.0f;
@@ -89,22 +110,22 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		{
 			if (Direction_of_Travel_num == 0)
 			{
-				vx = x + 64; //右
+				vx = x + 50; //右
 				vx_max = 2.0f;
 			}
 			else if (Direction_of_Travel_num == 1)
 			{
-				vx = x - 64;//左
+				vx = x - 50;//左
 				vx_max = -2.0f;
 			}
 			else if (Direction_of_Travel_num == 2)
 			{
-				vy = y - 64;//上
+				vy = y - 50;//上
 				vy_max = -2.0f;
 			}
 			else if (Direction_of_Travel_num == 3)
 			{
-				vy = y + 64;//下
+				vy = y + 50;//下
 				vy_max = 2.0f;
 			}
 			Forward_flg = true;
@@ -137,7 +158,45 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		}
 		
 		ClearDrawScreen(); //画像クリア
-		//描画処理
+
+		//マップを描く
+		for (i = 0; i < MAP_HEIGHT; i++)
+		{
+			for (j = 0; j < MAP_WIDTH; j++)
+			{
+				if (MapData[i][j] == 0)
+				{
+					DrawRectGraphF(
+						j * MAP_SIZE, i * MAP_SIZE,  //描画位置
+						0, 0, //切り取り開始位置
+						50, 50, //切り取るサイズ
+						squares_img1,  //切り取る元画像
+						FALSE //透過処理フラグ
+					);
+					/*DrawBox(j * MAP_SIZE, i * MAP_SIZE,
+						j * MAP_SIZE + MAP_SIZE, i * MAP_SIZE + MAP_SIZE,
+						GetColor(255, 255, 255), TRUE);*/
+				}
+			}
+		}
+
+		//unsigned int Cr;
+		//Cr = GetColor(255, 255, 255);//色の値を取得
+		//DrawBox(150, 20, 200, 70, Cr, TRUE);//四角形を描画
+		//DrawBox(205, 20, 255, 70, Cr, TRUE);
+		//DrawBox(260, 20, 310, 70, Cr, TRUE);
+
+		//描画処理(ここで画像の表示を行う)
+		//背景
+		//DrawRectGraphF(
+		//	0, 0,  //描画位置
+		//	0, 0, //切り取り開始位置
+		//	800, 600, //切り取るサイズ
+		//	back_img1,  //切り取る元画像
+		//	TRUE //透過処理フラグ
+		//	//LR_flg //反転処理フラグ
+		//);
+		//プレイヤー
 		DrawRectGraphF(
 			x, y,  //描画位置
 			rect_x, 0, //切り取り開始位置
@@ -146,6 +205,32 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			TRUE, //透過処理フラグ
 			LR_flg //反転処理フラグ
 		);
+
+		//UI部分背景
+		DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//四角形を描画
+		//文字を描画する
+		//登録者数
+		DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：1000人(仮)");
+		DrawFormatString(7, 29, GetColor(255, 255, 255), "2Pチャンネル登録者数：1000人(仮)");
+		//ゴールまでの歩数
+		DrawFormatString(300, 20, GetColor(255, 255, 255), "ゴールまで");
+		DrawFormatString(395, 7, GetColor(255, 255, 255), "1P：あと30歩");
+		DrawFormatString(395, 29, GetColor(255, 255, 255), "2P：あと30歩");
+		//現在順位
+		DrawFormatString(550, 20, GetColor(255, 255, 255), "現在順位");
+		DrawFormatString(625, 7, GetColor(255, 0, 0), "1位：1P");
+		DrawFormatString(625, 29, GetColor(255, 255, 255), "2位：2P");
+
+		int x_c1 = 55, y_c1 = 0;
+		//文字を描画する
+		//DrawFormatString(x_c1, y_c1, GetColor(255, 255, 0), "START");
+		int x_c2 = 505, y_c2 = 300;
+		//文字を描画する
+		DrawFormatString(x_c2, y_c2, GetColor(255, 0, 0), "GOAL！");
+
+		//x_c = x_c; // x座標を2加算
+		//y_c = y_c; // y座標を1加算
+
 
 		ScreenFlip(); //バックバッファと切り替え
 
