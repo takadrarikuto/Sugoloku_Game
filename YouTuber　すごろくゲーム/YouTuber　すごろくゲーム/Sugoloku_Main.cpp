@@ -13,18 +13,25 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	//windowの設定
 	ChangeWindowMode(TRUE); //windowモード
-	SetGraphMode(800, 600, 32); //windowサイズ640*480 32bit
+	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
 
 	//初期化
 	if (DxLib_Init() == -1)return -1; //エラーが出たら終了
 
+	//SetBackgroundColor(0, 255, 255);
+	if (DxLib_Init() < 0) return -1;
+
 	//バックバッファを使う設定
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	//LoadGraphScreen(0, 0, "背景テスト用.png", TRUE);
+
 	//画像読み込み
 	int image = LoadGraph("image\\Frisk.png");
+	int back_img1 = LoadGraph("image\\背景テスト用.png");
+	DrawGraph(0, 0, back_img1, TRUE);
 
 	//画像の位置情報
 	float x, y;
@@ -148,7 +155,6 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	}
 
 	DxLib_End(); //dxライブラリ終了処理
-
 
 	return 0;
 }
