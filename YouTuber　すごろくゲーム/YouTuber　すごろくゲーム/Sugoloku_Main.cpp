@@ -80,6 +80,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	int anim_cnt = 0;
 	//切り取り位置
 	int rect_x = 0;
+	int rect_y = 0;
 
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
@@ -199,7 +200,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		//プレイヤー
 		DrawRectGraphF(
 			x, y,  //描画位置
-			rect_x, 0, //切り取り開始位置
+			rect_x, rect_y, //切り取り開始位置
 			64, 64, //切り取るサイズ
 			image,  //切り取る元画像
 			TRUE, //透過処理フラグ
