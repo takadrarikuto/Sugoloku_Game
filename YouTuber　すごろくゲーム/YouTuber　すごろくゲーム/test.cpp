@@ -10,6 +10,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int back_img1 = LoadGraph("image\\背景テスト用.png");
 	DrawGraph(0, 0, back_img1, TRUE);
 
+
 	ScreenFlip();
 
 	WaitKey();
