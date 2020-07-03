@@ -76,7 +76,9 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	int i, j;
 	int Key;
-	int ScrollX, ScrollY;
+	//停止中は画面のスクロールは行わない
+	int ScrollX = 0;
+	int ScrollY = 0;
 
 	//プレイヤー
 	//画像の位置情報
