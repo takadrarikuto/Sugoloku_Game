@@ -137,133 +137,142 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		//ルーレット処理
-		//Enterでルーレット回転スタート
-		if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false)
-		{
-			if (Roulette == 0)
-			{
-				//ルーレット回転開始
-				Roulette_Rotation = true;
-				PlayerMove_num = 0; //初期化
-				Roulette = 1;
-			}
-			else if (Roulette == 1)
-			{
-				//ルーレット停止
-				PlayerMove_Flg = true; //主人公移動開始
-				Roulette_Rotation = false; //初期化
-				Roulette = 0; //初期化
-			}
-			Roulette_Enter_Bottan = true;
-		}
-		else if (CheckHitKey(KEY_INPUT_RETURN) == false)
-		{
-			Roulette_Enter_Bottan = false;
-		}
+		/*if (Move == 0)
+		{*/
 
-		//ルーレット回転処理
-		if (Roulette_Rotation == true)
-		{
-			//画像切り取り位置変更処理
-			if (Rou_rect_x < 400) {
-				Rou_rect_x += 200;
+			//ルーレット処理
+			//Enterでルーレット回転スタート
+			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false)
+			{
+				if (Roulette == 0)
+				{
+					//ルーレット回転開始
+					Roulette_Rotation = true;
+					PlayerMove_num = 0; //初期化
+					Roulette = 1;
+				}
+				else if (Roulette == 1)
+				{
+					//ルーレット停止
+					PlayerMove_Flg = true; //主人公移動開始
+					Roulette_Rotation = false; //初期化
+					Roulette = 0; //初期化
+				}
+				Roulette_Enter_Bottan = true;
 			}
-			else {
-				Rou_rect_x = 0; //初期化
-				if (Rou_rect_y < 200) {
-					Rou_rect_y = 200;
+			else if (CheckHitKey(KEY_INPUT_RETURN) == false)
+			{
+				Roulette_Enter_Bottan = false;
+			}
+
+			//ルーレット回転処理
+			if (Roulette_Rotation == true)
+			{
+				//画像切り取り位置変更処理
+				if (Rou_rect_x < 400) {
+					Rou_rect_x += 200;
 				}
 				else {
-					Rou_rect_y = 0; //初期化
+					Rou_rect_x = 0; //初期化
+					if (Rou_rect_y < 200) {
+						Rou_rect_y = 200;
+					}
+					else {
+						Rou_rect_y = 0; //初期化
+					}
 				}
 			}
-		}
 
-		//移動距離調整処理
-		if (Rou_rect_y < 200)
-		{
-			if (Rou_rect_x == 0) {
-				PlayerMove_num = 1;
+			//移動距離調整処理
+			if (Rou_rect_y < 200)
+			{
+				if (Rou_rect_x == 0) {
+					PlayerMove_num = 1;
+				}
+				else if (Rou_rect_x == 200) {
+					PlayerMove_num = 2;
+				}
+				else if (Rou_rect_x == 400) {
+					PlayerMove_num = 3;
+				}
 			}
-			else if (Rou_rect_x == 200) {
-				PlayerMove_num = 2;
+			else if (Rou_rect_y == 200)
+			{
+				if (Rou_rect_x == 0) {
+					PlayerMove_num = 4;
+				}
+				else if (Rou_rect_x == 200) {
+					PlayerMove_num = 5;
+				}
+				else if (Rou_rect_x == 400) {
+					PlayerMove_num = 6;
+				}
 			}
-			else if (Rou_rect_x == 400) {
-				PlayerMove_num = 3;
-			}
-		}
-		else if (Rou_rect_y == 200)
-		{
-			if (Rou_rect_x == 0) {
-				PlayerMove_num = 4;
-			}
-			else if (Rou_rect_x == 200) {
-				PlayerMove_num = 5;
-			}
-			else if (Rou_rect_x == 400) {
-				PlayerMove_num = 6;
-			}
-		}
 
-		//移動方向設定
-		//右
-		if (Direction_of_Travel_num == 0) {
-			LR_flg = 1;
-			Move = 1;
-			MoveX = 1;
-			MoveY = 0;
-		}
-		//左
-		else if (Direction_of_Travel_num == 1) {
-			LR_flg = 0;
-			Move = 1;
-			MoveX = -1;
-			MoveY = 0;
-		}
-		//上
-		else if (Direction_of_Travel_num == 2) {
-			UD_flg = 1;
-			Move = 1;
-			MoveX = 0;
-			MoveY = -1;
-		}
-		//下
-		else if (Direction_of_Travel_num == 3) {
-			UD_flg = 0;
-			Move = 1;
-			MoveX = 0;
-			MoveY = 1;
-		}
+			//移動方向設定
+			//右
+			if (Direction_of_Travel_num == 0) {
+				LR_flg = 1;
+				Move = 1;
+				MoveX = 1;
+				MoveY = 0;
+			}
+			//左
+			else if (Direction_of_Travel_num == 1) {
+				LR_flg = 0;
+				Move = 1;
+				MoveX = -1;
+				MoveY = 0;
+			}
+			//上
+			else if (Direction_of_Travel_num == 2) {
+				UD_flg = 1;
+				Move = 1;
+				MoveX = 0;
+				MoveY = -1;
+			}
+			//下
+			else if (Direction_of_Travel_num == 3) {
+				UD_flg = 0;
+				Move = 1;
+				MoveX = 0;
+				MoveY = 1;
+			}
 
-		//停止中は画面のスクロールは行わない
-		ScrollX = 0;
-		ScrollY = 0;
+			//停止中は画面のスクロールは行わない
+			ScrollX = 0;
+			ScrollY = 0;
 
-		//Enterで前進フラグをtrue、1P移動距離を設定
-		if (PlayerMove_Flg == true)
-		{
-			if (Direction_of_Travel_num == 0)
+			//Enterで前進フラグをtrue、1P移動距離を設定
+			if (PlayerMove_Flg == true)
 			{
-				vx = x + (64 * PlayerMove_num); //右
-				vx_max = 2.0f;
+				if (Direction_of_Travel_num == 0)
+				{
+					vx = x + (64 * PlayerMove_num); //右
+					vx_max = 2.0f;
+				}
+				else if (Direction_of_Travel_num == 1)
+				{
+					vx = x - (64 * PlayerMove_num);//左
+					vx_max = -2.0f;
+				}
+				else if (Direction_of_Travel_num == 2)
+				{
+					vy = y - (64 * PlayerMove_num);//上
+					vy_max = -2.0f;
+				}
+				else if (Direction_of_Travel_num == 3)
+				{
+					vy = y + (64 * PlayerMove_num);//下
+					vy_max = 2.0f;
+				}
 			}
-			else if (Direction_of_Travel_num == 1)
+
+			/*if (Move == 1)
 			{
-				vx = x - (64 * PlayerMove_num);//左
-				vx_max = -2.0f;
-			}
-			else if (Direction_of_Travel_num == 2)
-			{
-				vy = y - (64 * PlayerMove_num);//上
-				vy_max = -2.0f;
-			}
-			else if (Direction_of_Travel_num == 3)
-			{
-				vy = y + (64 * PlayerMove_num);//下
-				vy_max = 2.0f;
-			}
-		}
+				MoveCounter = 0;
+			}*/
+		//}
 
 		// 移動中の場合は移動処理を行う
 		if (Move == 1)
