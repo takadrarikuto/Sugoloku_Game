@@ -77,27 +77,6 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	int ScrollX = 0;
 	int ScrollY = 0;
 
-	//画像の位置情報
-	float x, y;
-	//画像の移動距離情報
-	float vx, vy;
-	//画像の移動ベクトル最大値
-	float vx_max, vy_max;
-	//初期化 
-	x = 350.0f;
-	y = 275.0f;
-	vx = 0.0f;
-	vy = 0.0f;
-	vx_max = 0.0f;
-	vy_max = 0.0f;
-	//左右向きフラグ
-	bool LR_flg = 1;
-	//上下向きフラグ
-	bool UD_flg = 0;
-	//進行方向管理変数
-	int Direction_of_Travel_num = 0; //0:右 1:左 2:上 3:下
-	//前進フラグ
-	bool Forward_flg = false;
 	//プレイヤー
 		//画像の位置情報
 		float x, y;
@@ -106,8 +85,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		//画像の移動ベクトル最大値
 		float vx_max, vy_max;
 		//初期化 
-		x = 0.0f;
-		y = 536.0f;
+		x = 350.0f;
+		y = 275.0f;
 		vx = 0.0f;
 		vy = 0.0f;
 		vx_max = 0.0f;
@@ -118,6 +97,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		bool UD_flg = 0;
 		//進行方向管理変数
 		int Direction_of_Travel_num = 0; //0:右 1:左 2:上 3:下
+		//前進フラグ
+		bool Forward_flg = false;
 
 		//アニメーション用カウント
 		int anim_cnt = 0;
