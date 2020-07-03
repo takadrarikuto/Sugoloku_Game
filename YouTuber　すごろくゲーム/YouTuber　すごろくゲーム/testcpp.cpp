@@ -2,10 +2,8 @@
 #include "DxLib.h"
 
 #define MAP_SIZE	64			// マップチップ一つのドットサイズ
-
 #define MAP_WIDTH	20			// マップの幅
 #define MAP_HEIGHT	16			// マップの縦長さ
-
 #define MOVE_FRAME	32			// 移動にかけるフレーム数
 
 // マップのデータ
@@ -32,13 +30,10 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 
 // プレイヤーの位置
 int PlayerX, PlayerY;
-
 // 移動しているかどうかのフラグ( 0:停止中  1:移動中 )
 int Move;
-
 // 各方向に移動する量
 int MoveX, MoveY;
-
 // 移動し始めてから何フレーム経過したかを保持する変数
 int MoveCounter;
 
@@ -89,6 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int Key;
 	int ScrollX, ScrollY;
 
+	ChangeWindowMode(TRUE); //windowモード
 	SetGraphMode(640, 480, 16);
 	if (DxLib_Init() == -1)	// ＤＸライブラリ初期化処理
 	{

@@ -71,7 +71,9 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	int i, j;
 	int Key;
-	int ScrollX, ScrollY;
+	//停止中は画面のスクロールは行わない
+	int ScrollX = 0;
+	int ScrollY = 0;
 
 	//画像の位置情報
 	float x, y;
@@ -106,33 +108,31 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		
-			//方向設定
-			//右
-			if (CheckHitKey(KEY_INPUT_RIGHT)) {
-				LR_flg = 1;
-				Direction_of_Travel_num = 0;
-			}
-			//左
-			else if (CheckHitKey(KEY_INPUT_LEFT)) {
-				LR_flg = 0;
-				Direction_of_Travel_num = 1;
-			}
-			//上
-			else if (CheckHitKey(KEY_INPUT_UP)) {
-				UD_flg = 1;
-				Direction_of_Travel_num = 2;
-			}
-			//下
-			else if (CheckHitKey(KEY_INPUT_DOWN)) {
-				UD_flg = 0;
-				Direction_of_Travel_num = 3;
-			}
+		//方向設定
+		//右
+		if (CheckHitKey(KEY_INPUT_RIGHT)) {
+			LR_flg = 1;
+			Direction_of_Travel_num = 0;
+		}
+		//左
+		else if (CheckHitKey(KEY_INPUT_LEFT)) {
+			LR_flg = 0;
+			Direction_of_Travel_num = 1;
+		}
+		//上
+		else if (CheckHitKey(KEY_INPUT_UP)) {
+			UD_flg = 1;
+			Direction_of_Travel_num = 2;
+		}
+		//下
+		else if (CheckHitKey(KEY_INPUT_DOWN)) {
+			UD_flg = 0;
+			Direction_of_Travel_num = 3;
+		}
 
-			// 移動中ではない場合キー入力を受け付ける
-			if (Move == 0)
-			{
-
+		// 移動中ではない場合キー入力を受け付ける
+		if (Move == 0)
+		{
 			//Enterで前進フラグをtrue、1P移動距離を設定
 			if (CheckHitKey(KEY_INPUT_RETURN) && Forward_flg == false)
 			{
@@ -141,39 +141,39 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 					//vx = x + 50; //右
 					//vx_max = 2.0f;
 					Move = 1;
-					MoveX = 1;
-					MoveY = 0;
+					MoveX = 1.0f;
+					MoveY = 0.0f;
 				}
 				else if (Direction_of_Travel_num == 1)
 				{
 					//vx = x - 50;//左
 					//vx_max = -2.0f;
 					Move = 1;
-					MoveX = -1;
-					MoveY = 0;
+					MoveX = -1.0f;
+					MoveY = 0.0f;
 				}
 				else if (Direction_of_Travel_num == 2)
 				{
 					//vy = y - 50;//上
 					//vy_max = -2.0f;
 					Move = 1;
-					MoveX = 0;
-					MoveY = -1;
+					MoveX = 0.0f;
+					MoveY = -1.0f;
 				}
 				else if (Direction_of_Travel_num == 3)
 				{
 					//vy = y + 50;//下
 					//vy_max = 2.0f;
 					Move = 1;
-					MoveX = 0;
-					MoveY = 1;
+					MoveX = 0.0f;
+					MoveY = 1.0f;
 				}
-				Forward_flg = true;
+				
+				if (Move == 1)
+				{
+					MoveCounter = 0;
+				}
 			}
-
-			//停止中は画面のスクロールは行わない
-			ScrollX = 0;
-			ScrollY = 0;
 		}
 
 		// 移動中の場合は移動処理を行う
@@ -195,14 +195,14 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			if (CheckHitKey(KEY_INPUT_RETURN) == false)
 			{
 				//初期化 
-				if (vx == x)
+				/*if (vx == x)
 				{
 					vx_max = 0.0f;
 				}
 				else if (vy == y)
 				{
 					vy_max = 0.0f;
-				}
+				}*/
 				Forward_flg = false;
 			}
 
@@ -210,18 +210,20 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			if (MoveCounter == MOVE_FRAME)
 			{
 				// プレイヤーの位置を変更する
-				x += MoveX;
-				y += MoveY;
+				//x += MoveX;
+				//y += MoveY;
 
 				// 停止中は画面のスクロールは行わない
-				//ScrollX = 0;
-				//ScrollY = 0;
+				/*ScrollX = 0;
+				ScrollY = 0;*/
 
 				Move = 0;
 			}
 			else
 			{
-				// 経過時間からスクロール量を算出する
+				/*ScrollX = 0;
+				ScrollY = 0;*/
+				//経過時間からスクロール量を算出する
 				ScrollX = -(MoveX * MAP_SIZE * MoveCounter / MOVE_FRAME);
 				ScrollY = -(MoveY * MAP_SIZE * MoveCounter / MOVE_FRAME);
 			}
