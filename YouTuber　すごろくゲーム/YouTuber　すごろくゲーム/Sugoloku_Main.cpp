@@ -126,6 +126,11 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	int Rou_rect_x = 0;
 	int Rou_rect_y = 0;
 
+	//ルーレット画像表示停止フラグ
+	bool RouDraw_flg = false;	
+	//ルーレット画像表示停止タイム
+	int RouDraw_time = 0;
+
 	//共有
 	//主人公移動開始フラグ
 	bool PlayerMove_Flg = false;
@@ -146,20 +151,32 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 				//ルーレット回転開始
 				Roulette_Rotation = true;
 				PlayerMove_num = 0; //初期化
-				Roulette = 1;
+				Roulette = 1;		
+				RouDraw_flg = false;
 			}
 			else if (Roulette == 1)
 			{
-				//ルーレット停止
-				PlayerMove_Flg = true; //主人公移動開始
-				Roulette_Rotation = false; //初期化
-				Roulette = 0; //初期化
+				//ルーレット停止		
+				if (RouDraw_time < 60)
+					RouDraw_time++;
+				else if (RouDraw_time >= 60)
+					Roulette = 2; //初期化
+				Roulette_Rotation = false; //初期化							
 			}
+			
 			Roulette_Enter_Bottan = true;
 		}
 		else if (CheckHitKey(KEY_INPUT_RETURN) == false)
 		{
 			Roulette_Enter_Bottan = false;
+		}
+
+		//ルーレット画像表示停止タイム更新
+		if (Roulette == 2)
+		{
+			PlayerMove_Flg = true; //主人公移動開始	
+			RouDraw_flg = true;
+			Roulette = 0; //初期化
 		}
 
 		//ルーレット回転処理
@@ -268,7 +285,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		// 移動中の場合は移動処理を行う
 		if (Move == 1)
 		{
-			MoveCounter++;
+			MoveCounter++;			
 			//設定した移動距離までに移動
 			//左右
 			if (vx != x)
@@ -278,7 +295,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			//上下
 			else if (vy != y)
 			{
-				y += vy_max;
+				y += vy_max;				
 			}
 			//設定した移動距離に到着すると停止(Enterを押しっぱなしによる連続移動を止める処理付き)
 			if (PlayerMove_Flg == true)
@@ -292,7 +309,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 				{
 					vy_max = 0.0f;
 				}
-				PlayerMove_Flg = false;
+				//初期化
+				PlayerMove_Flg = false;				
 				Direction_of_Travel_num = 0;
 			}
 
@@ -366,15 +384,18 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			LR_flg //反転処理フラグ
 		);
 
-		//ルーレット描画処理
-		DrawRectGraphF(
-			Rou_x, Rou_y,  //描画位置
-			Rou_rect_x, Rou_rect_y, //切り取り開始位置
-			RECR_MAX, RECR_MAX, //切り取るサイズ
-			Rou_image,  //切り取る元画像
-			TRUE, //透過処理フラグ
-			Rou_LR_flg //反転処理フラグ
-		);
+		if (RouDraw_flg == false)
+		{
+			//ルーレット描画処理
+			DrawRectGraphF(
+				Rou_x, Rou_y,  //描画位置
+				Rou_rect_x, Rou_rect_y, //切り取り開始位置
+				RECR_MAX, RECR_MAX, //切り取るサイズ
+				Rou_image,  //切り取る元画像
+				TRUE, //透過処理フラグ
+				Rou_LR_flg //反転処理フラグ
+			);
+		}		
 
 		//UI部分背景
 		DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//四角形を描画
