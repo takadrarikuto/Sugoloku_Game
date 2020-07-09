@@ -130,8 +130,13 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	//切り取り位置
 	int Rou_rect_x = 0;
 	int Rou_rect_y = 0;
-	//--------------------------------------------
-	//共有----------------------------------------
+
+	//ルーレット画像表示停止フラグ
+	bool RouDraw_flg = false;	
+	//ルーレット画像表示停止タイム
+	int RouDraw_time = 0;
+
+	//共有
 	//主人公移動開始フラグ
 	bool PlayerMove_Flg = false;
 	//主人公移動回数
@@ -304,7 +309,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		// 移動中の場合は移動処理を行う
 		if (Move == 1)
 		{
-			MoveCounter++;
+			MoveCounter++;			
 			//設定した移動距離までに移動
 			//左右
 			//if (vx != x)
@@ -327,9 +332,10 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 				else if (vy == y)
 				{
 					vy_max = 0.0f;
-				}*/
-				PlayerMove_Flg = false;
-				//Forward_flg = false;
+				}
+				//初期化
+				PlayerMove_Flg = false;				
+				Direction_of_Travel_num = 0;
 			}
 
 			// 移動処理が終了したら停止中にする
@@ -463,16 +469,19 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			TRUE, //透過処理フラグ
 			LR_flg //反転処理フラグ
 		);
-		//ルーレット
-		/*DrawRectGraphF(
-			Rou_x, Rou_y,  //描画位置
-			Rou_rect_x, Rou_rect_y, //切り取り開始位置
-			RECR_MAX, RECR_MAX, //切り取るサイズ
-			Rou_image,  //切り取る元画像
-			TRUE, //透過処理フラグ
-			Rou_LR_flg //反転処理フラグ
-		);*/
-		//-----------------------------------------------------------------------
+
+		if (RouDraw_flg == false)
+		{
+			//ルーレット描画処理
+			DrawRectGraphF(
+				Rou_x, Rou_y,  //描画位置
+				Rou_rect_x, Rou_rect_y, //切り取り開始位置
+				RECR_MAX, RECR_MAX, //切り取るサイズ
+				Rou_image,  //切り取る元画像
+				TRUE, //透過処理フラグ
+				Rou_LR_flg //反転処理フラグ
+			);
+		}		
 
 		//UI部分背景
 		DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//四角形を描画
