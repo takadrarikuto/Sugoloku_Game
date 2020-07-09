@@ -25,37 +25,31 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//画像読み込み
-	int image = LoadGraph("image\\スロット.png");
+	int Rou_image = LoadGraph("image\\スロット.png");
 
 	//画像の位置情報
-	float x, y;
-	//切り取り位置変更
-	int vx, vy;
+	float Rou_x, Rou_y;
 	//初期化 
-	x = 300.0f;
-	y = 200.0f;
-	vx = 0;
-	vy = 0;
+	Rou_x = 300.0f;
+	Rou_y = 200.0f;
 	//左右向きフラグ
-	bool LR_flg = 0;
-	//ボタン確認
-	bool Enter_Bottan = false;
+	bool Rou_LR_flg = 0;
+	//ボタン確認(ルーレット用)
+	bool Roulette_Enter_Bottan = false;
 	//ルーレット回転
 	bool Roulette_Rotation = false;
 	//ルーレット進展
 	int Roulette = 0;
 
-	//アニメーション用カウント
-	int anim_cnt = 0;
 	//切り取り位置
-	int rect_x = 0;
-	int rect_y = 0;
+	int Rou_rect_x = 0;
+	int Rou_rect_y = 0;
 
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		//ルーレット処理
 		//Enterでルーレット回転スタート
-		if (CheckHitKey(KEY_INPUT_RETURN) == true && Enter_Bottan == false)
+		if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false)
 		{			
 			if (Roulette == 0)
 			{			
@@ -69,26 +63,26 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 				Roulette_Rotation = false;
 				Roulette = 0;				
 			}				
-			Enter_Bottan = true;
+			Roulette_Enter_Bottan = true;
 		}
 		else if (CheckHitKey(KEY_INPUT_RETURN) == false)
 		{
-			Enter_Bottan = false;
+			Roulette_Enter_Bottan = false;
 		}
 
 		//ルーレット回転処理
 		if (Roulette_Rotation == true)
 		{			
-			if (rect_x < 400) {
-				rect_x += 200;
+			if (Rou_rect_x < 400) {
+				Rou_rect_x += 200;
 			}
 			else {
-				rect_x = 0; //初期化
-				if (rect_y < 200) {
-					rect_y = 200;
+				Rou_rect_x = 0; //初期化
+				if (Rou_rect_y < 200) {
+					Rou_rect_y = 200;
 				}
 				else {
-					rect_y = 0; //初期化
+					Rou_rect_y = 0; //初期化
 				}
 			}
 		}
@@ -96,12 +90,12 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		ClearDrawScreen(); //画像クリア
 		//描画処理
 		DrawRectGraphF(
-			x, y,  //描画位置
-			rect_x, rect_y, //切り取り開始位置
+			Rou_x, Rou_y,  //描画位置
+			Rou_rect_x, Rou_rect_y, //切り取り開始位置
 			RECR_MAX, RECR_MAX, //切り取るサイズ
-			image,  //切り取る元画像
+			Rou_image,  //切り取る元画像
 			TRUE, //透過処理フラグ
-			LR_flg //反転処理フラグ
+			Rou_LR_flg //反転処理フラグ
 		);
 
 		ScreenFlip(); //バックバッファと切り替え
