@@ -201,6 +201,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	int Key,i;
 	int ScrollX, ScrollY;
+	int time;
 
 	//初期化
 	if (DxLib_Init() == -1)	//DXライブラリ初期化処理
@@ -289,6 +290,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
 			LR_flg = 1;
 			Direction_of_Travel_num = 0;
+			time = 0;
+			time++;
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：右");
 		}
 		//左
