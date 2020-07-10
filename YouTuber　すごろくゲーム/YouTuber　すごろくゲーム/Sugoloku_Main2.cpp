@@ -27,7 +27,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
@@ -57,6 +57,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	int squares_img1 = LoadGraph("image\\マス.png");
 	int squares_img2 = LoadGraph("image\\青マス.png");
 	int squares_img3 = LoadGraph("image\\緑マス.png");
+	int squares_img4 = LoadGraph("image\\分岐.png");
 
 	//描画するマップチップの数をセット
 	DrawMapChipNumX = 800 / MAP_SIZE + 2;
@@ -134,6 +135,17 @@ void GraphDraw(int ScrollX, int ScrollY)
 					0, 0, //切り取り開始位置
 					50, 50, //切り取るサイズ
 					squares_img3,  //切り取る元画像
+					FALSE //透過処理フラグ
+				);
+			}
+			//マップに6があれば「分岐」描画
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 6)
+			{
+				DrawRectGraphF(
+					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+					0, 0, //切り取り開始位置
+					60, 60, //切り取るサイズ
+					squares_img4,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
 			}
