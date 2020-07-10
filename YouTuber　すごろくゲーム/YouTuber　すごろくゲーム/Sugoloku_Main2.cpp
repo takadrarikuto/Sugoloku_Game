@@ -66,6 +66,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int squares_img1 = LoadGraph("image\\マス.png");
 	static int squares_img2 = LoadGraph("image\\青マス.png");
 	static int squares_img3 = LoadGraph("image\\緑マス.png");
+	static int Branch = LoadGraph("image\\分岐.png");
 
 	//マップを描く
 	for (i = -1; i < DrawMapChipNumY; i++)
@@ -145,7 +146,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
 					60, 60, //切り取るサイズ
-					squares_img4,  //切り取る元画像
+					Branch,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
 			}
