@@ -9,29 +9,30 @@
 
 #define RECR_MAX 200 //ルーレット切り取り数
 
-//マップのデータ(16マス×12マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール)
+//マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール)(125マス)
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 } ,
-	{ 0, 1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    1, 1, 1, 1, 1, 4, 1, 1, 1, 0 } ,
+	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    4, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 4,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 1, 1, 1, 4, 1,    1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 1, 1, 1, 4, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
 
 //プレイヤーの位置
@@ -42,6 +43,8 @@ int Move;
 int MoveX, MoveY;
 //移動し始めてから何フレーム経過したかを保持する変数
 int MoveCounter;
+//マス目カウント用(試作)
+int squares_cnt1 = 125;
 
 //マップとプレイヤーの描画関数
 void GraphDraw(int ScrollX, int ScrollY)
@@ -167,19 +170,24 @@ void GraphDraw(int ScrollX, int ScrollY)
 
 	//-----------------------------------------------------------------------
 	//UI部分背景
-	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//四角形を描画
+	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//描画
 	//文字を描画する-------------------------------------------------------------------
 	//登録者数
 	DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：1000人");
 	DrawFormatString(7, 29, GetColor(255, 255, 255), "2Pチャンネル登録者数：1000人");
 	//ゴールまでの歩数
-	DrawFormatString(300, 20, GetColor(255, 255, 255), "ゴールまで");
-	DrawFormatString(395, 7, GetColor(255, 255, 255), "1P：あと30歩");
-	DrawFormatString(395, 29, GetColor(255, 255, 255), "2P：あと30歩");
+	DrawFormatString(270, 20, GetColor(255, 255, 255), "ゴールまで");
+	DrawFormatString(365, 7, GetColor(255, 255, 255), "1P：あと%d歩", squares_cnt1);
+	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと30歩");
 	//現在順位
-	DrawFormatString(550, 20, GetColor(255, 255, 255), "現在順位");
-	DrawFormatString(625, 7, GetColor(255, 0, 0), "1位：1P");
-	DrawFormatString(625, 29, GetColor(255, 255, 255), "2位：2P");
+	DrawFormatString(500, 20, GetColor(255, 255, 255), "現在順位");
+	DrawFormatString(575, 7, GetColor(255, 0, 0), "1位：1P");
+	DrawFormatString(575, 29, GetColor(255, 255, 255), "2位：2P");
+	//順番
+	DrawFormatString(665, 20, GetColor(255, 255, 255), "ターン");
+	DrawFormatString(750, 7, GetColor(255, 255, 255), "1P");
+	DrawFormatString(750, 29, GetColor(255, 255, 255), "2P");
+	DrawFormatString(725, 7, GetColor(255, 255, 255), "◆");
 	//---------------------------------------------------------------------------------
 }
 
@@ -201,7 +209,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	int Key,i;
 	int ScrollX, ScrollY;
-	int time;
 
 	//初期化
 	if (DxLib_Init() == -1)	//DXライブラリ初期化処理
@@ -290,27 +297,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
 			LR_flg = 1;
 			Direction_of_Travel_num = 0;
-			time = 0;
-			time++;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：右");
 		}
 		//左
 		else if (CheckHitKey(KEY_INPUT_LEFT)) {
 			LR_flg = 0;
 			Direction_of_Travel_num = 1;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：左");
 		}
 		//上
 		else if (CheckHitKey(KEY_INPUT_UP)) {
 			UD_flg = 1;
 			Direction_of_Travel_num = 2;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：上");
 		}
 		//下
 		else if (CheckHitKey(KEY_INPUT_DOWN)) {
 			UD_flg = 0;
 			Direction_of_Travel_num = 3;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：下");
+		}
+
+		//向き文字表示
+		if (Direction_of_Travel_num == 0)
+		{
+			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：右");
+		}
+		else if (Direction_of_Travel_num == 1)
+		{
+			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：左");
+		}
+		else if (Direction_of_Travel_num == 2)
+		{
+			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：上");
+		}
+		else if (Direction_of_Travel_num == 3)
+		{
+			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：下");
 		}
 
 		//移動中ではない場合キー入力を受け付ける
@@ -385,10 +404,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//----------------------------------------------------------------------------------
 
 			//キー入力を得る
-			//Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+			Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 			//キー入力に応じてプレイヤーの座標を移動
-			/*if (Key & PAD_INPUT_LEFT)
+			if (Key & PAD_INPUT_LEFT)
 			{
 				Move = 1;
 				MoveX = -1;
@@ -411,7 +430,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Move = 1;
 				MoveX = 0;
 				MoveY = 1;
-			}*/
+			}
 
 			if (PlayerMove_Flg == true)
 			{
