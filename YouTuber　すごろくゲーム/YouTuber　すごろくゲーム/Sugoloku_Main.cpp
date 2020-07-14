@@ -29,7 +29,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
@@ -77,6 +77,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	int squares_img1 = LoadGraph("image\\マス.png");
 	int squares_img2 = LoadGraph("image\\青マス.png");
 	int squares_img3 = LoadGraph("image\\緑マス.png");
+	int Branch = LoadGraph("image\\分岐.png");
 
 	int i, j;
 	int Key;
@@ -424,7 +425,17 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 						FALSE //透過処理フラグ
 					);
 				}
-
+				//マップに6があれば「分岐」描画
+				if (MapData[i][j] == 6)
+				{
+					DrawRectGraphF(
+						j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+						0, 0, //切り取り開始位置
+						50, 50, //切り取るサイズ
+						Branch,  //切り取る元画像
+						FALSE //透過処理フラグ
+					);
+				}
 				//進入不可能なマップだった場合は移動できない
 				if (MapData[i][j] == 0)
 				{
