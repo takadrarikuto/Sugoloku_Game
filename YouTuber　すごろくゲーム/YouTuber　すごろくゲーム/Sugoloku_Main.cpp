@@ -132,8 +132,6 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	//ルーレット画像表示停止フラグ
 	bool RouDraw_flg = false;	
-	//ルーレット画像表示停止タイム
-	int RouDraw_time = 0;
 	//--------------------------------------------
 	//共有
 	//主人公移動開始フラグ
@@ -190,34 +188,33 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			//Enterでルーレット回転スタート
 			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false){
 				if (Roulette == 0){
-					//ルーレット回転開始
-					Roulette_Rotation = true;
-					PlayerMove_num = 0; //初期化
-					Roulette = 1;	
+					
+					Roulette = 1;
+					PlayerMove_num = 0; //初期化						
+					RouDraw_flg = false; //初期化
 				}
 				else if (Roulette == 1){
+					//ルーレット回転開始
+					Roulette_Rotation = true;
+					
+					Roulette = 2;
+				}
+				else if (Roulette == 2) {
 					//ルーレット停止	
-					Roulette_Rotation = false; //初期化	
-					RouDraw_flg = true; //ルーレット画像表示停止					
+					Roulette_Rotation = false; //初期化					
+					Roulette = 3;
+				}
+				else if (Roulette == 3)
+				{
+					PlayerMove_Flg = true; //主人公移動開始
+					RouDraw_flg = true; //ルーレット画像表示停止
+					//初期化					
+					Roulette = 0;
 				}
 				Roulette_Enter_Bottan = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_RETURN) == false)
 				Roulette_Enter_Bottan = false;
-			
-			//ルーレット画像表示停止タイム更新	
-			if (RouDraw_flg == true)
-				for (; RouDraw_time < ROU_DRAW_TIME;) {
-					RouDraw_time++;
-				}
-			if (RouDraw_time >= ROU_DRAW_TIME) {
-				PlayerMove_Flg = true; //主人公移動開始
-				RouDraw_time = 0;//ルーレット画像再表示
-				//初期化
-				RouDraw_flg = false;
-				Roulette = 0;
-				RouDraw_time = 0;
-			}												
 			
 			//ルーレット回転処理
 			if (Roulette_Rotation == true){
@@ -471,7 +468,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			LR_flg //反転処理フラグ
 		);
 
-		if (RouDraw_time == 0) {
+		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
 				Rou_x, Rou_y,  //描画位置
