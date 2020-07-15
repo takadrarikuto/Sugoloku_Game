@@ -336,25 +336,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
 			P1_LR_flg = 1;
 			P1_Direction_of_Travel_num = 0;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：右");
 		}
 		//左
 		else if (CheckHitKey(KEY_INPUT_LEFT)) {
 			P1_LR_flg = 0;
 			P1_Direction_of_Travel_num = 1;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：左");
 		}
 		//上
 		else if (CheckHitKey(KEY_INPUT_UP)) {
 			P1_UD_flg = 1;
 			P1_Direction_of_Travel_num = 2;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：上");
 		}
 		//下
 		else if (CheckHitKey(KEY_INPUT_DOWN)) {
 			P1_UD_flg = 0;
 			P1_Direction_of_Travel_num = 3;
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：下");
 		}
 
 		//向き文字表示
