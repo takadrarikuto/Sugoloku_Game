@@ -34,6 +34,31 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 0, 0, 1, 1, 1, 4, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
+//主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス)(125マス)
+int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
+{
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{ 0, 2, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 1, 1, 0 } ,
+	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 5,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
+	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+};
 
 //プレイヤーの位置
 int PlayerX, PlayerY;
@@ -153,16 +178,28 @@ void GraphDraw(int ScrollX, int ScrollY)
 					FALSE //透過処理フラグ
 				);
 			}
+
+			//主人公用マップに2があれば「主人公」描画
+			if (MapData_P[i + MapDrawPointY][j + MapDrawPointX] == 2)
+			{
+				DrawRectGraphF(
+					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+					0, 0, //切り取り開始位置
+					MAP_SIZE, MAP_SIZE, //切り取るサイズ
+					image,  //切り取る元画像
+					TRUE //透過処理フラグ
+				);
+			}
 		}
 	}
 	//プレイヤーの描画
-	DrawRectGraphF(
+	/*DrawRectGraphF(
 		400, 300 ,  //描画位置
 		0, 0, //切り取り開始位置
 		MAP_SIZE, MAP_SIZE, //切り取るサイズ
 		image,  //切り取る元画像
 		TRUE //透過処理フラグ
-	);
+	);*/
 
 	/*DrawBox((PlayerX - MapDrawPointX) * MAP_SIZE, (PlayerY - MapDrawPointY) * MAP_SIZE,
 		(PlayerX - MapDrawPointX + 1) * MAP_SIZE, (PlayerY - MapDrawPointY + 1) * MAP_SIZE,
@@ -201,6 +238,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//送受信データ処理用
 	char StrBuf[256] = { "NULL" };
 
+	SetOutApplicationLogValidFlag(FALSE); //Log.txtを生成しないように設定
 	ChangeWindowMode(TRUE); //windowモード
 	SetGraphMode(800, 600, 16); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
@@ -209,6 +247,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	int Key,i;
 	int ScrollX, ScrollY;
+	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
+	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
 
 	//初期化
 	if (DxLib_Init() == -1)	//DXライブラリ初期化処理
@@ -467,6 +507,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						Move = 1;
 						MoveX = 0.0f;
 						MoveY = 1.0f;
+						
 					}
 
 					if (Move == 1)
@@ -479,7 +520,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//進入不可能なマップだった場合は移動できない
 			if (Move == 1)
 			{
-				if (MapData[PlayerY + MoveY][PlayerX + MoveX] == 0)
+				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
 				{
 					Move = 0;
 				}
@@ -487,6 +528,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				{
 					MoveCounter = 0;
 				}
+				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
+				{
+					MapData_P[2 + MapDrawPointY][2 + MapDrawPointX];
+				}*/
 			}
 
 			//停止中は画面のスクロールは行わない

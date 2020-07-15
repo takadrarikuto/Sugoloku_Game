@@ -53,6 +53,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	//windowの設定
 	ChangeWindowMode(TRUE); //windowモード
 	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
+	SetOutApplicationLogValidFlag(FALSE); //Log.txtを生成しないように設定
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
 
