@@ -336,8 +336,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
 			P1_LR_flg = 1;
 			P1_Direction_of_Travel_num = 0;
-			time = 0;
-			time++;
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：右");
 		}
 		//左
@@ -357,24 +355,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			P1_UD_flg = 0;
 			P1_Direction_of_Travel_num = 3;
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向：下");
-			UD_flg = 0;
-			Direction_of_Travel_num = 3;
 		}
 
 		//向き文字表示
-		if (Direction_of_Travel_num == 0)
+		if (P1_Direction_of_Travel_num == 0)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：右");
 		}
-		else if (Direction_of_Travel_num == 1)
+		else if (P1_Direction_of_Travel_num == 1)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：左");
 		}
-		else if (Direction_of_Travel_num == 2)
+		else if (P1_Direction_of_Travel_num == 2)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：上");
 		}
-		else if (Direction_of_Travel_num == 3)
+		else if (P1_Direction_of_Travel_num == 3)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：下");
 		}
@@ -479,7 +475,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Move = 1;
 				MoveX = 0;
 				MoveY = 1;
-			}*/
+			}
 			//プレイヤー前進フラグをtrue、1P移動距離を設定
 			if (P1_PlayerMove_Flg == true){
 				for (i = 0; i < P1_PlayerMove_num; i++){
