@@ -18,7 +18,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 7, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
 	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -70,6 +70,8 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int squares_img2 = LoadGraph("image\\青マス.png");
 	static int squares_img3 = LoadGraph("image\\緑マス.png");
 	static int Branch = LoadGraph("image\\分岐.png");
+	static int Double = LoadGraph("image\\２倍マス.png");
+
 
 	//マップを描く
 	for (i = -1; i < DrawMapChipNumY; i++)
@@ -153,6 +155,18 @@ void GraphDraw(int ScrollX, int ScrollY)
 					FALSE //透過処理フラグ
 				);
 			}
+			//マップに7があれば「2倍マス」描画
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 7)
+			{
+				DrawRectGraphF(
+					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+					0, 0, //切り取り開始位置
+					50, 50, //切り取るサイズ
+					Double,  //切り取る元画像
+					FALSE //透過処理フラグ
+				);
+			}
+
 		}
 	}
 	//プレイヤーの描画
