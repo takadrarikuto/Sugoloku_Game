@@ -14,7 +14,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    1, 1, 1, 1, 1, 4, 1, 1, 1, 0 } ,
-	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
@@ -96,6 +96,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int squares_img3 = LoadGraph("image\\緑マス.png");
 	static int Branch = LoadGraph("image\\分岐.png");
 	static int Double = LoadGraph("image\\２倍マス.png");
+	static int event = LoadGraph("image\\イベントマス.png");
 
 
 	//マップを描く
@@ -183,7 +184,17 @@ void GraphDraw(int ScrollX, int ScrollY)
 					FALSE //透過処理フラグ
 				);
 			}
-
+			//マップに8があれば「イベントマス」描画
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 8)
+			{
+				DrawRectGraphF(
+					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+					0, 0, //切り取り開始位置
+					50, 50, //切り取るサイズ
+					event,  //切り取る元画像
+					FALSE //透過処理フラグ
+				);
+			}
 
 			//主人公用マップに2があれば「主人公」描画
 			if (MapData_P[i + MapDrawPointY][j + MapDrawPointX] == 2)
