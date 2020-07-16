@@ -5,10 +5,9 @@
 #define MAP_SIZE	50 //マップチップ一つのドットサイズ
 #define MAP_WIDTH	20 //マップの幅
 #define MAP_HEIGHT	20 //マップの縦長さ
-
 #define MOVE_FRAME	32 //移動にかけるフレーム数
-
 #define RECR_MAX 200 //ルーレット切り取り数
+#define ROU_DRAW_TIME 180 //ルーレット画像表示停止タイム最大値
 
 // マップのデータ(16マス×12マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール)
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
@@ -30,7 +29,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
@@ -55,6 +54,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	char StrBuf[256] = { "NULL" };
 
 	//windowの設定
+	SetOutApplicationLogValidFlag(FALSE); //Log.txtを生成しないように設定
 	ChangeWindowMode(TRUE); //windowモード
 	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
@@ -78,6 +78,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	int squares_img1 = LoadGraph("image\\マス.png");
 	int squares_img2 = LoadGraph("image\\青マス.png");
 	int squares_img3 = LoadGraph("image\\緑マス.png");
+	int Branch = LoadGraph("image\\分岐.png");
 
 	int i, j;
 	int Key;
@@ -87,31 +88,22 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	//プレイヤー----------------------------------
 	//画像の位置情報
-	float x, y;
-	//画像の移動距離情報
-	float vx, vy;
-	//画像の移動ベクトル最大値
-	float vx_max, vy_max;
+	float P1_x, P1_y, /*1Pプレイヤー*/P2_x, P2_y/*2Pプレイヤー*/;
 	//初期化 
-	x = 350.0f;
-	y = 268.0f;
-	vx = 0.0f;
-	vy = 0.0f;
-	vx_max = 0.0f;
-	vy_max = 0.0f;
+	P1_x = 350.0f; P1_y = 268.0f; //1Pプレイヤー
+	P2_x = 400.0f; P2_y = 268.0f; //2Pプレイヤー
 	//左右向きフラグ
-	bool LR_flg = 1;
+	bool P1_LR_flg = 1/*1Pプレイヤー*/, P2_LR_flg = 1/*2Pプレイヤー*/;
 	//上下向きフラグ
-	bool UD_flg = 0;
+	bool P1_UD_flg = 0/*1Pプレイヤー*/, P2_UD_flg = 0/*2Pプレイヤー*/;
 	//進行方向管理変数
-	int Direction_of_Travel_num = 0; //0:右 1:左 2:上 3:下
-	//前進フラグ
-	//bool Forward_flg = false;
+	int P1_Direction_of_Travel_num = 0/*1Pプレイヤー*/, 
+		P2_Direction_of_Travel_num = 0/*2Pプレイヤー*/; //0:右 1:左 2:上 3:下
 	//アニメーション用カウント
-	int anim_cnt = 0;
+	int P1_anim_cnt = 0/*1Pプレイヤー*/, P2_anim_cnt = 0/*2Pプレイヤー*/;
 	//切り取り位置
-	int rect_x = 0;
-	int rect_y = 0;
+	int P1_rect_x = 0/*1Pプレイヤー*/, P2_rect_x = 0/*2Pプレイヤー*/;
+	int P1_rect_y = 0/*1Pプレイヤー*/, P2_rect_y = 0/*2Pプレイヤー*/;
 	//--------------------------------------------
 	//ルーレット----------------------------------
 	//画像の位置情報
@@ -133,14 +125,12 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 
 	//ルーレット画像表示停止フラグ
 	bool RouDraw_flg = false;	
-	//ルーレット画像表示停止タイム
-	int RouDraw_time = 0;
-
+	//--------------------------------------------
 	//共有
 	//主人公移動開始フラグ
-	bool PlayerMove_Flg = false;
+	bool P1_PlayerMove_Flg = false/*1Pプレイヤー*/, P2_PlayerMove_Flg = false/*2Pプレイヤー*/;
 	//主人公移動回数
-	int PlayerMove_num = 0;
+	int P1_PlayerMove_num = 0/*1Pプレイヤー*/, P2_PlayerMove_num = 0/*2Pプレイヤー*/;
 	//--------------------------------------------
 
 	//最初は停止中(0)にしておく
@@ -151,14 +141,14 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 	DrawMapChipNumY = 600 / MAP_SIZE + 1;
 
 	//画面左上に描画するマップ座標をセット
-	MapDrawPointX = x - DrawMapChipNumX / 2;
-	MapDrawPointY = y - DrawMapChipNumY / 2;
+	MapDrawPointX = P1_x - DrawMapChipNumX / 2;
+	MapDrawPointY = P1_y - DrawMapChipNumY / 2;
 
 	int OldX, OldY;	// 移動する前のプレイヤーの位置を保存する変数
 
 	//移動する前のプレイヤーの位置を保存
-	OldX = x;
-	OldY = y;
+	OldX = P1_x;
+	OldY = P1_y;
 
 	//メイン処理
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -166,55 +156,61 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		//方向設定
 		//右
 		if (CheckHitKey(KEY_INPUT_RIGHT)) {
-			LR_flg = 1;
-			Direction_of_Travel_num = 0;
+			P1_LR_flg = 1;
+			P1_Direction_of_Travel_num = 0;
 		}
 		//左
 		else if (CheckHitKey(KEY_INPUT_LEFT)) {
-			LR_flg = 0;
-			Direction_of_Travel_num = 1;
+			P1_LR_flg = 0;
+			P1_Direction_of_Travel_num = 1;
 		}
 		//上
 		else if (CheckHitKey(KEY_INPUT_UP)) {
-			UD_flg = 1;
-			Direction_of_Travel_num = 2;
+			P1_UD_flg = 1;
+			P1_Direction_of_Travel_num = 2;
 		}
 		//下
 		else if (CheckHitKey(KEY_INPUT_DOWN)) {
-			UD_flg = 0;
-			Direction_of_Travel_num = 3;
+			P1_UD_flg = 0;
+			P1_Direction_of_Travel_num = 3;
 		}
-
+		
 		// 移動中ではない場合キー入力を受け付ける
-		if (Move == 0)
-		{
+		if (Move == 0){
 			//ルーレット処理--------------------------------------------------------------------
 			//Enterでルーレット回転スタート
-			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false)
-			{
-				if (Roulette == 0)
-				{
+			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false){
+				if (Roulette == 0){
+					
+					Roulette = 1;
+					P1_PlayerMove_num = 0; //初期化						
+					RouDraw_flg = false; //初期化
+				}
+				else if (Roulette == 1){
 					//ルーレット回転開始
 					Roulette_Rotation = true;
-					PlayerMove_num = 0; //初期化
-					Roulette = 1;
+					
+					Roulette = 2;
 				}
-				else if (Roulette == 1)
+				else if (Roulette == 2) {
+					//ルーレット停止	
+					Roulette_Rotation = false; //初期化					
+					Roulette = 3;
+				}
+				else if (Roulette == 3)
 				{
-					//ルーレット停止
-					PlayerMove_Flg = true; //主人公移動開始
-					Roulette_Rotation = false; //初期化
-					Roulette = 0; //初期化
+					P1_PlayerMove_Flg = true; //主人公移動開始
+					RouDraw_flg = true; //ルーレット画像表示停止
+					//初期化					
+					Roulette = 0;
 				}
 				Roulette_Enter_Bottan = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_RETURN) == false)
-			{
 				Roulette_Enter_Bottan = false;
-			}
+			
 			//ルーレット回転処理
-			if (Roulette_Rotation == true)
-			{
+			if (Roulette_Rotation == true){
 				//画像切り取り位置変更処理
 				if (Rou_rect_x < 400) {
 					Rou_rect_x += 200;
@@ -228,30 +224,28 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 						Rou_rect_y = 0; //初期化
 					}
 				}
-			}
+			}			
 			//移動距離調整処理
-			if (Rou_rect_y < 200)
-			{
+			if (Rou_rect_y < 200){
 				if (Rou_rect_x == 0) {
-					PlayerMove_num = 1;
+					P1_PlayerMove_num = 1;
 				}
 				else if (Rou_rect_x == 200) {
-					PlayerMove_num = 2;
+					P1_PlayerMove_num = 2;
 				}
 				else if (Rou_rect_x == 400) {
-					PlayerMove_num = 3;
+					P1_PlayerMove_num = 3;
 				}
 			}
-			else if (Rou_rect_y == 200)
-			{
+			else if (Rou_rect_y == 200){
 				if (Rou_rect_x == 0) {
-					PlayerMove_num = 4;
+					P1_PlayerMove_num = 4;
 				}
 				else if (Rou_rect_x == 200) {
-					PlayerMove_num = 5;
+					P1_PlayerMove_num = 5;
 				}
 				else if (Rou_rect_x == 400) {
-					PlayerMove_num = 6;
+					P1_PlayerMove_num = 6;
 				}
 			}
 			//----------------------------------------------------------------------------------
@@ -261,38 +255,34 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			ScrollY = 0;
 
 			//プレイヤー前進フラグをtrue、1P移動距離を設定
-			if (PlayerMove_Flg == true)
+			if (P1_PlayerMove_Flg == true)
 			{
-				for (i = 0; i < PlayerMove_num; i++)
+				for (i = 0; i < P1_PlayerMove_num; i++)
 				{
-					if (Direction_of_Travel_num == 0)
+					if (P1_Direction_of_Travel_num == 0)
 					{
-						//vx = x + 50; //右
-						//vx_max = 2.0f;
+						//右移動
 						Move = 1;
 						MoveX = 1.0f;
 						MoveY = 0.0f;
 					}
-					else if (Direction_of_Travel_num == 1)
+					else if (P1_Direction_of_Travel_num == 1)
 					{
-						//vx = x - 50;//左
-						//vx_max = -2.0f;
+						//左移動
 						Move = 1;
 						MoveX = -1.0f;
 						MoveY = 0.0f;
 					}
-					else if (Direction_of_Travel_num == 2)
+					else if (P1_Direction_of_Travel_num == 2)
 					{
-						//vy = y - 50;//上
-						//vy_max = -2.0f;
+						//上移動
 						Move = 1;
 						MoveX = 0.0f;
 						MoveY = -1.0f;
 					}
-					else if (Direction_of_Travel_num == 3)
+					else if (P1_Direction_of_Travel_num == 3)
 					{
-						//vy = y + 50;//下
-						//vy_max = 2.0f;
+						//下移動
 						Move = 1;
 						MoveX = 0.0f;
 						MoveY = 1.0f;
@@ -307,52 +297,13 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 		}
 
 		// 移動中の場合は移動処理を行う
-		if (Move == 1)
-		{
-			MoveCounter++;			
-			//設定した移動距離までに移動
-			//左右
-			//if (vx != x)
-			//{
-			//	x += vx_max;
-			//}
-			//上下
-			//else if (vy != y)
-			//{
-			//	y += vy_max;
-			//}
-			//設定した移動距離に到着すると停止(押しっぱなしによる連続移動を止める処理付き)
-			if (PlayerMove_Flg == true)
+		if (Move == 1){
+			MoveCounter++;				
+			if (P1_PlayerMove_Flg == true)
 			{
-				//初期化
-				/*if (vx == x)
-				{
-					vx_max = 0.0f;
-				}
-				else if (vy == y)
-				{
-					vy_max = 0.0f;
-				}
-				//初期化
-				PlayerMove_Flg = false;				
-				Direction_of_Travel_num = 0;
-			}
-
-			// 移動処理が終了したら停止中にする
-			if (MoveCounter == MOVE_FRAME)
-			{
-				// プレイヤーの位置を変更する
-				//x += MoveX;
-				//y += MoveY;
-
-				// 停止中は画面のスクロールは行わない
-				/*ScrollX = 0;
-				ScrollY = 0;*/
-
 				Move = 0;
 			}
-			else
-			{
+			else{
 				/*ScrollX = 0;
 				ScrollY = 0;*/
 				//経過時間からスクロール量を算出する
@@ -426,12 +377,22 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 						FALSE //透過処理フラグ
 					);
 				}
-
+				//マップに6があれば「分岐」描画
+				if (MapData[i][j] == 6)
+				{
+					DrawRectGraphF(
+						j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+						0, 0, //切り取り開始位置
+						50, 50, //切り取るサイズ
+						Branch,  //切り取る元画像
+						FALSE //透過処理フラグ
+					);
+				}
 				//進入不可能なマップだった場合は移動できない
 				if (MapData[i][j] == 0)
 				{
-					x = OldX;
-					y = OldY;
+					P1_x = OldX;
+					P1_y = OldY;
 				}
 
 				// 画面からはみ出た位置なら描画しない
@@ -440,8 +401,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			}
 		}
 
-		DrawBox((x - MapDrawPointX) * MAP_SIZE, (y - MapDrawPointY) * MAP_SIZE,
-			(x - MapDrawPointX + 1) * MAP_SIZE, (y - MapDrawPointY + 1) * MAP_SIZE,
+		DrawBox((P1_x - MapDrawPointX) * MAP_SIZE, (P1_y - MapDrawPointY) * MAP_SIZE,
+			(P1_x - MapDrawPointX + 1) * MAP_SIZE, (P1_y - MapDrawPointY + 1) * MAP_SIZE,
 			GetColor(255, 255, 255), TRUE);
 
 		//unsigned int Cr;
@@ -458,20 +419,19 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance,
 			800, 600, //切り取るサイズ
 			back_img1,  //切り取る元画像
 			TRUE //透過処理フラグ
-			//LR_flg //反転処理フラグ
+			//P1_LR_flg //反転処理フラグ
 		);*/
 		//プレイヤー
 		DrawRectGraphF(
-			x, y,  //描画位置
-			rect_x, rect_y, //切り取り開始位置
+			P1_x, P1_y,  //描画位置
+			P1_rect_x, P1_rect_y, //切り取り開始位置
 			64, 64, //切り取るサイズ
 			image,  //切り取る元画像
 			TRUE, //透過処理フラグ
-			LR_flg //反転処理フラグ
+			P1_LR_flg //反転処理フラグ
 		);
 
-		if (RouDraw_flg == false)
-		{
+		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
 				Rou_x, Rou_y,  //描画位置
