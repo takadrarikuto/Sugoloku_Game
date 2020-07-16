@@ -16,7 +16,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    1, 1, 1, 1, 1, 4, 1, 1, 1, 0 } ,
 	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    9, 9, 9, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 7, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -95,8 +95,9 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int squares_img2 = LoadGraph("image\\青マス.png");
 	static int squares_img3 = LoadGraph("image\\緑マス.png");
 	static int Branch = LoadGraph("image\\分岐.png");
-	static int Double = LoadGraph("image\\２倍マス.png");
+	static int Double = LoadGraph("image\\サイコロ２倍マス.png");
 	static int event = LoadGraph("image\\イベントマス.png");
+	static int Reversal = LoadGraph("image\\逆転マス.png");
 
 
 	//マップを描く
@@ -168,12 +169,12 @@ void GraphDraw(int ScrollX, int ScrollY)
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
-					60, 60, //切り取るサイズ
+					50, 50, //切り取るサイズ
 					Branch,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
 			}
-			//マップに7があれば「2倍マス」描画
+			//マップに7があれば「サイコロ２倍マス」描画
 			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 7)
 			{
 				DrawRectGraphF(
@@ -195,7 +196,17 @@ void GraphDraw(int ScrollX, int ScrollY)
 					FALSE //透過処理フラグ
 				);
 			}
-
+			//マップに9があれば「逆転マス」描画
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 9)
+			{
+				DrawRectGraphF(
+					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+					0, 0, //切り取り開始位置
+					50, 50, //切り取るサイズ
+					Reversal,  //切り取る元画像
+					FALSE //透過処理フラグ
+				);
+			}
 			//主人公用マップに2があれば「主人公」描画
 			if (MapData_P[i + MapDrawPointY][j + MapDrawPointX] == 2)
 			{
@@ -207,6 +218,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 					TRUE //透過処理フラグ
 				);
 			}
+
 		}
 	}
 	//プレイヤーの描画
@@ -257,7 +269,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	SetOutApplicationLogValidFlag(FALSE); //Log.txtを生成しないように設定
 	ChangeWindowMode(TRUE); //windowモード
-	SetGraphMode(800, 600, 16); //windowサイズ800*600 32bit
+	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
 	SetBackgroundColor(0, 100, 0); //背景色
@@ -533,6 +545,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else{
 					MoveCounter = 0;
+				}
+				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
+				{
+					//MapData_P[MapDrawPointY][MapDrawPointX] = 2;
+					//PlayerY = 2;
 				}
 				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
 				{
