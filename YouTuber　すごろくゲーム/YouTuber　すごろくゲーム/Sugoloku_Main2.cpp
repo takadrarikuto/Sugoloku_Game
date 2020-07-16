@@ -168,7 +168,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
-					60, 60, //切り取るサイズ
+					50, 50, //切り取るサイズ
 					Branch,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
