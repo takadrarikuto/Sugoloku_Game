@@ -545,10 +545,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else{
 					MoveCounter = 0;
 				}
-				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
+				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
 				{
-					MapData_P[2 + MapDrawPointY][2 + MapDrawPointX];
-				}*/
+					//MapData_P[MapDrawPointY][MapDrawPointX] = 2;
+					//PlayerY = 2;
+				}
 			}
 
 			//停止中は画面のスクロールは行わない
