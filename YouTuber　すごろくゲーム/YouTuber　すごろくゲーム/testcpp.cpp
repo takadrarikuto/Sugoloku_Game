@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int ScrollX, ScrollY;
 
 	ChangeWindowMode(TRUE); //windowモード
-	SetGraphMode(640, 480, 32);
+	SetGraphMode(640, 480, 16);
 	if (DxLib_Init() == -1)	// ＤＸライブラリ初期化処理
 	{
 		return -1;				// エラーが起きたら直ちに終了
