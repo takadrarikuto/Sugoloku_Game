@@ -480,65 +480,92 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//キー入力を得る
 			Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-			//キー入力に応じてプレイヤーの座標を移動
-			if (Key & PAD_INPUT_LEFT)
-			{
-				Move = 1;
-				MoveX = -1;
-				MoveY = 0;
-			}
-			if (Key & PAD_INPUT_RIGHT)
-			{
-				Move = 1;
-				MoveX = 1;
-				MoveY = 0;
-			}
-			if (Key & PAD_INPUT_UP)
-			{
-				Move = 1;
-				MoveX = 0;
-				MoveY = -1;
-			}
-			if (Key & PAD_INPUT_DOWN)
-			{
-				Move = 1;
-				MoveX = 0;
-				MoveY = 1;
-			}
+			////キー入力に応じてプレイヤーの座標を移動
+			//if (Key & PAD_INPUT_LEFT)
+			//{
+			//	Move = 1;
+			//	MoveX = -1;
+			//	MoveY = 0;
+			//}
+			//if (Key & PAD_INPUT_RIGHT)
+			//{
+			//	Move = 1;
+			//	MoveX = 1;
+			//	MoveY = 0;
+			//}
+			//if (Key & PAD_INPUT_UP)
+			//{
+			//	Move = 1;
+			//	MoveX = 0;
+			//	MoveY = -1;
+			//}
+			//if (Key & PAD_INPUT_DOWN)
+			//{
+			//	Move = 1;
+			//	MoveX = 0;
+			//	MoveY = 1;
+			//}
 			//プレイヤー前進フラグをtrue、1P移動距離を設定
 			if (P1_PlayerMove_Flg == true){
-				for (i = 0; i < P1_PlayerMove_num; i++){
-					if (P1_Direction_of_Travel_num == 0){//右移動						
-						Move = 1;
-						MoveX = 1.0f;
-						MoveY = 0.0f;
-					}
-					else if (P1_Direction_of_Travel_num == 1){//左移動						
-						Move = 1;
-						MoveX = -1.0f;
-						MoveY = 0.0f;
-					}
-					else if (P1_Direction_of_Travel_num == 2){//上移動						
-						Move = 1;
-						MoveX = 0.0f;
-						MoveY = -1.0f;
-					}
-					else if (P1_Direction_of_Travel_num == 3){//下移動						
-						Move = 1;
-						MoveX = 0.0f;
-						MoveY = 1.0f;
-						
-					}
+
+				//for (i = 0; i < P1_PlayerMove_num; i++){
+				//	if (P1_Direction_of_Travel_num == 0){//右移動						
+				//		Move = 1;
+				//		MoveX = 1.0f;
+				//		MoveY = 0.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 1){//左移動						
+				//		Move = 1;
+				//		MoveX = -1.0f;
+				//		MoveY = 0.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 2){//上移動						
+				//		Move = 1;
+				//		MoveX = 0.0f;
+				//		MoveY = -1.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 3){//下移動						
+				//		Move = 1;
+				//		MoveX = 0.0f;
+				//		MoveY = 1.0f;
+				//		
+				//	}
+				//キー入力に応じてプレイヤーの座標を移動
+				if (Key & PAD_INPUT_LEFT)
+				{
+					Move = 1;
+					MoveX = -1;
+					MoveY = 0;
+				}
+				if (Key & PAD_INPUT_RIGHT)
+				{
+					Move = 1;
+					MoveX = 1;
+					MoveY = 0;
+				}
+				if (Key & PAD_INPUT_UP)
+				{
+					Move = 1;
+					MoveX = 0;
+					MoveY = -1;
+				}
+				if (Key & PAD_INPUT_DOWN)
+				{
+					Move = 1;
+					MoveX = 0;
+					MoveY = 1;
+				}
 
 					if (Move == 1){
 						MoveCounter = 0;
 					}
-				}
+				
 			}
 
 			//進入不可能なマップだった場合は移動できない
 			if (Move == 1)
 			{
+				//0 = 壁には移動できない
 				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
 				{
 					Move = 0;
@@ -546,11 +573,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else{
 					MoveCounter = 0;
 				}
-				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
-				{
+				//for (int m = 0 ; m < P1_PlayerMove_num; m++)
+				{			
+					//マップ読み取り
+					for (int m_y = 0; m_y < MAP_HEIGHT; m_y++){
+						for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
+							//主人公の周りにある道を確認して移動する
+							if (P1_Direction_of_Travel_num == 0 &&
+								MapData_P[m_y][m_x] == 2 && MapData_P[PlayerY][PlayerX + 1] == 1) {//右移動	
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 1.0f;
+								MoveY = 0.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 1 &&
+								MapData_P[m_y][m_x] == 2 && MapData_P[PlayerY][PlayerX - 1] == 1) {//左移動	
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = -1.0f;
+								MoveY = 0.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 2 &&
+								MapData_P[m_y][m_x] == 2 && MapData_P[PlayerY - 1][PlayerX] == 1) {//上移動	
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 0.0f;
+								MoveY = -1.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 3 &&
+								MapData_P[m_y][m_x] == 2 && MapData_P[PlayerY + 1][PlayerX] == 1) {//下移動	
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 0.0f;
+								MoveY = 1.0f;
+							}
+						}
+					}
 					//MapData_P[MapDrawPointY][MapDrawPointX] = 2;
-					//PlayerY = 2;
-				}
+					//PlayerY = 2;				
+				}			
 				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
 				{
 					MapData_P[2 + MapDrawPointY][2 + MapDrawPointX];
