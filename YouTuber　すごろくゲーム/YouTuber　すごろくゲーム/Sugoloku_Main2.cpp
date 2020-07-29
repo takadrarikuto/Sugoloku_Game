@@ -316,10 +316,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int move_sound = 0;
 	int roulette_sound = 0;
 	int roulette_dec_sound = 0;
+	int subscriber_up_sound = 0;
+	int subscriber_down_sound = 0;
 
 	move_sound = LoadSoundMem("music\\コマ移動.mp3");
 	roulette_sound = LoadSoundMem("music\\ルーレット.mp3");
 	roulette_dec_sound = LoadSoundMem("music\\ルーレット決定.mp3");
+	subscriber_up_sound = LoadSoundMem("music\\登録者数増加音.mp3");
+	subscriber_down_sound = LoadSoundMem("music\\登録者数減少音.mp3");
 
 	//プレイヤーの初期位置をセット
 	PlayerX = 1;
@@ -500,10 +504,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
 									//進んだ方向に4があれば、登録者数増加
 									if (MapData_P[PlayerY][PlayerX + 1] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY][PlayerX + 1] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
@@ -518,10 +524,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
 									//進んだ方向に4があれば、登録者数増加
 									if (MapData_P[PlayerY][PlayerX - 1] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY][PlayerX - 1] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
@@ -536,10 +544,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
 									//進んだ方向に4があれば、登録者数増加
 									if (MapData_P[PlayerY - 1][PlayerX] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY - 1][PlayerX] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
@@ -554,10 +564,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
 									//進んだ方向に4があれば、登録者数増加
 									if (MapData_P[PlayerY + 1][PlayerX] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY + 1][PlayerX] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
