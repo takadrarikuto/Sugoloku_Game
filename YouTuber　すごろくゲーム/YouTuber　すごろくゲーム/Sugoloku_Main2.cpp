@@ -92,7 +92,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	MapDrawPointY = PlayerY - (DrawMapChipNumY / 2 - 1);
 
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
-	static int image = LoadGraph("image\\Frisk3.png");
+	static int image = LoadGraph("image\\プレイヤー1.png");
 	static int back_img1 = LoadGraph("image\\背景テスト用.png");
 	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
 	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
@@ -103,7 +103,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int Double = LoadGraph("image\\サイコロ２倍マス.png");//「7」
 	static int event = LoadGraph("image\\イベントマス.png");//「8」
 	static int Reversal = LoadGraph("image\\逆転マス.png");//「9」
-
 
 	//マップを描く
 	for (i = -1; i < DrawMapChipNumY; i++){
@@ -311,6 +310,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ルーレット画像(「static int」でないと、メモリが増加し続けるので注意)
 	static int Rou_image = LoadGraph("image\\スロット.png");
 
+	//BGM再生
+	PlaySoundFile("music\\メインBGM.mp3", DX_PLAYTYPE_LOOP);
+
+	int move_sound = 0;
+	int roulette_sound = 0;
+	int roulette_dec_sound = 0;
+
+	move_sound = LoadSoundMem("music\\コマ移動.mp3");
+	roulette_sound = LoadSoundMem("music\\ルーレット.mp3");
+	roulette_dec_sound = LoadSoundMem("music\\ルーレット決定.mp3");
+
 	//プレイヤーの初期位置をセット
 	PlayerX = 1;
 	PlayerY = 1;
@@ -436,11 +446,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else if (Roulette == 1) {					
 					Roulette_Rotation = true; //ルーレット回転開始
 					Roulette = 2; //Roulette 2へ移動
+					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//移動音再生
 				}
 				else if (Roulette == 2) {
 					//ルーレット停止	
 					Roulette_Rotation = false; //初期化					
 					Roulette = 3; //Roulette 3へ移動
+					StopSoundMem(roulette_sound);
+					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 				}
 				else if (Roulette == 3)
 				{
@@ -611,6 +624,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								{
 									P1_subscriber -= 100;
 								}
+								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK,TRUE);//移動音再生
 								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 								MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
 								Move = 1;
@@ -631,6 +645,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								{
 									P1_subscriber -= 100;
 								}
+								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 								MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
 								Move = 1;
@@ -651,6 +666,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								{
 									P1_subscriber -= 100;
 								}
+								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 								MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
 								Move = 1;
@@ -671,6 +687,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								{
 									P1_subscriber -= 100;
 								}
+								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 								MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
 								Move = 1;
