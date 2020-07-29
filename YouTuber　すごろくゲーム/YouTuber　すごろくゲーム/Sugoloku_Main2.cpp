@@ -422,12 +422,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					//ルーレット停止	
 					Roulette_Rotation = false; //初期化
 					Roulette = 2; //Roulette 2へ移動
+					StopSoundMem(roulette_sound);
+					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 				}
 				else if (Roulette == 2) {
 					P1_PlayerMove_Flg = true; //主人公移動開始	
 					RouDraw_flg = true; //ルーレット画像表示停止
-					StopSoundMem(roulette_sound);
-					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 					Roulette = 0; //Roulette 0へ移動
 				}
 				Roulette_Enter_Bottan = true;
