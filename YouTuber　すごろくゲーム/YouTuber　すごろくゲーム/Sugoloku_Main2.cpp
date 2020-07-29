@@ -105,8 +105,8 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int Reversal = LoadGraph("image\\逆転マス.png");//「9」
 
 	//マップを描く
-	for (i = -1; i < DrawMapChipNumY; i++){
-		for (j = -1; j < DrawMapChipNumX; j++){
+	for (i = -1; i < DrawMapChipNumY; i++) {
+		for (j = -1; j < DrawMapChipNumX; j++) {
 			//画面からはみ出た位置なら描画しない
 			if (j + MapDrawPointX < 0 || i + MapDrawPointY < 0 ||
 				j + MapDrawPointX >= MAP_WIDTH || i + MapDrawPointY >= MAP_HEIGHT) continue;
@@ -119,7 +119,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 					GetColor(0, 0, 255), TRUE);
 			}*/
 			//マップに1があれば「通常マス」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 1){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 1) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -129,7 +129,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				);
 			}
 			//マップに2があれば「STARTマス」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 2){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 2) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -139,7 +139,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				);
 			}
 			//マップに3があれば「GOALマス」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 3){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 3) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -149,7 +149,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				);
 			}
 			//マップに4があれば「チャンネル登録者数増加マス」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 4){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 4) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -159,7 +159,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				);
 			}
 			//マップに5があれば「チャンネル登録者数減少マス」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 5){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 5) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -169,7 +169,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 				);
 			}
 			//マップに6があれば「分岐」描画
-			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 6){
+			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 6) {
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
@@ -237,12 +237,12 @@ void GraphDraw(int ScrollX, int ScrollY)
 		(PlayerX - MapDrawPointX + 1) * MAP_SIZE, (PlayerY - MapDrawPointY + 1) * MAP_SIZE,
 		GetColor(255, 255, 255), TRUE);*/
 
-	//-----------------------------------------------------------------------
-	//UI部分背景
+		//-----------------------------------------------------------------------
+		//UI部分背景
 	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//描画
 	//文字を描画する-------------------------------------------------------------------
 	//登録者数
-	DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：%d人",P1_subscriber);
+	DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：%d人", P1_subscriber);
 	DrawFormatString(7, 29, GetColor(255, 255, 255), "2Pチャンネル登録者数：%d人", P2_subscriber);
 	//ゴールまでの歩数
 	DrawFormatString(270, 18, GetColor(255, 255, 255), "ゴールまで");
@@ -291,16 +291,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
 	SetBackgroundColor(0, 100, 0); //背景色
 
-	int Key,i;
+	int Key, i;
 	int ScrollX, ScrollY;
 	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
 
 	//初期化
-	if (DxLib_Init() == -1)	{ //DXライブラリ初期化処理
+	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
 		return -1;				//エラーが起きたら直ちに終了
 	}
-	if (DxLib_Init() < 0){
+	if (DxLib_Init() < 0) {
 		return -1;
 	}
 
@@ -338,9 +338,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool P1_LR_flg = 1/*1Pプレイヤー*/, P2_LR_flg = 1/*2Pプレイヤー*/;
 	//上下向きフラグ
 	bool P1_UD_flg = 0/*1Pプレイヤー*/, P2_UD_flg = 0/*2Pプレイヤー*/;
-	//進行方向管理変数
-	int P1_Direction_of_Travel_num = 0/*1Pプレイヤー*/,
-		P2_Direction_of_Travel_num = 0/*2Pプレイヤー*/; //0:右 1:左 2:上 3:下
 	//アニメーション用カウント
 	int P1_anim_cnt = 0/*1Pプレイヤー*/, P2_anim_cnt = 0/*2Pプレイヤー*/;
 	//切り取り位置
@@ -388,78 +385,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//static int Title_image = LoadGraph("image\\スロット.png");
 
 	//ループ
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0){
+	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
 		//画面を初期化
 		ClearDrawScreen();
 
-		//方向設定
-		//右
-		if (CheckHitKey(KEY_INPUT_RIGHT)) {
-			P1_LR_flg = 1;
-			P1_Direction_of_Travel_num = 0;
-		}
-		//左
-		else if (CheckHitKey(KEY_INPUT_LEFT)) {
-			P1_LR_flg = 0;
-			P1_Direction_of_Travel_num = 1;
-		}
-		//上
-		else if (CheckHitKey(KEY_INPUT_UP)) {
-			P1_UD_flg = 1;
-			P1_Direction_of_Travel_num = 2;
-		}
-		//下
-		else if (CheckHitKey(KEY_INPUT_DOWN)) {
-			P1_UD_flg = 0;
-			P1_Direction_of_Travel_num = 3;
-		}
-
 		//向き文字表示
-		if (P1_Direction_of_Travel_num == 0)
+		if (P1_LR_flg == 1)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：右");
 		}
-		else if (P1_Direction_of_Travel_num == 1)
+		else if (P1_LR_flg == 0)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：左");
 		}
-		else if (P1_Direction_of_Travel_num == 2)
+		else if (P1_UD_flg == 1)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：上");
 		}
-		else if (P1_Direction_of_Travel_num == 3)
+		else if (P1_UD_flg == 0)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：下");
 		}
 
 		//移動中ではない場合キー入力を受け付ける
-		if (Move == 0){
+		if (Move == 0) {
 			//ルーレット処理--------------------------------------------------------------------
 			//Enterでルーレット回転スタート
 			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false) {
 				if (Roulette == 0) {
-					//初期化	
-					P1_PlayerMove_num = 0;					
-					RouDraw_flg = false;
-					Roulette = 1; //Roulette 1へ移動
-				}
-				else if (Roulette == 1) {					
+					//初期化		
 					Roulette_Rotation = true; //ルーレット回転開始
-					Roulette = 2; //Roulette 2へ移動
+					Roulette = 1; //Roulette 1へ移動
 					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//移動音再生
 				}
-				else if (Roulette == 2) {
+				else if (Roulette == 1) {
 					//ルーレット停止	
-					Roulette_Rotation = false; //初期化					
-					Roulette = 3; //Roulette 3へ移動
+					Roulette_Rotation = false; //初期化
+					Roulette = 2; //Roulette 2へ移動
+				}
+				else if (Roulette == 2) {
+					P1_PlayerMove_Flg = true; //主人公移動開始	
+					RouDraw_flg = true; //ルーレット画像表示停止
 					StopSoundMem(roulette_sound);
 					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
-				}
-				else if (Roulette == 3)
-				{
-					P1_PlayerMove_Flg = true; //主人公移動開始
-					RouDraw_flg = true; //ルーレット画像表示停止
-					//初期化					
 					Roulette = 0; //Roulette 0へ移動
 				}
 				Roulette_Enter_Bottan = true;
@@ -468,7 +436,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Roulette_Enter_Bottan = false;
 
 			//ルーレット回転処理
-			if (Roulette_Rotation == true){
+			if (Roulette_Rotation == true) {
 				//画像切り取り位置変更処理
 				if (Rou_rect_x < 400) {
 					Rou_rect_x += 200;
@@ -511,198 +479,96 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//キー入力を得る
 			Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-			////キー入力に応じてプレイヤーの座標を移動
-			//if (Key & PAD_INPUT_LEFT)
-			//{
-			//	Move = 1;
-			//	MoveX = -1;
-			//	MoveY = 0;
-			//}
-			//if (Key & PAD_INPUT_RIGHT)
-			//{
-			//	Move = 1;
-			//	MoveX = 1;
-			//	MoveY = 0;
-			//}
-			//if (Key & PAD_INPUT_UP)
-			//{
-			//	Move = 1;
-			//	MoveX = 0;
-			//	MoveY = -1;
-			//}
-			//if (Key & PAD_INPUT_DOWN)
-			//{
-			//	Move = 1;
-			//	MoveX = 0;
-			//	MoveY = 1;
-			//}
-			//プレイヤー前進フラグをtrue、1P移動距離を設定
-			if (P1_PlayerMove_Flg == true){
-
-				//for (i = 0; i < P1_PlayerMove_num; i++){
-				//	if (P1_Direction_of_Travel_num == 0){//右移動						
-				//		Move = 1;
-				//		MoveX = 1.0f;
-				//		MoveY = 0.0f;
-				//	}
-				//	else if (P1_Direction_of_Travel_num == 1){//左移動						
-				//		Move = 1;
-				//		MoveX = -1.0f;
-				//		MoveY = 0.0f;
-				//	}
-				//	else if (P1_Direction_of_Travel_num == 2){//上移動						
-				//		Move = 1;
-				//		MoveX = 0.0f;
-				//		MoveY = -1.0f;
-				//	}
-				//	else if (P1_Direction_of_Travel_num == 3){//下移動						
-				//		Move = 1;
-				//		MoveX = 0.0f;
-				//		MoveY = 1.0f;
-				//		
-				//	}
-				//キー入力に応じてプレイヤーの座標を移動
-				if (Key & PAD_INPUT_LEFT)
-				{
-					Move = 1;
-					MoveX = -1;
-					MoveY = 0;
-				}
-				if (Key & PAD_INPUT_RIGHT)
-				{
-					Move = 1;
-					MoveX = 1;
-					MoveY = 0;
-				}
-				if (Key & PAD_INPUT_UP)
-				{
-					Move = 1;
-					MoveX = 0;
-					MoveY = -1;
-				}
-				if (Key & PAD_INPUT_DOWN)
-				{
-					Move = 1;
-					MoveX = 0;
-					MoveY = 1;
-				}
-
-					if (Move == 1){
-						MoveCounter = 0;
-					}
-				
-			}
-
 			//進入不可能なマップだった場合は移動できない
-			if (Move == 1)
+			if (P1_PlayerMove_Flg == true)
 			{
 				//0 = 壁には移動できない
 				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
 				{
-					Move = 0;
+					//0には何もしない
 				}
-				else{
-					MoveCounter = 0;
-				}
-				//for (int m = 0 ; m < P1_PlayerMove_num; m++)
-				{			
-					//マップ読み取り
-					for (int m_y = 0; m_y < MAP_HEIGHT; m_y++){
-						for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
-							//主人公の周りにある道を確認して移動する
-							if (P1_Direction_of_Travel_num == 0 &&
-								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
-								|| MapData_P[PlayerY][PlayerX + 1] == 4
-								|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY][PlayerX + 1] == 4)
-								{
-									P1_subscriber += 100;
+				else {
+					//ルーレットに表示された数字分移動させる
+					for (; 0 < P1_PlayerMove_num; P1_PlayerMove_num--)
+					{
+						//マップ読み取り
+						for (int m_y = 0; m_y < MAP_HEIGHT; m_y++) {
+							for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
+								//主人公の周りにある道を確認して移動する
+								if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
+									|| MapData_P[PlayerY][PlayerX + 1] == 4
+									|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY][PlayerX + 1] == 4){
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY][PlayerX + 1] == 5){
+										P1_subscriber -= 100;
+									}
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveX = 1.0f; //X軸方向にスクロール
+									P1_LR_flg = 1; //向き切り替え 右
 								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY][PlayerX + 1] == 5)
-								{
-									P1_subscriber -= 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
+									|| MapData_P[PlayerY][PlayerX - 1] == 4
+									|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY][PlayerX - 1] == 4){
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY][PlayerX - 1] == 5){
+										P1_subscriber -= 100;
+									}
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveX = -1.0f; //-X軸方向にスクロール
+									P1_LR_flg = 0; //向き切り替え 左
 								}
-								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK,TRUE);//移動音再生
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
-								Move = 1;
-								MoveX = 1.0f;
-								MoveY = 0.0f;
-							}
-							else if (P1_Direction_of_Travel_num == 1 &&
-								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
-								|| MapData_P[PlayerY][PlayerX - 1] == 4
-								|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY][PlayerX - 1] == 4)
-								{
-									P1_subscriber += 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
+									|| MapData_P[PlayerY - 1][PlayerX] == 4
+									|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY - 1][PlayerX] == 4){
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY - 1][PlayerX] == 5){
+										P1_subscriber -= 100;
+									}
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveY = -1.0f; //-Y軸方向にスクロール
+									P1_UD_flg = 1; //向き切り替え 上
 								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY][PlayerX - 1] == 5)
-								{
-									P1_subscriber -= 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
+									|| MapData_P[PlayerY + 1][PlayerX] == 4
+									|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY + 1][PlayerX] == 4){
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY + 1][PlayerX] == 5){
+										P1_subscriber -= 100;
+									}
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveY = 1.0f; //Y軸方向にスクロール
+									P1_UD_flg = 0; //向き切り替え 下
 								}
-								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
-								Move = 1;
-								MoveX = -1.0f;
-								MoveY = 0.0f;
-							}
-							else if (P1_Direction_of_Travel_num == 2 &&
-								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
-								|| MapData_P[PlayerY - 1][PlayerX] == 4
-								|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY - 1][PlayerX] == 4)
-								{
-									P1_subscriber += 100;
-								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY - 1][PlayerX] == 5)
-								{
-									P1_subscriber -= 100;
-								}
-								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
-								Move = 1;
-								MoveX = 0.0f;
-								MoveY = -1.0f;
-							}
-							else if (P1_Direction_of_Travel_num == 3 &&
-								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
-								|| MapData_P[PlayerY + 1][PlayerX] == 4
-								|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY + 1][PlayerX] == 4)
-								{
-									P1_subscriber += 100;
-								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY + 1][PlayerX] == 5)
-								{
-									P1_subscriber -= 100;
-								}
-								PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
-								Move = 1;
-								MoveX = 0.0f;
-								MoveY = 1.0f;
 							}
 						}
 					}
-					//MapData_P[MapDrawPointY][MapDrawPointX] = 2;
-					//PlayerY = 2;				
-				}			
-				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
-				{
-					MapData_P[2 + MapDrawPointY][2 + MapDrawPointX];
-				}*/
+
+					MoveCounter = 0;
+				}				
 			}
 
 			//停止中は画面のスクロールは行わない
@@ -711,16 +577,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 		//移動中の場合は移動処理を行う
-		if (Move == 1){
+		if (Move == 1) {
 			MoveCounter++;
-			if (P1_PlayerMove_Flg == true){
+			if (P1_PlayerMove_Flg == true) {
 				//初期化
 				P1_PlayerMove_Flg = false;
-				P1_Direction_of_Travel_num = 0;
 			}
 			//移動処理が終了したら停止中にする
-			if (MoveCounter == MOVE_FRAME){
+			if (MoveCounter == MOVE_FRAME) {
+				//初期化
 				Move = 0;
+				RouDraw_flg = false;
+				Roulette = 0; //Roulette 0へ移動
 
 				//プレイヤーの位置を変更する
 				PlayerX += MoveX;
@@ -730,7 +598,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				ScrollX = 0;
 				ScrollY = 0;
 			}
-			else{
+			else {
 				//経過時間からスクロール量を算出する
 				ScrollX = -(MoveX * MAP_SIZE * MoveCounter / MOVE_FRAME);
 				ScrollY = -(MoveY * MAP_SIZE * MoveCounter / MOVE_FRAME);
@@ -739,7 +607,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ClearDrawScreen(); //画像クリア
 
-		if (RouDraw_flg == false){
+		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
 				Rou_x, Rou_y,  //描画位置
