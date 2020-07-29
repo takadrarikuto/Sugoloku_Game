@@ -416,14 +416,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					//初期化		
 					Roulette_Rotation = true; //ルーレット回転開始
 					Roulette = 1; //Roulette 1へ移動
-					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//移動音再生
+					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//効果音再生
 				}
 				else if (Roulette == 1) {
 					//ルーレット停止	
 					Roulette_Rotation = false; //初期化
 					Roulette = 2; //Roulette 2へ移動
 					StopSoundMem(roulette_sound);
-					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 				}
 				else if (Roulette == 2) {
 					P1_PlayerMove_Flg = true; //主人公移動開始	
@@ -506,6 +506,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY][PlayerX + 1] == 5){
 										P1_subscriber -= 100;
 									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 									MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
 									Move = 1; //スクロール開始
@@ -523,6 +524,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY][PlayerX - 1] == 5){
 										P1_subscriber -= 100;
 									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 									MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
 									Move = 1; //スクロール開始
@@ -540,6 +542,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY - 1][PlayerX] == 5){
 										P1_subscriber -= 100;
 									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 									MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
 									Move = 1; //スクロール開始
@@ -557,6 +560,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY + 1][PlayerX] == 5){
 										P1_subscriber -= 100;
 									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
 									MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
 									Move = 1; //スクロール開始
