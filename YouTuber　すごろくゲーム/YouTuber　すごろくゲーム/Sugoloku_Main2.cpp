@@ -13,11 +13,11 @@
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    1, 1, 1, 1, 1, 4, 1, 1, 1, 0 } ,
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 3,    9, 9, 9, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 3,    9, 9, 9, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 7, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
@@ -38,12 +38,12 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 1, 1, 0 } ,
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 1, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 5,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 7,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -68,6 +68,11 @@ int Move;
 int MoveX, MoveY;
 //移動し始めてから何フレーム経過したかを保持する変数
 int MoveCounter;
+
+//チャンネル登録者数用変数(初期値：1000人)
+int P1_subscriber = 1000;
+int P2_subscriber = 1000;
+
 //マス目カウント用(試作)
 int squares_cnt1 = 125;
 
@@ -89,15 +94,15 @@ void GraphDraw(int ScrollX, int ScrollY)
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
 	static int image = LoadGraph("image\\Frisk3.png");
 	static int back_img1 = LoadGraph("image\\背景テスト用.png");
-	static int squares_start = LoadGraph("image\\STARTマス.png");
-	static int squares_goal = LoadGraph("image\\GOALマス.png");
-	static int squares_img1 = LoadGraph("image\\マス.png");
-	static int squares_img2 = LoadGraph("image\\青マス.png");
-	static int squares_img3 = LoadGraph("image\\緑マス.png");
-	static int Branch = LoadGraph("image\\分岐.png");
-	static int Double = LoadGraph("image\\サイコロ２倍マス.png");
-	static int event = LoadGraph("image\\イベントマス.png");
-	static int Reversal = LoadGraph("image\\逆転マス.png");
+	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
+	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
+	static int squares_img1 = LoadGraph("image\\マス.png");//「1」
+	static int subscriber_up = LoadGraph("image\\登録者数増加マス.png");//「4」
+	static int subscriber_down = LoadGraph("image\\登録者数減少マス.png");//「5」
+	static int Branch = LoadGraph("image\\分岐.png");//「6」
+	static int Double = LoadGraph("image\\サイコロ２倍マス.png");//「7」
+	static int event = LoadGraph("image\\イベントマス.png");//「8」
+	static int Reversal = LoadGraph("image\\逆転マス.png");//「9」
 
 
 	//マップを描く
@@ -144,23 +149,23 @@ void GraphDraw(int ScrollX, int ScrollY)
 					FALSE //透過処理フラグ
 				);
 			}
-			//マップに4があれば「青マス」描画
+			//マップに4があれば「チャンネル登録者数増加マス」描画
 			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 4){
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
 					50, 50, //切り取るサイズ
-					squares_img2,  //切り取る元画像
+					subscriber_up,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
 			}
-			//マップに5があれば「緑マス」描画
+			//マップに5があれば「チャンネル登録者数減少マス」描画
 			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 5){
 				DrawRectGraphF(
 					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
 					0, 0, //切り取り開始位置
 					50, 50, //切り取るサイズ
-					squares_img3,  //切り取る元画像
+					subscriber_down,  //切り取る元画像
 					FALSE //透過処理フラグ
 				);
 			}
@@ -239,18 +244,32 @@ void GraphDraw(int ScrollX, int ScrollY)
 	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//描画
 	//文字を描画する-------------------------------------------------------------------
 	//登録者数
-	DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：1000人");
-	DrawFormatString(7, 29, GetColor(255, 255, 255), "2Pチャンネル登録者数：1000人");
+	DrawFormatString(7, 7, GetColor(255, 255, 255), "1Pチャンネル登録者数：%d人",P1_subscriber);
+	DrawFormatString(7, 29, GetColor(255, 255, 255), "2Pチャンネル登録者数：%d人", P2_subscriber);
 	//ゴールまでの歩数
-	DrawFormatString(270, 20, GetColor(255, 255, 255), "ゴールまで");
+	DrawFormatString(270, 18, GetColor(255, 255, 255), "ゴールまで");
 	DrawFormatString(365, 7, GetColor(255, 255, 255), "1P：あと%d歩", squares_cnt1);
 	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと30歩");
 	//現在順位
-	DrawFormatString(500, 20, GetColor(255, 255, 255), "現在順位");
-	DrawFormatString(575, 7, GetColor(255, 0, 0), "1位：1P");
-	DrawFormatString(575, 29, GetColor(255, 255, 255), "2位：2P");
+	DrawFormatString(500, 18, GetColor(255, 255, 255), "現在順位");
+	if (P1_subscriber > P2_subscriber)
+	{
+		DrawFormatString(575, 7, GetColor(255, 0, 0), "1位：1P");
+		DrawFormatString(575, 29, GetColor(255, 255, 255), "2位：2P");
+	}
+	else if (P2_subscriber > P1_subscriber)
+	{
+		DrawFormatString(575, 7, GetColor(255, 0, 0), "1位：2P");
+		DrawFormatString(575, 29, GetColor(255, 255, 255), "2位：1P");
+	}
+	else
+	{
+		DrawFormatString(575, 18, GetColor(255, 255, 255), "同位：");
+		DrawFormatString(628, 7, GetColor(255, 255, 255), "1P");
+		DrawFormatString(628, 29, GetColor(255, 255, 255), "2P");
+	}
 	//順番
-	DrawFormatString(665, 20, GetColor(255, 255, 255), "ターン");
+	DrawFormatString(665, 18, GetColor(255, 255, 255), "ターン");
 	DrawFormatString(750, 7, GetColor(255, 255, 255), "1P");
 	DrawFormatString(750, 29, GetColor(255, 255, 255), "2P");
 	DrawFormatString(725, 7, GetColor(255, 255, 255), "◆");
@@ -452,6 +471,194 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//キー入力を得る
 			Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
+			////キー入力に応じてプレイヤーの座標を移動
+			//if (Key & PAD_INPUT_LEFT)
+			//{
+			//	Move = 1;
+			//	MoveX = -1;
+			//	MoveY = 0;
+			//}
+			//if (Key & PAD_INPUT_RIGHT)
+			//{
+			//	Move = 1;
+			//	MoveX = 1;
+			//	MoveY = 0;
+			//}
+			//if (Key & PAD_INPUT_UP)
+			//{
+			//	Move = 1;
+			//	MoveX = 0;
+			//	MoveY = -1;
+			//}
+			//if (Key & PAD_INPUT_DOWN)
+			//{
+			//	Move = 1;
+			//	MoveX = 0;
+			//	MoveY = 1;
+			//}
+			//プレイヤー前進フラグをtrue、1P移動距離を設定
+			if (P1_PlayerMove_Flg == true){
+
+				//for (i = 0; i < P1_PlayerMove_num; i++){
+				//	if (P1_Direction_of_Travel_num == 0){//右移動						
+				//		Move = 1;
+				//		MoveX = 1.0f;
+				//		MoveY = 0.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 1){//左移動						
+				//		Move = 1;
+				//		MoveX = -1.0f;
+				//		MoveY = 0.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 2){//上移動						
+				//		Move = 1;
+				//		MoveX = 0.0f;
+				//		MoveY = -1.0f;
+				//	}
+				//	else if (P1_Direction_of_Travel_num == 3){//下移動						
+				//		Move = 1;
+				//		MoveX = 0.0f;
+				//		MoveY = 1.0f;
+				//		
+				//	}
+				//キー入力に応じてプレイヤーの座標を移動
+				if (Key & PAD_INPUT_LEFT)
+				{
+					Move = 1;
+					MoveX = -1;
+					MoveY = 0;
+				}
+				if (Key & PAD_INPUT_RIGHT)
+				{
+					Move = 1;
+					MoveX = 1;
+					MoveY = 0;
+				}
+				if (Key & PAD_INPUT_UP)
+				{
+					Move = 1;
+					MoveX = 0;
+					MoveY = -1;
+				}
+				if (Key & PAD_INPUT_DOWN)
+				{
+					Move = 1;
+					MoveX = 0;
+					MoveY = 1;
+				}
+
+					if (Move == 1){
+						MoveCounter = 0;
+					}
+				
+			}
+
+			//進入不可能なマップだった場合は移動できない
+			if (Move == 1)
+			{
+				//0 = 壁には移動できない
+				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
+				{
+					Move = 0;
+				}
+				else{
+					MoveCounter = 0;
+				}
+				//for (int m = 0 ; m < P1_PlayerMove_num; m++)
+				{			
+					//マップ読み取り
+					for (int m_y = 0; m_y < MAP_HEIGHT; m_y++){
+						for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
+							//主人公の周りにある道を確認して移動する
+							if (P1_Direction_of_Travel_num == 0 &&
+								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
+								|| MapData_P[PlayerY][PlayerX + 1] == 4
+								|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
+								//進んだ方向に4があれば、登録者数増加
+								if (MapData_P[PlayerY][PlayerX + 1] == 4)
+								{
+									P1_subscriber += 100;
+								}
+								//進んだ方向に5があれば、登録者数減少
+								if (MapData_P[PlayerY][PlayerX + 1] == 5)
+								{
+									P1_subscriber -= 100;
+								}
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 1.0f;
+								MoveY = 0.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 1 &&
+								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
+								|| MapData_P[PlayerY][PlayerX - 1] == 4
+								|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
+								//進んだ方向に4があれば、登録者数増加
+								if (MapData_P[PlayerY][PlayerX - 1] == 4)
+								{
+									P1_subscriber += 100;
+								}
+								//進んだ方向に5があれば、登録者数減少
+								if (MapData_P[PlayerY][PlayerX - 1] == 5)
+								{
+									P1_subscriber -= 100;
+								}
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = -1.0f;
+								MoveY = 0.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 2 &&
+								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
+								|| MapData_P[PlayerY - 1][PlayerX] == 4
+								|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
+								//進んだ方向に4があれば、登録者数増加
+								if (MapData_P[PlayerY - 1][PlayerX] == 4)
+								{
+									P1_subscriber += 100;
+								}
+								//進んだ方向に5があれば、登録者数減少
+								if (MapData_P[PlayerY - 1][PlayerX] == 5)
+								{
+									P1_subscriber -= 100;
+								}
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 0.0f;
+								MoveY = -1.0f;
+							}
+							else if (P1_Direction_of_Travel_num == 3 &&
+								MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
+								|| MapData_P[PlayerY + 1][PlayerX] == 4
+								|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
+								//進んだ方向に4があれば、登録者数増加
+								if (MapData_P[PlayerY + 1][PlayerX] == 4)
+								{
+									P1_subscriber += 100;
+								}
+								//進んだ方向に5があれば、登録者数減少
+								if (MapData_P[PlayerY + 1][PlayerX] == 5)
+								{
+									P1_subscriber -= 100;
+								}
+								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+								MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
+								Move = 1;
+								MoveX = 0.0f;
+								MoveY = 1.0f;
+							}
+						}
+					}
+					//MapData_P[MapDrawPointY][MapDrawPointX] = 2;
+					//PlayerY = 2;				
+				}			
+				/*if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 1)
+				{
+					MapData_P[2 + MapDrawPointY][2 + MapDrawPointX];
+				}*/
 			
 			//進入不可能なマップだった場合は移動できない
 			if (P1_PlayerMove_Flg == true)
