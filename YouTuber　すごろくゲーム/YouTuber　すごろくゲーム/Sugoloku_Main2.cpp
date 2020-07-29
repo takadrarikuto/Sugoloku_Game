@@ -92,7 +92,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	MapDrawPointY = PlayerY - (DrawMapChipNumY / 2 - 1);
 
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
-	static int image = LoadGraph("image\\Frisk3.png");
+	static int image = LoadGraph("image\\プレイヤー1.png");
 	static int back_img1 = LoadGraph("image\\背景テスト用.png");
 	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
 	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
@@ -103,7 +103,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int Double = LoadGraph("image\\サイコロ２倍マス.png");//「7」
 	static int event = LoadGraph("image\\イベントマス.png");//「8」
 	static int Reversal = LoadGraph("image\\逆転マス.png");//「9」
-
 
 	//マップを描く
 	for (i = -1; i < DrawMapChipNumY; i++) {
@@ -296,6 +295,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int ScrollX, ScrollY;
 	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
+	int subscriber_up_time = 0;
+	int subscriber_down_time = 0;
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -308,8 +309,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//描画先画面を裏画面にする
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//ルーレット画像(「static int」でないと、メモリが増加し続けるので注意)
-	static int Rou_image = LoadGraph("image\\スロット.png");
+	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
+	static int Rou_image = LoadGraph("image\\スロット.png");//ルーレット
+	static int message_window_img = LoadGraph("image\\メッセージウィンドウ.png");//「9」
+
+	//BGM再生
+	PlaySoundFile("music\\メインBGM.mp3", DX_PLAYTYPE_LOOP);
+
+	int move_sound = 0;
+	int roulette_sound = 0;
+	int roulette_dec_sound = 0;
+	int subscriber_up_sound = 0;
+	int subscriber_down_sound = 0;
+
+	move_sound = LoadSoundMem("music\\コマ移動.mp3");
+	roulette_sound = LoadSoundMem("music\\ルーレット.mp3");
+	roulette_dec_sound = LoadSoundMem("music\\ルーレット決定.mp3");
+	subscriber_up_sound = LoadSoundMem("music\\登録者数増加音.mp3");
+	subscriber_down_sound = LoadSoundMem("music\\登録者数減少音.mp3");
 
 	//プレイヤーの初期位置をセット
 	PlayerX = 1;
@@ -406,11 +423,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					//初期化		
 					Roulette_Rotation = true; //ルーレット回転開始
 					Roulette = 1; //Roulette 1へ移動
+					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//効果音再生
 				}
 				else if (Roulette == 1) {
 					//ルーレット停止	
 					Roulette_Rotation = false; //初期化
 					Roulette = 2; //Roulette 2へ移動
+					StopSoundMem(roulette_sound);
+					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 				}
 				else if (Roulette == 2) {
 					P1_PlayerMove_Flg = true; //主人公移動開始	
@@ -475,77 +495,95 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					//0には何もしない
 				}
 				else {
-					//マップ読み取り
-					for (int m_y = 0; m_y < MAP_HEIGHT; m_y++) {
-						for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
-							//主人公の周りにある道を確認して移動する
-							if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
-								|| MapData_P[PlayerY][PlayerX + 1] == 4
-								|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY][PlayerX + 1] == 4){
-									P1_subscriber += 100;
+					//ルーレットに表示された数字分移動させる
+					for (; 0 < P1_PlayerMove_num; P1_PlayerMove_num--)
+					{
+						//マップ読み取り
+						for (int m_y = 0; m_y < MAP_HEIGHT; m_y++) {
+							for (int m_x = 0; m_x < MAP_WIDTH; m_x++) {
+								//主人公の周りにある道を確認して移動する
+								if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
+									|| MapData_P[PlayerY][PlayerX + 1] == 4
+									|| MapData_P[PlayerY][PlayerX + 1] == 5)) {//右移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY][PlayerX + 1] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY][PlayerX + 1] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+										P1_subscriber -= 100;
+									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveX = 1.0f; //X軸方向にスクロール
+									P1_LR_flg = 1; //向き切り替え 右
 								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY][PlayerX + 1] == 5){
-									P1_subscriber -= 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
+									|| MapData_P[PlayerY][PlayerX - 1] == 4
+									|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY][PlayerX - 1] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY][PlayerX - 1] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+										P1_subscriber -= 100;
+									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveX = -1.0f; //-X軸方向にスクロール
+									P1_LR_flg = 0; //向き切り替え 左
 								}
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y][m_x + 1] = 2; //通路に主人公を通す
-								Move = 1; //スクロール開始
-								MoveX = 1.0f; //X軸方向にスクロール
-								P1_LR_flg = 1; //向き切り替え 右
-							}
-							else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
-								|| MapData_P[PlayerY][PlayerX - 1] == 4
-								|| MapData_P[PlayerY][PlayerX - 1] == 5)) {//左移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY][PlayerX - 1] == 4){
-									P1_subscriber += 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
+									|| MapData_P[PlayerY - 1][PlayerX] == 4
+									|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY - 1][PlayerX] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+										P1_subscriber += 100;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY - 1][PlayerX] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+										P1_subscriber -= 100;
+									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveY = -1.0f; //-Y軸方向にスクロール
+									P1_UD_flg = 1; //向き切り替え 上
 								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY][PlayerX - 1] == 5){
-									P1_subscriber -= 100;
+								else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
+									|| MapData_P[PlayerY + 1][PlayerX] == 4
+									|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
+									//進んだ方向に4があれば、登録者数増加
+									if (MapData_P[PlayerY + 1][PlayerX] == 4){
+										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+										P1_subscriber += 100;
+										subscriber_up_time = 200;
+									}
+									//進んだ方向に5があれば、登録者数減少
+									if (MapData_P[PlayerY + 1][PlayerX] == 5){
+										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+										P1_subscriber -= 100;
+										subscriber_down_time = 200;
+									}
+									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
+									MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
+									Move = 1; //スクロール開始
+									MoveY = 1.0f; //Y軸方向にスクロール
+									P1_UD_flg = 0; //向き切り替え 下
 								}
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y][m_x - 1] = 2; //通路に主人公を通す
-								Move = 1; //スクロール開始
-								MoveX = -1.0f; //-X軸方向にスクロール
-								P1_LR_flg = 0; //向き切り替え 左
-							}
-							else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
-								|| MapData_P[PlayerY - 1][PlayerX] == 4
-								|| MapData_P[PlayerY - 1][PlayerX] == 5)) {//上移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY - 1][PlayerX] == 4){
-									P1_subscriber += 100;
-								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY - 1][PlayerX] == 5){
-									P1_subscriber -= 100;
-								}
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y - 1][m_x] = 2; //通路に主人公を通す
-								Move = 1; //スクロール開始
-								MoveY = -1.0f; //-Y軸方向にスクロール
-								P1_UD_flg = 1; //向き切り替え 上
-							}
-							else if (MapData_P[m_y][m_x] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
-								|| MapData_P[PlayerY + 1][PlayerX] == 4
-								|| MapData_P[PlayerY + 1][PlayerX] == 5)) {//下移動
-								//進んだ方向に4があれば、登録者数増加
-								if (MapData_P[PlayerY + 1][PlayerX] == 4){
-									P1_subscriber += 100;
-								}
-								//進んだ方向に5があれば、登録者数減少
-								if (MapData_P[PlayerY + 1][PlayerX] == 5){
-									P1_subscriber -= 100;
-								}
-								MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
-								MapData_P[m_y + 1][m_x] = 2; //通路に主人公を通す
-								Move = 1; //スクロール開始
-								MoveY = 1.0f; //Y軸方向にスクロール
-								P1_UD_flg = 0; //向き切り替え 下
 							}
 						}
 					}
@@ -611,6 +649,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//マップとプレイヤーを描画
 		GraphDraw(ScrollX, ScrollY);
+
+		subscriber_up_time--;
+		if (subscriber_up_time > 0) {
+			//背景画像読み込み
+			DrawRectGraphF(
+				15, 420,  //描画位置
+				0, 0, //切り取り開始位置
+				769, 187, //切り取るサイズ
+				message_window_img,  //切り取る元画像
+				TRUE //透過処理フラグ
+			);
+			DrawFormatString(40, 470, GetColor(50, 255, 255), "チャンネル登録者数増加マス");
+			DrawFormatString(40, 500, GetColor(255, 255, 255), "チャンネル登録者数が100人増えた！");
+		}
+		else{
+			subscriber_up_time = 0;
+		}
+
+		subscriber_down_time--;
+		if (subscriber_down_time > 0) {
+			//背景画像読み込み
+			DrawRectGraphF(
+				15, 420,  //描画位置
+				0, 0, //切り取り開始位置
+				769, 187, //切り取るサイズ
+				message_window_img,  //切り取る元画像
+				TRUE //透過処理フラグ
+			);
+			DrawFormatString(40, 470, GetColor(255, 50, 255), "チャンネル登録者数減少マス");
+			DrawFormatString(40, 500, GetColor(255, 0, 0), "チャンネル登録者数が100人減った…");
+		}
+		else {
+			subscriber_down_time = 0;
+		}
 
 		ScreenFlip(); //バックバッファと切り替え
 
