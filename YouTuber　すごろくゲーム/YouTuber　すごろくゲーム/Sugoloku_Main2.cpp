@@ -666,6 +666,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (P1_PlayerMove_Flg == true) {
 				//初期化
 				P1_PlayerMove_Flg = false;
+				squares_cnt1 -= 1;
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
@@ -680,7 +681,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					RouDraw_flg = false;
 					Roulette = 0; //Roulette 0へ移動
 				}				
-				
+
 				//プレイヤーの位置を変更する
 				PlayerX += MoveX;
 				PlayerY += MoveY;
