@@ -41,7 +41,7 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 1, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 7,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -297,6 +297,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
 	int subscriber_up_time = 0;
 	int subscriber_down_time = 0;
+	int goal_time = 0;
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -509,11 +510,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY][PlayerX + 1] == 4){
 										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
+										subscriber_up_time = 200;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY][PlayerX + 1] == 5){
 										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
+										subscriber_down_time = 200;
+									}
+									//進んだ方向に9があれば、ゴール処理
+									if (MapData_P[PlayerY][PlayerX + 1] == 9) {
+										goal_time = 200;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
@@ -529,11 +536,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY][PlayerX - 1] == 4){
 										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
+										subscriber_up_time = 200;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY][PlayerX - 1] == 5){
 										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
+										subscriber_down_time = 200;
+									}
+									//進んだ方向に9があれば、ゴール処理
+									if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+										goal_time = 200;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
@@ -549,11 +562,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									if (MapData_P[PlayerY - 1][PlayerX] == 4){
 										PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 										P1_subscriber += 100;
+										subscriber_up_time = 200;
 									}
 									//進んだ方向に5があれば、登録者数減少
 									if (MapData_P[PlayerY - 1][PlayerX] == 5){
 										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
+										subscriber_down_time = 200;
+									}
+									//進んだ方向に9があれば、ゴール処理
+									if (MapData_P[PlayerY - 1][PlayerX] == 9) {
+										goal_time = 200;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
@@ -576,6 +595,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 										PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 										P1_subscriber -= 100;
 										subscriber_down_time = 200;
+									}
+									//進んだ方向に9があれば、ゴール処理
+									if (MapData_P[PlayerY + 1][PlayerX] == 9) {
+										goal_time = 200;
 									}
 									PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 									MapData_P[m_y][m_x] = 3; //主人公が通った所は通れなくする
@@ -675,6 +698,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		else {
 			subscriber_down_time = 0;
+		}
+
+		goal_time--;
+		if (goal_time > 0) {
+			DrawRectGraphF(
+				15, 420,  //描画位置
+				0, 0, //切り取り開始位置
+				769, 187, //切り取るサイズ
+				message_window_img,  //切り取る元画像
+				TRUE //透過処理フラグ
+			);
+			DrawFormatString(40, 470, GetColor(255, 0, 0), "ゴール！");
+		}
+		else {
+			goal_time = 0;
 		}
 
 		ScreenFlip(); //バックバッファと切り替え
