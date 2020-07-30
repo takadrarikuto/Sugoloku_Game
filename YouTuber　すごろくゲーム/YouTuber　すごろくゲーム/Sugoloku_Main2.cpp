@@ -373,7 +373,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ルーレット画像表示停止フラグ
 	bool RouDraw_flg = false;
 	//ルーレット画像表示停止タイム
-	int RouDraw_time = 0;
+	int RouDraw_time = 0;	
 
 	//共有
 	//主人公移動開始フラグ
@@ -629,11 +629,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
-				//初期化
-				Move = 0;
-				RouDraw_flg = false;
-				Roulette = 0; //Roulette 0へ移動
-
+				if (P1_PlayerMove_num > 0) { //移動回数が0以上の時
+					P1_PlayerMove_Flg = true; //もう一度移動させる
+					MoveCounter = 0;
+					P1_PlayerMove_num--;
+				}
+				else if (P1_PlayerMove_num <= 0){ //移動回数が0の時
+					//初期化
+					Move = 0;
+					RouDraw_flg = false;
+					Roulette = 0; //Roulette 0へ移動
+				}				
+				
 				//プレイヤーの位置を変更する
 				PlayerX += MoveX;
 				PlayerY += MoveY;
