@@ -322,12 +322,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int roulette_dec_sound = 0;
 	int subscriber_up_sound = 0;
 	int subscriber_down_sound = 0;
+	int goal_sound = 0;
+	int goal_cheers_sound = 0;
 
 	move_sound = LoadSoundMem("music\\コマ移動.mp3");
 	roulette_sound = LoadSoundMem("music\\ルーレット.mp3");
 	roulette_dec_sound = LoadSoundMem("music\\ルーレット決定.mp3");
 	subscriber_up_sound = LoadSoundMem("music\\登録者数増加音.mp3");
 	subscriber_down_sound = LoadSoundMem("music\\登録者数減少音.mp3");
+	goal_sound = LoadSoundMem("music\\ゴール音.mp3");
+	goal_cheers_sound = LoadSoundMem("music\\ゴール歓声.mp3");
 
 	//プレイヤーの初期位置をセット
 	PlayerX = 1;
@@ -521,6 +525,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									}
 									//(主人公マップの)進んだ方向に9があれば、ゴール処理
 									if (MapData_P[PlayerY][PlayerX + 1] == 9) {
+										PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+										PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 										goal_time = 200;
 										//順位によって順位ボーナス加算
 										if (P1_subscriber > P2_subscriber) {
@@ -555,6 +561,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									}
 									//(主人公マップの)進んだ方向に9があれば、ゴール処理
 									if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+										PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+										PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 										goal_time = 200;
 										//順位によって順位ボーナス加算
 										if (P1_subscriber > P2_subscriber) {
@@ -589,6 +597,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									}
 									//(主人公マップの)進んだ方向に9があれば、ゴール処理
 									if (MapData_P[PlayerY - 1][PlayerX] == 9) {
+										PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+										PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 										goal_time = 200;
 										//順位によって順位ボーナス加算
 										if (P1_subscriber > P2_subscriber) {
@@ -623,7 +633,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 									}
 									//(主人公マップの)進んだ方向に9があれば、ゴール処理
 									if (MapData_P[PlayerY + 1][PlayerX] == 9) {
-										goal_time = 200;
+										PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+										PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+										goal_time = 400;
 										//順位によって順位ボーナス加算
 										if (P1_subscriber > P2_subscriber) {
 											P1_subscriber += 10000;
