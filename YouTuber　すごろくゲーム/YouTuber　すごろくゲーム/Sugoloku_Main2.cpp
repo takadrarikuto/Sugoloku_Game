@@ -34,7 +34,8 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
-//主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス)(125マス)
+/*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
+  )(125マス)*/
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
@@ -43,7 +44,7 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 9, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -54,9 +55,9 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
+	{ 0, 1, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 1, 1, 1, 0 } ,
+	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
 
@@ -513,10 +514,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			else {
 				//主人公の周りにある道を確認して移動する
-				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
-					|| MapData_P[PlayerY][PlayerX + 1] == 4
-					|| MapData_P[PlayerY][PlayerX + 1] == 5
-					|| MapData_P[PlayerY][PlayerX + 1] == 9)) {//右移動
+				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] == 4 || 
+						MapData_P[PlayerY][PlayerX + 1] == 5 || MapData_P[PlayerY][PlayerX + 1] == 9)) {//右移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
@@ -531,7 +530,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+					if (MapData_P[PlayerY][PlayerX + 1] == 9) {
 						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						goal_time = 200;
@@ -549,10 +548,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MoveX = 1.0f; //X軸方向にスクロール
 					P1_LR_flg = 1; //向き切り替え 右
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1
-					|| MapData_P[PlayerY][PlayerX - 1] == 4
-					|| MapData_P[PlayerY][PlayerX - 1] == 5
-					|| MapData_P[PlayerY][PlayerX - 1] == 9)) {//左移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1|| MapData_P[PlayerY][PlayerX - 1] == 4|| 
+						 MapData_P[PlayerY][PlayerX - 1] == 5 || MapData_P[PlayerY][PlayerX - 1] == 9)) {//左移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
@@ -585,10 +582,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MoveX = -1.0f; //-X軸方向にスクロール
 					P1_LR_flg = 0; //向き切り替え 左
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1
-					|| MapData_P[PlayerY - 1][PlayerX] == 4
-					|| MapData_P[PlayerY - 1][PlayerX] == 5
-					|| MapData_P[PlayerY - 1][PlayerX] == 9)) {//上移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1|| MapData_P[PlayerY - 1][PlayerX] == 4||
+						 MapData_P[PlayerY - 1][PlayerX] == 5 || MapData_P[PlayerY - 1][PlayerX] == 9)) {//上移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
@@ -603,7 +598,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+					if (MapData_P[PlayerY - 1][PlayerX] == 9) {
 						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						goal_time = 200;
@@ -621,10 +616,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MoveY = -1.0f; //-Y軸方向にスクロール
 					P1_UD_flg = 1; //向き切り替え 上
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1
-					|| MapData_P[PlayerY + 1][PlayerX] == 4
-					|| MapData_P[PlayerY + 1][PlayerX] == 5
-					|| MapData_P[PlayerY + 1][PlayerX] == 9)) {//下移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] == 4 || 
+						 MapData_P[PlayerY + 1][PlayerX] == 5 || MapData_P[PlayerY + 1][PlayerX] == 9)) {//下移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
@@ -641,7 +634,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+					if (MapData_P[PlayerY + 1][PlayerX] == 9) {
 						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 						goal_time = 200;
@@ -652,6 +645,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						else if (P2_subscriber > P1_subscriber) {
 							P1_subscriber += 5000;
 						}
+					}
+					//進む方向が壁の時
+					if (MapData_P[PlayerY][PlayerX + 1] == 0) {
+
 					}
 					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
@@ -672,6 +669,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (P1_PlayerMove_Flg == true) {
 				//初期化
 				P1_PlayerMove_Flg = false;
+				squares_cnt1 -= 1;
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
