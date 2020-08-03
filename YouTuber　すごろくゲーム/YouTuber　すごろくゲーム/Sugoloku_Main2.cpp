@@ -505,6 +505,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			{
 				//0‚É‚Í‰½‚à‚µ‚È‚¢
 			}
+			if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 0
+				|| MapData_P[PlayerY][PlayerX - 1] == 0 || MapData_P[PlayerY + 1][PlayerX] == 0
+				|| MapData_P[PlayerY + 1][PlayerX] == 0))
+			{
+				//0‚É‚Í‰½‚à‚µ‚È‚¢
+			}
 			else {
 				//ålŒö‚Ìü‚è‚É‚ ‚é“¹‚ğŠm”F‚µ‚ÄˆÚ“®‚·‚é
 				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1
