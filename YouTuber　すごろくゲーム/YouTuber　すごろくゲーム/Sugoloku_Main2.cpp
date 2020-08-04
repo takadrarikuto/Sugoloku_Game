@@ -506,12 +506,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			{
 				//0には何もしない
 			}
-			if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 0
-				|| MapData_P[PlayerY][PlayerX - 1] == 0 || MapData_P[PlayerY + 1][PlayerX] == 0
-				|| MapData_P[PlayerY + 1][PlayerX] == 0))
-			{
-				//0には何もしない
-			}
 			else {
 				//主人公の周りにある道を確認して移動する
 				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] == 4 || 
@@ -536,10 +530,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						goal_time = 200;
 						//順位によって順位ボーナス加算
 						if (P1_subscriber > P2_subscriber) {
-							P1_subscriber += 10000;
+							P1_subscriber += 10000; //1位 +10000人
 						}
 						else if (P2_subscriber > P1_subscriber) {
-							P1_subscriber += 5000;
+							P1_subscriber += 5000; //2位 +5000人
 						}
 					}
 					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
