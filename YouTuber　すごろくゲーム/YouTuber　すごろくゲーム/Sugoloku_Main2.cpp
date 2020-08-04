@@ -39,7 +39,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 1, 1, 1, 5, 0 } ,
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 8, 0, 0, 0, 1, 0 } ,
@@ -76,6 +76,7 @@ int P2_subscriber = 1000;
 
 //マス目カウント用(試作)
 int squares_cnt1 = 125;
+int squares_cnt2 = 125;
 
 //マップとプレイヤーの描画関数
 void GraphDraw(int ScrollX, int ScrollY)
@@ -238,8 +239,8 @@ void GraphDraw(int ScrollX, int ScrollY)
 		(PlayerX - MapDrawPointX + 1) * MAP_SIZE, (PlayerY - MapDrawPointY + 1) * MAP_SIZE,
 		GetColor(255, 255, 255), TRUE);*/
 
-		//-----------------------------------------------------------------------
-		//UI部分背景
+	//---------------------------------------------------------------------------------
+	//UI部分背景
 	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//描画
 	//文字を描画する-------------------------------------------------------------------
 	//登録者数
@@ -248,7 +249,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	//ゴールまでの歩数
 	DrawFormatString(270, 18, GetColor(255, 255, 255), "ゴールまで");
 	DrawFormatString(365, 7, GetColor(255, 255, 255), "1P：あと%d歩", squares_cnt1);
-	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと30歩");
+	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと%d歩", squares_cnt2);
 	//現在順位
 	DrawFormatString(500, 18, GetColor(255, 255, 255), "現在順位");
 	if (P1_subscriber > P2_subscriber)
@@ -299,6 +300,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int subscriber_up_time = 0;
 	int subscriber_down_time = 0;
 	int goal_time = 0;
+	bool Roulette_Flg = false; //ルーレットテキスト用フラグ
+	bool Roulette_stop_Flg = false; //ルーレットテキスト用フラグ
+	bool square_go_Flg = false; //ルーレットテキスト用フラグ
+	bool square_rest_Flg = true; //ルーレットテキスト用フラグ
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -428,12 +433,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				if (Roulette == 0) {
 					//初期化		
 					Roulette_Rotation = true; //ルーレット回転開始
+					Roulette_stop_Flg = true; //ルーレット回転中テキストオン
+					square_rest_Flg = false;
 					Roulette = 1; //Roulette 1へ移動
 					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//効果音再生
 				}
 				else if (Roulette == 1) {
 					//ルーレット停止	
 					Roulette_Rotation = false; //初期化
+					Roulette_stop_Flg = false; //ルーレット回転中テキストオフ
+					square_go_Flg = true; //コマ進めるテキストオン
 					Roulette = 2; //Roulette 2へ移動
 					StopSoundMem(roulette_sound);
 					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
@@ -441,12 +450,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else if (Roulette == 2) {
 					P1_PlayerMove_Flg = true; //主人公移動開始	
 					RouDraw_flg = true; //ルーレット画像表示停止
+					square_go_Flg = false; //コマ進めるテキストオフ
+					square_rest_Flg = true;
 					Roulette = 0; //Roulette 0へ移動
 				}
 				Roulette_Enter_Bottan = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_RETURN) == false)
 				Roulette_Enter_Bottan = false;
+				Roulette_Flg = true; //ルーレットスタートテキストオン
 
 			//ルーレット回転処理
 			if (Roulette_Rotation == true) {
@@ -695,6 +707,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ClearDrawScreen(); //画像クリア
 
+		//マップとプレイヤーを描画
+		GraphDraw(ScrollX, ScrollY);
+
 		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
@@ -707,19 +722,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			);
 		}
 
-		//マップとプレイヤーを描画
-		GraphDraw(ScrollX, ScrollY);
+		//メッセージウィンドウ画像読み込み
+		DrawRectGraphF(
+			15, 420,  //描画位置
+			0, 0, //切り取り開始位置
+			769, 187, //切り取るサイズ
+			message_window_img,  //切り取る元画像
+			TRUE //透過処理フラグ
+		);
 
+		//チャンネル登録者数増加テキスト
 		subscriber_up_time--;
 		if (subscriber_up_time > 0) {
-			//背景画像読み込み
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
 			DrawFormatString(40, 470, GetColor(50, 255, 255), "チャンネル登録者数増加マス");
 			DrawFormatString(40, 500, GetColor(255, 255, 255), "チャンネル登録者数が100人増えた！");
 		}
@@ -727,16 +741,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			subscriber_up_time = 0;
 		}
 
+		//チャンネル登録者数減少テキスト
 		subscriber_down_time--;
 		if (subscriber_down_time > 0) {
-			//背景画像読み込み
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
 			DrawFormatString(40, 470, GetColor(255, 50, 255), "チャンネル登録者数減少マス");
 			DrawFormatString(40, 500, GetColor(255, 0, 0), "チャンネル登録者数が100人減った…");
 		}
@@ -744,15 +751,60 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			subscriber_down_time = 0;
 		}
 
+		//ルーレットスタート指示テキスト
+		if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
+			&& square_rest_Flg == true && RouDraw_flg == false && goal_time == 0 && subscriber_up_time == 0 && subscriber_down_time == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+		}
+		else {
+			Roulette_Flg == false;
+		}
+
+		//ルーレットストップ指示テキスト
+		if (Roulette_stop_Flg == true && subscriber_up_time == 0 && subscriber_down_time == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットストップ");
+		}
+		else {
+			Roulette_stop_Flg == false;
+		}
+
+		//コマ進める指示テキスト
+		if (square_go_Flg == true && subscriber_up_time == 0 && subscriber_down_time == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでコマを進める");
+		}
+		else {
+			square_go_Flg == false;
+		}
+
+		//あと何マス テキスト
+		if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0 && subscriber_up_time == 0 && subscriber_down_time == 0) {
+
+			if (P1_PlayerMove_num == 1){
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：1マス");
+			}
+			else if (P1_PlayerMove_num == 2) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：2マス");
+			}
+			else if (P1_PlayerMove_num == 3) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：3マス");
+			}
+			else if (P1_PlayerMove_num == 4) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：4マス");
+			}
+			else if (P1_PlayerMove_num == 5) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：5マス");
+			}
+			else if (P1_PlayerMove_num == 6) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：6マス");
+			}
+		}
+		else {
+			square_rest_Flg == false;
+		}
+
+		//ゴールテキスト
 		goal_time--;
-		if (goal_time > 0) {
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
+		if (goal_time > 0 && subscriber_up_time == 0 && subscriber_down_time == 0) {
 			DrawFormatString(40, 470, GetColor(255, 0, 0), "ゴール！");
 
 			//1位でゴールした場合
