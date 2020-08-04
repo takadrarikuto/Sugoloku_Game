@@ -707,9 +707,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ClearDrawScreen(); //画像クリア
 
-		//マップとプレイヤーを描画
-		GraphDraw(ScrollX, ScrollY);
-
 		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
@@ -721,6 +718,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Rou_LR_flg //反転処理フラグ
 			);
 		}
+
+		//マップとプレイヤーを描画
+		GraphDraw(ScrollX, ScrollY);
 
 		//メッセージウィンドウ画像読み込み
 		DrawRectGraphF(
