@@ -41,23 +41,23 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 1, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 8, 0, 0, 0, 1, 0 } ,
 	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 1, 1, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 5, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 7,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 1, 1, 5, 8, 1, 1, 1, 1,    4, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 1, 1, 0 } ,
-	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,    1, 1, 1, 1, 1, 1, 1, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 7, 0 } ,
+	{ 0, 1, 1, 5, 1, 1, 1, 8, 1, 4,    1, 1, 5, 5, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 8, 0 } ,
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
+	{ 0, 1, 0, 1, 1, 1, 4, 1, 5, 1,    4, 1, 4, 4, 1, 5, 7, 0, 1, 0 } ,
+	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
+	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
 
@@ -508,19 +508,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			else {
 				//主人公の周りにある道を確認して移動する
-				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] == 4 || 
-						MapData_P[PlayerY][PlayerX + 1] == 5 || MapData_P[PlayerY][PlayerX + 1] == 6 || MapData_P[PlayerY][PlayerX + 1] == 9)) {//右移動
+				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
 						if (MapData_P[PlayerY][PlayerX + 1] == 4) {
 							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 							P1_subscriber += 100;
+							subscriber_up_time = 200;
 						}
 						//進んだ方向に5があれば、登録者数減少
 						if (MapData_P[PlayerY][PlayerX + 1] == 5) {
 							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 							P1_subscriber -= 100;
+							subscriber_down_time = 200;
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
@@ -540,21 +541,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
 					MoveX = 1.0f; //X軸方向にスクロール
 					P1_LR_flg = 1; //向き切り替え 右
-					Move = 1; //スクロール開始
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1|| MapData_P[PlayerY][PlayerX - 1] == 4|| 
-						 MapData_P[PlayerY][PlayerX - 1] == 5 || MapData_P[PlayerY][PlayerX - 1] == 6 || MapData_P[PlayerY][PlayerX - 1] == 9)) {//左移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1|| MapData_P[PlayerY][PlayerX - 1] >= 4)) {//左移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
 						if (MapData_P[PlayerY][PlayerX - 1] == 4) {
 							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 							P1_subscriber += 100;
+							subscriber_up_time = 200;
 						}
 						//進んだ方向に5があれば、登録者数減少
 						if (MapData_P[PlayerY][PlayerX - 1] == 5) {
 							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 							P1_subscriber -= 100;
+							subscriber_down_time = 200;
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
@@ -574,21 +575,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
 					MoveX = -1.0f; //-X軸方向にスクロール
 					P1_LR_flg = 0; //向き切り替え 左
-					Move = 1; //スクロール開始
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1|| MapData_P[PlayerY - 1][PlayerX] == 4||
-						 MapData_P[PlayerY - 1][PlayerX] == 5 || MapData_P[PlayerY - 1][PlayerX] == 6 || MapData_P[PlayerY - 1][PlayerX] == 9)) {//上移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1|| MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
 						if (MapData_P[PlayerY - 1][PlayerX] == 4) {
 							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 							P1_subscriber += 100;
+							subscriber_up_time = 200;
 						}
 						//進んだ方向に5があれば、登録者数減少
 						if (MapData_P[PlayerY - 1][PlayerX] == 5) {
 							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 							P1_subscriber -= 100;
+							subscriber_down_time = 200;
 						}
 					}
 					//(主人公マップの)進んだ方向に9があれば、ゴール処理
@@ -608,10 +609,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
 					MoveY = -1.0f; //-Y軸方向にスクロール
 					P1_UD_flg = 1; //向き切り替え 上
-					Move = 1; //スクロール開始
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] == 4 ||
-						 MapData_P[PlayerY + 1][PlayerX] == 5 || MapData_P[PlayerY + 1][PlayerX] == 6 || MapData_P[PlayerY + 1][PlayerX] == 9)) {//下移動
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4 )) {//下移動
 					//移動回数が1の時
 					if (P1_PlayerMove_num == 1) {
 						//進んだ方向に4があれば、登録者数増加
@@ -644,8 +643,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
 					MoveY = 1.0f; //Y軸方向にスクロール
 					P1_UD_flg = 0; //向き切り替え 下
-					Move = 1; //スクロール開始
 				}
+				Move = 1; //スクロール開始
 				PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 			}
 			
