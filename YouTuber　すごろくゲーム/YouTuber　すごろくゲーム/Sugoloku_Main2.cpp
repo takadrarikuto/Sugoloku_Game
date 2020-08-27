@@ -9,10 +9,32 @@
 
 #define RECR_MAX 200 //ルーレット切り取り数
 
-//マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール)(125マス)
+/*マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール
+4 = 登録者増加、 5 = 登録者減少、6 = 分岐点、7 = 2倍マス、)(150マス)*/
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,2,0,1,1,4,1,1,1,5,1,1,4,1,1,4,1,1,5,0},
+	{0,1,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,0,1,1,1,5,0,0,0,0,0,4,1,5,1,0,0,1,0},
+	{0,4,0,0,0,0,1,0,3,1,9,9,9,0,0,8,0,0,1,0},
+	{0,5,0,0,0,0,4,0,0,0,0,0,0,0,0,1,0,0,5,0},
+	{0,1,1,1,1,7,5,0,4,1,1,4,5,5,4,5,0,0,1,0},
+	{0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,5,1,1,7,1,1,5,0,1,8,1,0,1,7,1,0,4,0},
+	{0,4,0,0,0,0,0,0,0,0,1,0,5,5,5,0,4,0,1,0},
+	{0,1,5,1,1,8,1,4,1,1,4,0,0,0,0,0,1,0,1,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0},
+	{0,1,5,1,0,5,1,4,0,0,0,0,4,4,4,0,5,0,7,0},
+	{0,4,0,1,0,1,0,1,0,5,1,1,1,0,1,8,1,0,1,0},
+	{0,1,0,4,1,8,0,7,1,4,0,0,0,0,0,0,0,0,8,0},
+	{0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,0,1,4,4,4,4,5,1,4,1,4,4,1,5,1,0,1,0},
+	{0,8,1,1,0,0,0,0,0,0,0,0,0,0,0,0,6,4,5,0},
+	{0,0,0,1,5,5,5,5,4,1,5,1,5,5,1,4,1,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
@@ -32,13 +54,34 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 1, 1, 1, 4, 1, 5, 1,    4, 1, 4, 4, 1, 5, 7, 0, 1, 0 } ,
 	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
 	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,*/
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
 4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 8 = 分岐点終点(予定))(125マス)*/
+4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点、7 = 2倍マス、9 = ゴールマス　 = 分岐点終点(7以外予定))(150マス)*/
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,2,0,1,1,4,1,1,1,5,1,1,4,1,1,4,1,1,5,0},
+	{0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,0,1,1,1,5,0,0,0,0,0,4,1,5,1,0,0,1,0},
+	{0,4,0,0,0,0,1,0,9,1,1,1,1,0,0,1,0,0,1,0},
+	{0,5,0,0,0,0,4,0,0,0,0,0,0,0,0,1,0,0,5,0},
+	{0,1,1,1,1,7,5,0,4,1,1,4,5,5,4,5,0,0,1,0},
+	{0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,5,1,1,7,1,1,5,0,1,1,1,0,1,7,1,0,4,0},
+	{0,4,0,0,0,0,0,0,0,0,1,0,5,5,5,0,4,0,1,0},
+	{0,1,5,1,1,1,1,4,1,1,4,0,0,0,0,0,1,0,1,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0},
+	{0,1,5,1,0,5,1,4,0,0,0,0,4,4,4,0,5,0,7,0},
+	{0,4,0,1,0,1,0,1,0,5,1,1,1,0,1,1,1,0,1,0},
+	{0,1,0,4,1,1,0,7,1,4,0,0,0,0,0,0,0,0,1,0},
+	{0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{0,1,0,1,4,4,4,4,5,1,4,1,4,4,1,5,1,0,1,0},
+	{0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,6,4,5,0},
+	{0,0,0,1,5,5,5,5,4,1,5,1,5,5,1,4,1,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
@@ -58,7 +101,7 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 1, 1, 1, 4, 1, 5, 1,    4, 1, 4, 4, 1, 5, 7, 0, 1, 0 } ,
 	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
 	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,*/
 };
 
 //プレイヤーの位置
@@ -71,11 +114,12 @@ int MoveX, MoveY;
 int MoveCounter;
 
 //チャンネル登録者数用変数(初期値：1000人)
-int P1_subscriber = 1100;//現在、ゴールデバッグ用で一時的に1100に変更
+int P1_subscriber = 1000;
 int P2_subscriber = 1000;
 
 //マス目カウント用(試作)
-int squares_cnt1 = 125;
+int squares_cnt1 = 150;
+int squares_cnt2 = 150;
 
 //マップとプレイヤーの描画関数
 void GraphDraw(int ScrollX, int ScrollY)
@@ -101,7 +145,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	static int subscriber_up = LoadGraph("image\\登録者数増加マス.png");//「4」
 	static int subscriber_down = LoadGraph("image\\登録者数減少マス.png");//「5」
 	static int Branch = LoadGraph("image\\分岐.png");//「6」
-	static int Double = LoadGraph("image\\サイコロ２倍マス.png");//「7」
+	static int Double = LoadGraph("image\\２倍マス.png");//「7」
 	static int event = LoadGraph("image\\イベントマス.png");//「8」
 	static int Reversal = LoadGraph("image\\逆転マス.png");//「9」
 
@@ -238,8 +282,8 @@ void GraphDraw(int ScrollX, int ScrollY)
 		(PlayerX - MapDrawPointX + 1) * MAP_SIZE, (PlayerY - MapDrawPointY + 1) * MAP_SIZE,
 		GetColor(255, 255, 255), TRUE);*/
 
-		//-----------------------------------------------------------------------
-		//UI部分背景
+	//---------------------------------------------------------------------------------
+	//UI部分背景
 	DrawBox(0, 0, 800, 50, GetColor(0, 0, 0), TRUE);//描画
 	//文字を描画する-------------------------------------------------------------------
 	//登録者数
@@ -248,7 +292,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 	//ゴールまでの歩数
 	DrawFormatString(270, 18, GetColor(255, 255, 255), "ゴールまで");
 	DrawFormatString(365, 7, GetColor(255, 255, 255), "1P：あと%d歩", squares_cnt1);
-	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと30歩");
+	DrawFormatString(365, 29, GetColor(255, 255, 255), "2P：あと%d歩", squares_cnt2);
 	//現在順位
 	DrawFormatString(500, 18, GetColor(255, 255, 255), "現在順位");
 	if (P1_subscriber > P2_subscriber)
@@ -298,7 +342,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
 	int subscriber_up_time = 0;
 	int subscriber_down_time = 0;
+	int two_times_messagetime = 0;
 	int goal_time = 0;
+	bool Roulette_Flg = false; //ルーレットテキスト用フラグ
+	bool Roulette_stop_Flg = false; //ルーレットテキスト用フラグ
+	bool square_go_Flg = false; //ルーレットテキスト用フラグ
+	bool square_rest_Flg = true; //ルーレットテキスト用フラグ
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -380,6 +429,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ルーレット画像表示停止タイム
 	int RouDraw_time = 0;	
 
+	//2倍マス用フラグ
+	bool two_times = false;
+
 	//共有
 	//主人公移動開始フラグ
 	bool P1_PlayerMove_Flg = false/*1Pプレイヤー*/, P2_PlayerMove_Flg = false/*2Pプレイヤー*/;
@@ -438,11 +490,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				if (Roulette == 0) { //ルーレット回転スタート
 					RouDraw_flg = false; //画像表示再開
 					Roulette_Rotation = true; //ルーレット回転開始
+					Roulette_stop_Flg = true; //ルーレット回転中テキストオン
+					square_rest_Flg = false;
 					Roulette = 1; //Roulette 1へ移動
 					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//効果音再生
 				}
 				else if (Roulette == 1) { //ルーレット停止
 					Roulette_Rotation = false; //初期化
+					Roulette_stop_Flg = false; //ルーレット回転中テキストオフ
+					square_go_Flg = true; //コマ進めるテキストオン
 					Roulette = 2; //Roulette 2へ移動
 					StopSoundMem(roulette_sound);
 					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
@@ -451,12 +507,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					//イベントスロットフラグ and 分岐設定フラグがfalseの時 and 分岐設定変数が0の時
 					P1_PlayerMove_Flg = true; //主人公移動開始	
 					RouDraw_flg = true; //ルーレット画像表示停止
+					square_go_Flg = false; //コマ進めるテキストオフ
+					square_rest_Flg = true;
 					Roulette = 0; //Roulette 0へ移動
 				}
 				Roulette_Enter_Bottan = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_RETURN) == false)
 				Roulette_Enter_Bottan = false;
+				Roulette_Flg = true; //ルーレットスタートテキストオン
+				//two_times = false;
 
 			//ルーレット回転処理
 			if (Roulette_Rotation == true) {
@@ -474,6 +534,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					}
 				}
 			}
+
 			//主人公移動距離調整処理
 			if (Rou_rect_y < 200) { //ルーレット切り取りy位置200以下の時
 				if (Rou_rect_x == 0) {
@@ -484,6 +545,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else if (Rou_rect_x == 400) {
 					Rou_num = 3; //3スロット
+				}
+				//2倍マスフラグがONなら2倍にする
+				if (two_times == true)
+				{
+					P1_PlayerMove_num *= 2;
 				}
 			}
 			else if (Rou_rect_y == 200) { //ルーレット切り取りy位置200の時
@@ -518,6 +584,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				P1_PlayerMove_num = 6; //マス移動
 			}
 
+				//2倍マスフラグがONなら2倍にする
+				if (two_times == true)
+				{
+					P1_PlayerMove_num *= 2;
+				}
+			}
 			//----------------------------------------------------------------------------------
 
 			//キー入力を得る
@@ -533,189 +605,196 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//進入不可能なマップだった場合は移動できない
 		if (P1_PlayerMove_Flg == true)
 		{
-			//分岐判定処理
-			if (Branch_num > 0) {
-				if (P1_PlayerMove_num > 0) { //分岐マスを通過する時にマス移動が0以上の時
-					if (Branch_num == 1) { //右
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
-						MoveX = 1.0f; //X軸方向にスクロール
-					}
-					else if (Branch_num == 2) { //左
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
-						MoveX = -1.0f; //-X軸方向にスクロール
-					}
-					else if (Branch_num == 3) { //上
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = -1.0f; //-Y軸方向にスクロール
-					}
-					else if (Branch_num == 4) { //下
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = 1.0f; //Y軸方向にスクロール
-					}
-					Branch_flg = false; //分岐設定初期化
-					Branch_num = 0; //初期化
-				}
-				else { //分岐マスで停止した時
-					Branch_flg = false; //分岐設定初期化
-					P1_PlayerMove_Flg = false;
-				}
-			}
+			//0 = 壁には移動できない
+			if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
+			{
 
-			if (P1_PlayerMove_num > 0) {
-				//0 = 壁には移動できない
-				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
-				{
-					//0には何もしない
+				//0には何もしない
+			}
+			else {
+				//主人公の周りにある道を確認して移動する
+				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
+					//移動回数が1の時
+					if (P1_PlayerMove_num == 1) {
+						//進んだ方向に「4」があれば、登録者数増加
+						if (MapData_P[PlayerY][PlayerX + 1] == 4) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							P1_subscriber += 100;
+							subscriber_up_time = 200;
+						}
+						//進んだ方向に「5」があれば、登録者数減少
+						if (MapData_P[PlayerY][PlayerX + 1] == 5) {
+							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+							P1_subscriber -= 100;
+							subscriber_down_time = 200;
+						}
+						//進んだ方向に「7」があれば、次回ルーレット数2倍
+						if (MapData_P[PlayerY][PlayerX + 1] == 7) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							two_times = true;
+							two_times_messagetime = 200;
+						}
+						//進んだ方向が「7以外」なら、2倍マスフラグをOFFにする
+						if (MapData_P[PlayerY][PlayerX + 1] != 7 && two_times == true)
+						{
+							two_times = false;
+						}
+					}
+					//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
+					if (MapData_P[PlayerY][PlayerX + 1] == 9) {
+						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						goal_time = 200;
+						//順位によって順位ボーナス加算
+						if (P1_subscriber > P2_subscriber) {
+							P1_subscriber += 10000; //1位 +10000人
+						}
+						else if (P2_subscriber > P1_subscriber) {
+							P1_subscriber += 5000; //2位 +5000人
+						}
+					}
+					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+					MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
+					MoveX = 1.0f; //X軸方向にスクロール
+					P1_LR_flg = 1; //向き切り替え 右
 				}
-				else {
-					//主人公の周りにある道を確認して移動する
-					if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
-						//移動回数が1の時
-						if (P1_PlayerMove_num == 1) {
-							//進んだ方向に4があれば、登録者数増加
-							if (MapData_P[PlayerY][PlayerX + 1] == 4) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-								P1_subscriber += 100;
-								subscriber_up_time = 200;
-							}
-							//進んだ方向に5があれば、登録者数減少
-							if (MapData_P[PlayerY][PlayerX + 1] == 5) {
-								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-								P1_subscriber -= 100;
-								subscriber_down_time = 200;
-							}
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1|| MapData_P[PlayerY][PlayerX - 1] >= 4)) {//左移動
+					//移動回数が1の時
+					if (P1_PlayerMove_num == 1) {
+						//進んだ方向に「4」があれば、登録者数増加
+						if (MapData_P[PlayerY][PlayerX - 1] == 4) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							P1_subscriber += 100;
+							subscriber_up_time = 200;
 						}
-						//(主人公マップの)進んだ方向に9があれば、ゴール処理
-						if (MapData_P[PlayerY][PlayerX + 1] == 9) {
-							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							goal_time = 200;
-							//順位によって順位ボーナス加算
-							if (P1_subscriber > P2_subscriber) {
-								P1_subscriber += 10000;
-							}
-							else if (P2_subscriber > P1_subscriber) {
-								P1_subscriber += 5000;
-							}
+						//進んだ方向に「5」があれば、登録者数減少
+						if (MapData_P[PlayerY][PlayerX - 1] == 5) {
+							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+							P1_subscriber -= 100;
+							subscriber_down_time = 200;
 						}
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
-						MoveX = 1.0f; //X軸方向にスクロール
-						P1_LR_flg = 1; //向き切り替え 右
+						//進んだ方向に「7」があれば、次回ルーレット数2倍
+						if (MapData_P[PlayerY][PlayerX - 1] == 7) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							two_times = true;
+							two_times_messagetime = 200;
+						}
+						//進んだ方向が「7以外」なら、2倍マスフラグをOFFにする
+						if (MapData_P[PlayerY][PlayerX - 1] != 7 && two_times == true)
+						{
+							two_times = false;
+						}
 					}
-					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1 || MapData_P[PlayerY][PlayerX - 1] >= 4)) {//左移動
-						//移動回数が1の時
-						if (P1_PlayerMove_num == 1) {
-							//進んだ方向に4があれば、登録者数増加
-							if (MapData_P[PlayerY][PlayerX - 1] == 4) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-								P1_subscriber += 100;
-								subscriber_up_time = 200;
-							}
-							//進んだ方向に5があれば、登録者数減少
-							if (MapData_P[PlayerY][PlayerX - 1] == 5) {
-								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-								P1_subscriber -= 100;
-								subscriber_down_time = 200;
-							}
+					//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
+					if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						goal_time = 200;
+						//順位によって順位ボーナス加算
+						if (P1_subscriber > P2_subscriber) {
+							P1_subscriber += 10000;
 						}
-						//(主人公マップの)進んだ方向に6があれば、分岐処理
-						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
-							Branch_flg = true; //分岐設定フラグ true
+						else if (P2_subscriber > P1_subscriber) {
+							P1_subscriber += 5000;
 						}
-						//(主人公マップの)進んだ方向に9があれば、ゴール処理
-						if (MapData_P[PlayerY][PlayerX - 1] == 9) {
-							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							goal_time = 200;
-							//順位によって順位ボーナス加算
-							if (P1_subscriber > P2_subscriber) {
-								P1_subscriber += 10000;
-							}
-							else if (P2_subscriber > P1_subscriber) {
-								P1_subscriber += 5000;
-							}
-						}
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
-						MoveX = -1.0f; //-X軸方向にスクロール
-						P1_LR_flg = 0; //向き切り替え 左
 					}
-					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1 || MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
-						//移動回数が1の時
-						if (P1_PlayerMove_num == 1) {
-							//進んだ方向に4があれば、登録者数増加
-							if (MapData_P[PlayerY - 1][PlayerX] == 4) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-								P1_subscriber += 100;
-								subscriber_up_time = 200;
-							}
-							//進んだ方向に5があれば、登録者数減少
-							if (MapData_P[PlayerY - 1][PlayerX] == 5) {
-								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-								P1_subscriber -= 100;
-								subscriber_down_time = 200;
-							}
-						}
-						//(主人公マップの)進んだ方向に9があれば、ゴール処理
-						if (MapData_P[PlayerY - 1][PlayerX] == 9) {
-							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							goal_time = 200;
-							//順位によって順位ボーナス加算
-							if (P1_subscriber > P2_subscriber) {
-								P1_subscriber += 10000;
-							}
-							else if (P2_subscriber > P1_subscriber) {
-								P1_subscriber += 5000;
-							}
-						}
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = -1.0f; //-Y軸方向にスクロール
-						P1_UD_flg = 1; //向き切り替え 上
-					}
-					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4)) {//下移動
-						//移動回数が1の時
-						if (P1_PlayerMove_num == 1) {
-							//進んだ方向に4があれば、登録者数増加
-							if (MapData_P[PlayerY + 1][PlayerX] == 4) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-								P1_subscriber += 100;
-								subscriber_up_time = 200;
-							}
-							//進んだ方向に5があれば、登録者数減少
-							if (MapData_P[PlayerY + 1][PlayerX] == 5) {
-								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-								P1_subscriber -= 100;
-								subscriber_down_time = 200;
-							}
-						}
-						//(主人公マップの)進んだ方向に9があれば、ゴール処理
-						if (MapData_P[PlayerY + 1][PlayerX] == 9) {
-							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-							goal_time = 200;
-							//順位によって順位ボーナス加算
-							if (P1_subscriber > P2_subscriber) {
-								P1_subscriber += 10000;
-							}
-							else if (P2_subscriber > P1_subscriber) {
-								P1_subscriber += 5000;
-							}
-						}
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = 1.0f; //Y軸方向にスクロール
-						P1_UD_flg = 0; //向き切り替え 下
-					}
-					Move = 1; //スクロール開始
-					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+					MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
+					MoveX = -1.0f; //-X軸方向にスクロール
+					P1_LR_flg = 0; //向き切り替え 左
 				}
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1|| MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
+					//移動回数が1の時
+					if (P1_PlayerMove_num == 1) {
+						//進んだ方向に「4」があれば、登録者数増加
+						if (MapData_P[PlayerY - 1][PlayerX] == 4) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							P1_subscriber += 100;
+							subscriber_up_time = 200;
+						}
+						//進んだ方向に「5」があれば、登録者数減少
+						if (MapData_P[PlayerY - 1][PlayerX] == 5) {
+							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+							P1_subscriber -= 100;
+							subscriber_down_time = 200;
+						}
+						//進んだ方向に「7」があれば、次回ルーレット数2倍
+						if (MapData_P[PlayerY - 1][PlayerX] == 7) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							two_times = true;
+							two_times_messagetime = 200;
+						}
+						//進んだ方向が「7以外」なら、2倍マスフラグをOFFにする
+						if (MapData_P[PlayerY - 1][PlayerX] != 7 && two_times == true)
+						{
+							two_times = false;
+						}
+					}
+					//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
+					if (MapData_P[PlayerY - 1][PlayerX] == 9) {
+						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						goal_time = 200;
+						//順位によって順位ボーナス加算
+						if (P1_subscriber > P2_subscriber) {
+							P1_subscriber += 10000;
+						}
+						else if (P2_subscriber > P1_subscriber) {
+							P1_subscriber += 5000;
+						}
+					}
+					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+					MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
+					MoveY = -1.0f; //-Y軸方向にスクロール
+					P1_UD_flg = 1; //向き切り替え 上
+				}
+				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4 )) {//下移動
+					//移動回数が1の時
+					if (P1_PlayerMove_num == 1) {
+						//進んだ方向に「4」があれば、登録者数増加
+						if (MapData_P[PlayerY + 1][PlayerX] == 4) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							P1_subscriber += 100;
+							subscriber_up_time = 200;
+						}
+						//進んだ方向に「5」があれば、登録者数減少
+						if (MapData_P[PlayerY + 1][PlayerX] == 5) {
+							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+							P1_subscriber -= 100;
+							subscriber_down_time = 200;
+						}
+						//進んだ方向に「7」があれば、次回ルーレット数2倍
+						if (MapData_P[PlayerY + 1][PlayerX] == 7) {
+							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+							two_times = true;
+							two_times_messagetime = 200;
+						}
+						//進んだ方向が「7以外」なら、2倍マスフラグをOFFにする
+						if (MapData_P[PlayerY + 1][PlayerX] != 7 && two_times == true)
+						{
+							two_times = false;
+						}
+					}
+					//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
+					if (MapData_P[PlayerY + 1][PlayerX] == 9) {
+						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+						goal_time = 200;
+						//順位によって順位ボーナス加算
+						if (P1_subscriber > P2_subscriber) {
+							P1_subscriber += 10000;
+						}
+						else if (P2_subscriber > P1_subscriber) {
+							P1_subscriber += 5000;
+						}
+					}
+					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+					MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
+					MoveY = 1.0f; //Y軸方向にスクロール
+					P1_UD_flg = 0; //向き切り替え 下
+				}
+				Move = 1; //スクロール開始
+				PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 			}
 			
 			
@@ -792,16 +871,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//マップとプレイヤーを描画
 		GraphDraw(ScrollX, ScrollY);
 
+		//メッセージウィンドウ画像読み込み
+		DrawRectGraphF(
+			15, 420,  //描画位置
+			0, 0, //切り取り開始位置
+			769, 187, //切り取るサイズ
+			message_window_img,  //切り取る元画像
+			TRUE //透過処理フラグ
+		);
+
+		//チャンネル登録者数増加テキスト
 		subscriber_up_time--;
 		if (subscriber_up_time > 0) {
-			//背景画像読み込み
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
 			DrawFormatString(40, 470, GetColor(50, 255, 255), "チャンネル登録者数増加マス");
 			DrawFormatString(40, 500, GetColor(255, 255, 255), "チャンネル登録者数が100人増えた！");
 		}
@@ -809,16 +890,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			subscriber_up_time = 0;
 		}
 
+		//チャンネル登録者数減少テキスト
 		subscriber_down_time--;
 		if (subscriber_down_time > 0) {
-			//背景画像読み込み
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
 			DrawFormatString(40, 470, GetColor(255, 50, 255), "チャンネル登録者数減少マス");
 			DrawFormatString(40, 500, GetColor(255, 0, 0), "チャンネル登録者数が100人減った…");
 		}
@@ -826,15 +900,108 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			subscriber_down_time = 0;
 		}
 
+		//2倍マステキスト
+		two_times_messagetime--;
+		if (two_times_messagetime > 0) {
+			DrawFormatString(40, 470, GetColor(50, 255, 255), "2倍マス！");
+			DrawFormatString(40, 500, GetColor(255, 255, 255), "次回のルーレットの数が2倍になります");
+		}
+		else {
+			two_times_messagetime = 0;
+		}
+
+		//ルーレットスタート指示テキスト
+		if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
+			&& square_rest_Flg == true && RouDraw_flg == false && goal_time == 0
+			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+			if (two_times == true)
+			{
+				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
+				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
+			}
+		}
+		else {
+			Roulette_Flg == false;
+		}
+
+		//ルーレットストップ指示テキスト
+		if (Roulette_stop_Flg == true && subscriber_up_time == 0 && subscriber_down_time == 0
+			&& two_times_messagetime == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットストップ");
+			if (two_times == true)
+			{
+				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
+				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
+			}
+		}
+		else {
+			Roulette_stop_Flg == false;
+		}
+
+		//コマ進める指示テキスト
+		if (square_go_Flg == true && subscriber_up_time == 0 && subscriber_down_time == 0
+			&& two_times_messagetime == 0) {
+			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでコマを進める");
+			if (two_times == true)
+			{
+				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
+				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
+			}
+		}
+		else {
+			square_go_Flg == false;
+		}
+
+		//あと何マス テキスト
+		if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
+			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0) {
+
+			if (P1_PlayerMove_num == 1){
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：1マス");
+			}
+			else if (P1_PlayerMove_num == 2) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：2マス");
+			}
+			else if (P1_PlayerMove_num == 3) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：3マス");
+			}
+			else if (P1_PlayerMove_num == 4) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：4マス");
+			}
+			else if (P1_PlayerMove_num == 5) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：5マス");
+			}
+			else if (P1_PlayerMove_num == 6) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：6マス");
+			}
+			else if (P1_PlayerMove_num == 7) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：7マス");
+			}
+			else if (P1_PlayerMove_num == 8) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：8マス");
+			}
+			else if (P1_PlayerMove_num == 9) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：9マス");
+			}
+			else if (P1_PlayerMove_num == 10) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：10マス");
+			}
+			else if (P1_PlayerMove_num == 11) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：11マス");
+			}
+			else if (P1_PlayerMove_num == 12) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：12マス");
+			}
+		}
+		else {
+			square_rest_Flg == false;
+		}
+
+		//ゴールテキスト
 		goal_time--;
-		if (goal_time > 0) {
-			DrawRectGraphF(
-				15, 420,  //描画位置
-				0, 0, //切り取り開始位置
-				769, 187, //切り取るサイズ
-				message_window_img,  //切り取る元画像
-				TRUE //透過処理フラグ
-			);
+		if (goal_time > 0 && subscriber_up_time == 0 && subscriber_down_time == 0
+			&& two_times_messagetime == 0) {
 			DrawFormatString(40, 470, GetColor(255, 0, 0), "ゴール！");
 
 			//1位でゴールした場合
