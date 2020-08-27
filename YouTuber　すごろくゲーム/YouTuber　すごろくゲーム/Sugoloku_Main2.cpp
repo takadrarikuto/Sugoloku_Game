@@ -35,11 +35,11 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
-4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 分岐点終点(予定))(125マス)*/
+4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 8 = 分岐点終点(予定))(125マス)*/
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 1, 1, 1, 5, 0 } ,
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
 	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
 	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 8, 0, 0, 0, 1, 0 } ,
@@ -383,6 +383,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//共有
 	//主人公移動開始フラグ
 	bool P1_PlayerMove_Flg = false/*1Pプレイヤー*/, P2_PlayerMove_Flg = false/*2Pプレイヤー*/;
+	//イベントスロットフラグ
+	bool EventRou_flg = false;
+	//分岐設定フラグ
+	bool Branch_flg = false;
+	//スロット変数
+	int Rou_num = 0;
+	//イベントスロット変数
+	int P1_EventRou_num = 0/*1Pプレイヤー*/, P2_EventRou_num = 0/*2Pプレイヤー*/;
+	//分岐設定変数 1 = →,2 = ←,3 = ↑,4 = ↓
+	int Branch_num = 0;
 	//主人公移動回数
 	int P1_PlayerMove_num = 0/*1Pプレイヤー*/, P2_PlayerMove_num = 0/*2Pプレイヤー*/;
 	//--------------------------------------------
@@ -425,20 +435,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//ルーレット処理--------------------------------------------------------------------
 			//Enterでルーレット回転スタート
 			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false) {
-				if (Roulette == 0) {
-					//初期化		
+				if (Roulette == 0) { //ルーレット回転スタート
+					RouDraw_flg = false; //画像表示再開
 					Roulette_Rotation = true; //ルーレット回転開始
 					Roulette = 1; //Roulette 1へ移動
 					PlaySoundMem(roulette_sound, DX_PLAYTYPE_LOOP, TRUE);//効果音再生
 				}
-				else if (Roulette == 1) {
-					//ルーレット停止	
+				else if (Roulette == 1) { //ルーレット停止
 					Roulette_Rotation = false; //初期化
 					Roulette = 2; //Roulette 2へ移動
 					StopSoundMem(roulette_sound);
 					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 				}
-				else if (Roulette == 2) {
+				else if (Roulette == 2) { //移動開始
+					//イベントスロットフラグ and 分岐設定フラグがfalseの時 and 分岐設定変数が0の時
 					P1_PlayerMove_Flg = true; //主人公移動開始	
 					RouDraw_flg = true; //ルーレット画像表示停止
 					Roulette = 0; //Roulette 0へ移動
@@ -467,26 +477,47 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//主人公移動距離調整処理
 			if (Rou_rect_y < 200) { //ルーレット切り取りy位置200以下の時
 				if (Rou_rect_x == 0) {
-					P1_PlayerMove_num = 1; //1マス移動
+					Rou_num = 1; //1スロット
 				}
 				else if (Rou_rect_x == 200) {
-					P1_PlayerMove_num = 2; //2マス移動
+					Rou_num = 2; //2スロット
 				}
 				else if (Rou_rect_x == 400) {
-					P1_PlayerMove_num = 3; //3マス移動
+					Rou_num = 3; //3スロット
 				}
 			}
 			else if (Rou_rect_y == 200) { //ルーレット切り取りy位置200の時
 				if (Rou_rect_x == 0) {
-					P1_PlayerMove_num = 4; //4マス移動
+					Rou_num = 4; //4スロット
 				}
 				else if (Rou_rect_x == 200) {
-					P1_PlayerMove_num = 5; //5マス移動
+					Rou_num = 5; //5スロット
 				}
 				else if (Rou_rect_x == 400) {
-					P1_PlayerMove_num = 6; //6マス移動
+					Rou_num = 6; //6スロット
 				}
 			}
+
+			//分岐設定フラグ
+			if (Branch_flg == true && Roulette == 2) {
+				//分岐処理
+				if (Rou_num > 3) {
+					Branch_num = 3; //分岐設定 3 = ↑
+				}
+				else {
+					Branch_num = 4; //分岐設定 4 = ↓
+				}
+			}
+			//イベントスロット判定処理
+			else if (EventRou_flg == true && Roulette == 2) {
+				P1_EventRou_num = Rou_num; //イベントスロット
+				EventRou_flg = false; //イベントスロットフラグ初期化
+			}
+			//マス移動処理
+			else if(Branch_flg == false && EventRou_flg == false && Roulette == 0){
+				P1_PlayerMove_num = 6; //マス移動
+			}
+
 			//----------------------------------------------------------------------------------
 
 			//キー入力を得る
@@ -497,163 +528,203 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			ScrollX = 0;
 			ScrollY = 0;
 		}
-
+		
+		//移動処理
 		//進入不可能なマップだった場合は移動できない
 		if (P1_PlayerMove_Flg == true)
 		{
-			//0 = 壁には移動できない
-			if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
-			{
-				//0には何もしない
+			//分岐判定処理
+			if (Branch_num > 0) {
+				if (P1_PlayerMove_num > 0) { //分岐マスを通過する時にマス移動が0以上の時
+					if (Branch_num == 1) { //右
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
+						MoveX = 1.0f; //X軸方向にスクロール
+					}
+					else if (Branch_num == 2) { //左
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
+						MoveX = -1.0f; //-X軸方向にスクロール
+					}
+					else if (Branch_num == 3) { //上
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
+						MoveY = -1.0f; //-Y軸方向にスクロール
+					}
+					else if (Branch_num == 4) { //下
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
+						MoveY = 1.0f; //Y軸方向にスクロール
+					}
+					Branch_flg = false; //分岐設定初期化
+					Branch_num = 0; //初期化
+				}
+				else { //分岐マスで停止した時
+					Branch_flg = false; //分岐設定初期化
+					P1_PlayerMove_Flg = false;
+				}
 			}
-			else {
-				//主人公の周りにある道を確認して移動する
-				if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
-					//移動回数が1の時
-					if (P1_PlayerMove_num == 1) {
-						//進んだ方向に4があれば、登録者数増加
-						if (MapData_P[PlayerY][PlayerX + 1] == 4) {
-							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-							P1_subscriber += 100;
-							subscriber_up_time = 200;
-						}
-						//進んだ方向に5があれば、登録者数減少
-						if (MapData_P[PlayerY][PlayerX + 1] == 5) {
-							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-							P1_subscriber -= 100;
-							subscriber_down_time = 200;
-						}
-					}
-					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY][PlayerX + 1] == 9) {
-						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						goal_time = 200;
-						//順位によって順位ボーナス加算
-						if (P1_subscriber > P2_subscriber) {
-							P1_subscriber += 10000;
-						}
-						else if (P2_subscriber > P1_subscriber) {
-							P1_subscriber += 5000;
-						}
-					}
-					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-					MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
-					MoveX = 1.0f; //X軸方向にスクロール
-					P1_LR_flg = 1; //向き切り替え 右
+
+			if (P1_PlayerMove_num > 0) {
+				//0 = 壁には移動できない
+				if (MapData_P[PlayerY + MoveY][PlayerX + MoveX] == 0)
+				{
+					//0には何もしない
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1|| MapData_P[PlayerY][PlayerX - 1] >= 4)) {//左移動
-					//移動回数が1の時
-					if (P1_PlayerMove_num == 1) {
-						//進んだ方向に4があれば、登録者数増加
-						if (MapData_P[PlayerY][PlayerX - 1] == 4) {
-							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-							P1_subscriber += 100;
-							subscriber_up_time = 200;
+				else {
+					//主人公の周りにある道を確認して移動する
+					if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
+						//移動回数が1の時
+						if (P1_PlayerMove_num == 1) {
+							//進んだ方向に4があれば、登録者数増加
+							if (MapData_P[PlayerY][PlayerX + 1] == 4) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								P1_subscriber += 100;
+								subscriber_up_time = 200;
+							}
+							//進んだ方向に5があれば、登録者数減少
+							if (MapData_P[PlayerY][PlayerX + 1] == 5) {
+								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+								P1_subscriber -= 100;
+								subscriber_down_time = 200;
+							}
 						}
-						//進んだ方向に5があれば、登録者数減少
-						if (MapData_P[PlayerY][PlayerX - 1] == 5) {
-							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-							P1_subscriber -= 100;
-							subscriber_down_time = 200;
+						//(主人公マップの)進んだ方向に9があれば、ゴール処理
+						if (MapData_P[PlayerY][PlayerX + 1] == 9) {
+							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							goal_time = 200;
+							//順位によって順位ボーナス加算
+							if (P1_subscriber > P2_subscriber) {
+								P1_subscriber += 10000;
+							}
+							else if (P2_subscriber > P1_subscriber) {
+								P1_subscriber += 5000;
+							}
 						}
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
+						MoveX = 1.0f; //X軸方向にスクロール
+						P1_LR_flg = 1; //向き切り替え 右
 					}
-					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY][PlayerX - 1] == 9) {
-						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						goal_time = 200;
-						//順位によって順位ボーナス加算
-						if (P1_subscriber > P2_subscriber) {
-							P1_subscriber += 10000;
+					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX - 1] == 1 || MapData_P[PlayerY][PlayerX - 1] >= 4)) {//左移動
+						//移動回数が1の時
+						if (P1_PlayerMove_num == 1) {
+							//進んだ方向に4があれば、登録者数増加
+							if (MapData_P[PlayerY][PlayerX - 1] == 4) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								P1_subscriber += 100;
+								subscriber_up_time = 200;
+							}
+							//進んだ方向に5があれば、登録者数減少
+							if (MapData_P[PlayerY][PlayerX - 1] == 5) {
+								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+								P1_subscriber -= 100;
+								subscriber_down_time = 200;
+							}
 						}
-						else if (P2_subscriber > P1_subscriber) {
-							P1_subscriber += 5000;
+						//(主人公マップの)進んだ方向に6があれば、分岐処理
+						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
+							Branch_flg = true; //分岐設定フラグ true
 						}
+						//(主人公マップの)進んだ方向に9があれば、ゴール処理
+						if (MapData_P[PlayerY][PlayerX - 1] == 9) {
+							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							goal_time = 200;
+							//順位によって順位ボーナス加算
+							if (P1_subscriber > P2_subscriber) {
+								P1_subscriber += 10000;
+							}
+							else if (P2_subscriber > P1_subscriber) {
+								P1_subscriber += 5000;
+							}
+						}
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
+						MoveX = -1.0f; //-X軸方向にスクロール
+						P1_LR_flg = 0; //向き切り替え 左
 					}
-					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-					MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
-					MoveX = -1.0f; //-X軸方向にスクロール
-					P1_LR_flg = 0; //向き切り替え 左
+					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1 || MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
+						//移動回数が1の時
+						if (P1_PlayerMove_num == 1) {
+							//進んだ方向に4があれば、登録者数増加
+							if (MapData_P[PlayerY - 1][PlayerX] == 4) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								P1_subscriber += 100;
+								subscriber_up_time = 200;
+							}
+							//進んだ方向に5があれば、登録者数減少
+							if (MapData_P[PlayerY - 1][PlayerX] == 5) {
+								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+								P1_subscriber -= 100;
+								subscriber_down_time = 200;
+							}
+						}
+						//(主人公マップの)進んだ方向に9があれば、ゴール処理
+						if (MapData_P[PlayerY - 1][PlayerX] == 9) {
+							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							goal_time = 200;
+							//順位によって順位ボーナス加算
+							if (P1_subscriber > P2_subscriber) {
+								P1_subscriber += 10000;
+							}
+							else if (P2_subscriber > P1_subscriber) {
+								P1_subscriber += 5000;
+							}
+						}
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
+						MoveY = -1.0f; //-Y軸方向にスクロール
+						P1_UD_flg = 1; //向き切り替え 上
+					}
+					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4)) {//下移動
+						//移動回数が1の時
+						if (P1_PlayerMove_num == 1) {
+							//進んだ方向に4があれば、登録者数増加
+							if (MapData_P[PlayerY + 1][PlayerX] == 4) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								P1_subscriber += 100;
+								subscriber_up_time = 200;
+							}
+							//進んだ方向に5があれば、登録者数減少
+							if (MapData_P[PlayerY + 1][PlayerX] == 5) {
+								PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+								P1_subscriber -= 100;
+								subscriber_down_time = 200;
+							}
+						}
+						//(主人公マップの)進んだ方向に9があれば、ゴール処理
+						if (MapData_P[PlayerY + 1][PlayerX] == 9) {
+							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
+							goal_time = 200;
+							//順位によって順位ボーナス加算
+							if (P1_subscriber > P2_subscriber) {
+								P1_subscriber += 10000;
+							}
+							else if (P2_subscriber > P1_subscriber) {
+								P1_subscriber += 5000;
+							}
+						}
+						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
+						MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
+						MoveY = 1.0f; //Y軸方向にスクロール
+						P1_UD_flg = 0; //向き切り替え 下
+					}
+					Move = 1; //スクロール開始
+					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1|| MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
-					//移動回数が1の時
-					if (P1_PlayerMove_num == 1) {
-						//進んだ方向に4があれば、登録者数増加
-						if (MapData_P[PlayerY - 1][PlayerX] == 4) {
-							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-							P1_subscriber += 100;
-							subscriber_up_time = 200;
-						}
-						//進んだ方向に5があれば、登録者数減少
-						if (MapData_P[PlayerY - 1][PlayerX] == 5) {
-							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-							P1_subscriber -= 100;
-							subscriber_down_time = 200;
-						}
-					}
-					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY - 1][PlayerX] == 9) {
-						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						goal_time = 200;
-						//順位によって順位ボーナス加算
-						if (P1_subscriber > P2_subscriber) {
-							P1_subscriber += 10000;
-						}
-						else if (P2_subscriber > P1_subscriber) {
-							P1_subscriber += 5000;
-						}
-					}
-					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-					MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
-					MoveY = -1.0f; //-Y軸方向にスクロール
-					P1_UD_flg = 1; //向き切り替え 上
-				}
-				else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4 )) {//下移動
-					//移動回数が1の時
-					if (P1_PlayerMove_num == 1) {
-						//進んだ方向に4があれば、登録者数増加
-						if (MapData_P[PlayerY + 1][PlayerX] == 4) {
-							PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-							P1_subscriber += 100;
-							subscriber_up_time = 200;
-						}
-						//進んだ方向に5があれば、登録者数減少
-						if (MapData_P[PlayerY + 1][PlayerX] == 5) {
-							PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-							P1_subscriber -= 100;
-							subscriber_down_time = 200;
-						}
-					}
-					//(主人公マップの)進んだ方向に9があれば、ゴール処理
-					if (MapData_P[PlayerY + 1][PlayerX] == 9) {
-						PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
-						goal_time = 200;
-						//順位によって順位ボーナス加算
-						if (P1_subscriber > P2_subscriber) {
-							P1_subscriber += 10000;
-						}
-						else if (P2_subscriber > P1_subscriber) {
-							P1_subscriber += 5000;
-						}
-					}
-					MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-					MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
-					MoveY = 1.0f; //Y軸方向にスクロール
-					P1_UD_flg = 0; //向き切り替え 下
-				}
-				Move = 1; //スクロール開始
-				PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
 			}
+			
 			
 			MoveCounter = 0;
 		}
 		
 
 		//移動中の場合は移動処理を行う
-		if (Move == 1) {
+		if (Move == 1) {			
 			MoveCounter++;
 			if (P1_PlayerMove_Flg == true) {
 				//初期化
@@ -662,18 +733,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
-				if (P1_PlayerMove_num > 1) { //移動回数が0以上の時
-					P1_PlayerMove_Flg = true; //もう一度移動させる
-					MoveCounter = 0;	
-					P1_PlayerMove_num--; //移動回数減少
-				}
-				else if (P1_PlayerMove_num == 1){ //移動回数が1の時
+				if (Branch_flg == true) {
 					//初期化
 					Move = 0;
-					RouDraw_flg = false;
-					Roulette = 0; //Roulette 0へ移動
-				}				
-				
+					MoveCounter = 0;
+					P1_PlayerMove_num--; //移動回数減少
+					RouDraw_flg = false; //画像表示再開
+				}
+				else {
+					//分岐設定開始処理
+					if (P1_PlayerMove_num > 1) { //移動回数が0以上の時
+						P1_PlayerMove_Flg = true; //もう一度移動させる
+						MoveCounter = 0;
+						P1_PlayerMove_num--; //移動回数減少
+					}
+					else if (P1_PlayerMove_num == 1) { //移動回数が1の時
+						//初期化
+						Move = 0;
+						P1_PlayerMove_num = 0;
+						Roulette = 0; //Roulette 0へ移動
+						RouDraw_flg = false; //画像表示再開
+					}
+				}
+
 				//プレイヤーの位置を変更する
 				PlayerX += MoveX;
 				PlayerY += MoveY;
