@@ -10,29 +10,30 @@
 #define RECR_MAX 200 //ルーレット切り取り数
 
 /*マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール
-4 = 登録者増加、 5 = 登録者減少、6 = 分岐点、7 = 2倍マス、)(150マス)*/
+4 = 登録者増加、 5 = 登録者減少、6 = 分岐点、7 = 2倍マス、8 = イベントマス
+9 = 逆転マス)(150マス)*/
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,2,0,1,1,4,1,1,1,5,1,1,4,1,1,4,1,1,5,0},
-	{0,1,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,0,1,1,1,5,0,0,0,0,0,4,1,5,1,0,0,1,0},
-	{0,4,0,0,0,0,1,0,3,1,9,9,9,0,0,8,0,0,1,0},
-	{0,5,0,0,0,0,4,0,0,0,0,0,0,0,0,1,0,0,5,0},
-	{0,1,7,1,1,7,5,0,4,1,1,4,5,5,4,5,0,0,1,0},
-	{0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,5,1,1,7,1,1,5,0,1,8,1,0,1,7,1,0,4,0},
-	{0,4,0,0,0,0,0,0,0,0,1,0,5,5,5,0,4,0,1,0},
-	{0,1,5,1,1,8,1,4,1,1,4,0,0,0,0,0,1,0,1,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0},
-	{0,1,5,1,0,5,1,4,0,0,0,0,4,4,4,0,5,0,7,0},
-	{0,4,0,1,0,1,0,1,0,5,1,1,1,0,1,8,1,0,1,0},
-	{0,1,0,4,1,8,0,7,1,4,0,0,0,0,0,0,0,0,8,0},
-	{0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,0,1,4,4,4,4,5,1,4,1,4,4,1,5,1,0,1,0},
-	{0,8,1,1,0,0,0,0,0,0,0,0,0,0,0,0,6,4,5,0},
-	{0,0,0,1,5,5,5,5,4,1,5,1,5,5,1,4,1,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 5, 1, 1, 4, 1, 1, 4, 1, 1, 5, 0 },
+	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 0, 1, 1, 1, 5, 0, 0, 0, 0, 0, 4, 1, 5, 1, 0, 0, 1, 0 },
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 3, 1, 9, 9, 9, 0, 0, 8, 0, 0, 1, 0 },
+	{ 0, 5, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0 },
+	{ 0, 1, 1, 1, 1, 7, 5, 0, 4, 1, 1, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 0, 1, 8, 1, 0, 1, 7, 1, 0, 4, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 1, 0 },
+	{ 0, 1, 5, 1, 1, 8, 1, 4, 1, 1, 4, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 1, 5, 1, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
+	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 1, 1, 0, 1, 8, 1, 0, 1, 0 },
+	{ 0, 1, 0, 4, 1, 8, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
+	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
+	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 
 	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
@@ -57,29 +58,30 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,*/
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
-4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 2倍マス、8 = 分岐点終点(予定)) 9 = ゴールマス (150マス)*/
+4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 2倍マス、8 = 分岐点終点(予定)
+9 = ゴールマス、10 = イベントマス、11 = 逆転マス) (150マス)*/
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,2,0,1,1,4,1,1,1,5,1,1,4,1,1,4,1,1,5,0},
-	{0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,0,1,1,1,5,0,0,0,0,0,4,1,5,1,0,0,1,0},
-	{0,4,0,0,0,0,1,0,9,1,1,1,1,0,0,1,0,0,1,0},
-	{0,5,0,0,0,0,4,0,0,0,0,0,0,0,0,1,0,0,5,0},
-	{0,1,1,1,1,7,5,0,4,1,1,4,5,5,4,5,0,0,1,0},
-	{0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,5,1,1,7,1,1,5,0,1,1,1,0,1,7,1,0,4,0},
-	{0,4,0,0,0,0,0,0,0,0,1,0,5,5,5,0,4,0,1,0},
-	{0,1,5,1,1,1,1,4,1,1,4,0,0,0,0,0,1,0,1,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0},
-	{0,1,5,1,0,5,1,4,0,0,0,0,4,4,4,0,5,0,7,0},
-	{0,4,0,1,0,1,0,1,0,5,1,1,1,0,1,1,1,0,1,0},
-	{0,1,0,4,1,1,0,7,1,4,0,0,0,0,0,0,0,0,1,0},
-	{0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-	{0,1,0,1,4,4,4,4,5,1,4,1,4,4,1,5,1,0,1,0},
-	{0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,6,4,5,0},
-	{0,0,0,1,5,5,5,5,4,1,5,1,5,5,1,4,1,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 5, 1, 1, 4, 1, 1, 4, 1, 1, 5, 0 },
+	{ 0, 1, 0,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 0, 1, 1, 1, 5, 0, 0, 0, 0, 0, 4, 1, 5, 1, 0, 0, 1, 0 },
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 9, 1,11,11,11, 0, 0,10, 0, 0, 1, 0 },
+	{ 0, 5, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0 },
+	{ 0, 1, 1, 1, 1, 7, 5, 0, 4, 1, 1, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 0, 1,10, 1, 0, 1, 7, 1, 0, 4, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 1, 0 },
+	{ 0, 1, 5, 1, 1,10, 1, 4, 1, 1, 4, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 1, 5, 1, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
+	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 1, 1, 0, 1,10, 1, 0, 1, 0 },
+	{ 0, 1, 0, 4, 1,10, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0,10, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
+	{ 0,10, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
+	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
 	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
 	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
@@ -371,6 +373,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int roulette_dec_sound = 0;
 	int subscriber_up_sound = 0;
 	int subscriber_down_sound = 0;
+	int two_times_sound = 0;
 	int goal_sound = 0;
 	int goal_cheers_sound = 0;
 
@@ -379,6 +382,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	roulette_dec_sound = LoadSoundMem("music\\ルーレット決定.mp3");
 	subscriber_up_sound = LoadSoundMem("music\\登録者数増加音.mp3");
 	subscriber_down_sound = LoadSoundMem("music\\登録者数減少音.mp3");
+	two_times_sound = LoadSoundMem("music\\2倍マス音.mp3");
 	goal_sound = LoadSoundMem("music\\ゴール音.mp3");
 	goal_cheers_sound = LoadSoundMem("music\\ゴール歓声.mp3");
 
@@ -463,8 +467,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//画面を初期化
 		ClearDrawScreen();
 
-		//向き文字表示
-		if (P1_LR_flg == 1)
+		//向き文字表示(デバッグ用・一応残しとく)
+		/*if (P1_LR_flg == 1)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：右");
 		}
@@ -479,7 +483,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		else if (P1_UD_flg == 0)
 		{
 			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：下");
-		}
+		}*/
 
 		//移動中ではない場合キー入力を受け付ける
 		if (Move == 0) {
@@ -580,7 +584,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//マス移動処理
 			else if(Branch_flg == false && EventRou_flg == false && Roulette == 0){
-				P1_PlayerMove_num = 6; //マス移動 デバック6固定
+				P1_PlayerMove_num = Rou_num; //マス移動 デバック6固定
 			}
 
 			//2倍マスフラグがONなら2倍にする
@@ -663,7 +667,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							}
 							//進んだ方向に「7」があれば、次回ルーレット数2倍
 							if (MapData_P[PlayerY][PlayerX + 1] == 7) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								PlaySoundMem(two_times_sound, DX_PLAYTYPE_BACK, TRUE);//2倍マス音再生
 								two_times = true;
 								two_times_messagetime = 200;
 							}
@@ -671,6 +675,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY][PlayerX + 1] != 7 && two_times == true)
 							{
 								two_times = false;
+							}
+							//進んだ方向に「10」があれば、イベント発生（仮）
+							if (MapData_P[PlayerY][PlayerX + 1] == 10) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+							}
+							//進んだ方向に「11」があれば、逆転マス発生（仮）
+							if (MapData_P[PlayerY][PlayerX + 1] == 11) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
@@ -708,7 +720,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							}
 							//進んだ方向に「7」があれば、次回ルーレット数2倍
 							if (MapData_P[PlayerY][PlayerX - 1] == 7) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								PlaySoundMem(two_times_sound, DX_PLAYTYPE_BACK, TRUE);//2倍マス音再生
 								two_times = true;
 								two_times_messagetime = 200;
 							}
@@ -716,6 +728,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY][PlayerX - 1] != 7 && two_times == true)
 							{
 								two_times = false;
+							}
+							//進んだ方向に「10」があれば、イベント発生（仮）
+							if (MapData_P[PlayerY][PlayerX - 1] == 10) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+							}
+							//進んだ方向に「11」があれば、逆転マス発生（仮）
+							if (MapData_P[PlayerY][PlayerX - 1] == 11) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
@@ -753,7 +773,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							}
 							//進んだ方向に「7」があれば、次回ルーレット数2倍
 							if (MapData_P[PlayerY - 1][PlayerX] == 7) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								PlaySoundMem(two_times_sound, DX_PLAYTYPE_BACK, TRUE);//2倍マス音再生
 								two_times = true;
 								two_times_messagetime = 200;
 							}
@@ -761,6 +781,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY - 1][PlayerX] != 7 && two_times == true)
 							{
 								two_times = false;
+							}
+							//進んだ方向に「10」があれば、イベント発生（仮）
+							if (MapData_P[PlayerY - 1][PlayerX] == 10) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+							}
+							//進んだ方向に「11」があれば、逆転マス発生（仮）
+							if (MapData_P[PlayerY - 1][PlayerX] == 11) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
@@ -798,7 +826,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							}
 							//進んだ方向に「7」があれば、次回ルーレット数2倍
 							if (MapData_P[PlayerY + 1][PlayerX] == 7) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+								PlaySoundMem(two_times_sound, DX_PLAYTYPE_BACK, TRUE);//2倍マス音再生
 								two_times = true;
 								two_times_messagetime = 200;
 							}
@@ -806,6 +834,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY + 1][PlayerX] != 7 && two_times == true)
 							{
 								two_times = false;
+							}
+							//進んだ方向に「10」があれば、イベント発生（仮）
+							if (MapData_P[PlayerY + 1][PlayerX] == 10) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+							}
+							//進んだ方向に「11」があれば、逆転マス発生（仮）
+							if (MapData_P[PlayerY + 1][PlayerX] == 11) {
+								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
@@ -842,7 +878,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (P1_PlayerMove_Flg == true) {
 				//初期化
 				P1_PlayerMove_Flg = false;
-				squares_cnt1 -= 1;
+				//マスカウント(あと何マス)が0以上の時のみマスカウントを減らす
+				if (squares_cnt1 > 0){
+					squares_cnt1 -= 1;
+				}
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
@@ -992,40 +1031,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0) {
 
 			if (P1_PlayerMove_num == 1){
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：1マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：0マス");
 			}
 			else if (P1_PlayerMove_num == 2) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：2マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：1マス");
 			}
 			else if (P1_PlayerMove_num == 3) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：3マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：2マス");
 			}
 			else if (P1_PlayerMove_num == 4) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：4マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：3マス");
 			}
 			else if (P1_PlayerMove_num == 5) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：5マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：4マス");
 			}
 			else if (P1_PlayerMove_num == 6) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：6マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：5マス");
 			}
 			else if (P1_PlayerMove_num == 7) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：7マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：6マス");
 			}
 			else if (P1_PlayerMove_num == 8) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：8マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：7マス");
 			}
 			else if (P1_PlayerMove_num == 9) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：9マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：8マス");
 			}
 			else if (P1_PlayerMove_num == 10) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：10マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：9マス");
 			}
 			else if (P1_PlayerMove_num == 11) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：11マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：10マス");
 			}
 			else if (P1_PlayerMove_num == 12) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：12マス");
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：11マス");
 			}
 		}
 		else {
