@@ -376,6 +376,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int subscriber_up_sound = 0;
 	int subscriber_down_sound = 0;
 	int two_times_sound = 0;
+	int event_sound = 0;
 	int goal_sound = 0;
 	int goal_cheers_sound = 0;
 
@@ -385,6 +386,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	subscriber_up_sound = LoadSoundMem("music\\登録者数増加音.mp3");
 	subscriber_down_sound = LoadSoundMem("music\\登録者数減少音.mp3");
 	two_times_sound = LoadSoundMem("music\\2倍マス音.mp3");
+	event_sound = LoadSoundMem("music\\イベントマス音.mp3");
 	goal_sound = LoadSoundMem("music\\ゴール音.mp3");
 	goal_cheers_sound = LoadSoundMem("music\\ゴール歓声.mp3");
 
@@ -594,7 +596,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//マス移動処理
 			else if(Branch_flg == false && EventRou_flg == false && Roulette == 0){
-				P1_PlayerMove_num = Rou_num; //マス移動 デバック6固定
+				P1_PlayerMove_num = 17; //マス移動 デバック6固定
 			}
 			//2倍マスフラグがONなら2倍にする
 			if (two_times == true)
@@ -684,9 +686,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-							//進んだ方向に「10」があれば、イベント発生（仮）
+							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY][PlayerX + 1] == 10) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
 								Event_messagetime_Flg = true;
 								EventRou_flg = true;
 								EventRou_flg2 = true;
@@ -740,9 +742,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-							//進んだ方向に「10」があれば、イベント発生（仮）
+							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY][PlayerX - 1] == 10) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
 								Event_messagetime_Flg = true;
 								EventRou_flg = true;
 								EventRou_flg2 = true;
@@ -796,9 +798,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-							//進んだ方向に「10」があれば、イベント発生（仮）
+							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY - 1][PlayerX] == 10) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
 								Event_messagetime_Flg = true;
 								EventRou_flg = true;
 								EventRou_flg2 = true;
@@ -852,9 +854,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-							//進んだ方向に「10」があれば、イベント発生（仮）
+							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY + 1][PlayerX] == 10) {
-								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
+								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
 								Event_messagetime_Flg = true;
 								EventRou_flg = true;
 								EventRou_flg2 = true;
