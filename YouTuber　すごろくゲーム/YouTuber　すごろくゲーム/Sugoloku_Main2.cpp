@@ -681,11 +681,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-						}
-						//進んだ方向に「6」があれば、分岐処理
-						if (MapData_P[PlayerY][PlayerX + 1] == 6) {
-							Branch_flg = true;
-						}
 							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY][PlayerX + 1] == 10) {
 								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
@@ -697,6 +692,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY][PlayerX + 1] == 11) {
 								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
+						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY][PlayerX + 1] == 6) {
+							Branch_flg = true;
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX + 1] == 9) {
@@ -742,11 +741,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-						}
-						//進んだ方向に「6」があれば、分岐処理
-						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
-							Branch_flg = true;
-						}
 							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY][PlayerX - 1] == 10) {
 								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
@@ -758,6 +752,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY][PlayerX - 1] == 11) {
 								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
+						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
+							Branch_flg = true;
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX - 1] == 9) {
@@ -866,11 +864,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
-						}
-						//進んだ方向に「6」があれば、分岐処理
-						if (MapData_P[PlayerY + 1][PlayerX] == 6) {
-							Branch_flg = true;
-						}
 							//進んだ方向に「10」があれば、イベント発生
 							if (MapData_P[PlayerY + 1][PlayerX] == 10) {
 								PlaySoundMem(event_sound, DX_PLAYTYPE_BACK, TRUE);//マス音再生
@@ -882,6 +875,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							if (MapData_P[PlayerY + 1][PlayerX] == 11) {
 								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//音再生(確認用)
 							}
+						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY + 1][PlayerX] == 6) {
+							Branch_flg = true;
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY + 1][PlayerX] == 9) {
