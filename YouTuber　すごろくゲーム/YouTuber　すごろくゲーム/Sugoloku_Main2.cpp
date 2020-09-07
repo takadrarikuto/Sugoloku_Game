@@ -438,6 +438,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool EventRou_flg = false;
 	//分岐設定フラグ
 	bool Branch_flg = false;
+	//主人公分岐先設定フラグ
+	bool P1_PlayerMove_Branch_destination_Up_flg = false; //↑
+	bool P1_PlayerMove_Branch_destination_Down_flg = false; //↓
 	//スロット変数
 	int Rou_num = 0;
 	//イベントスロット変数
@@ -487,6 +490,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//Enterでルーレット回転スタート
 			if (CheckHitKey(KEY_INPUT_RETURN) == true && Roulette_Enter_Bottan == false) {
 				if (Roulette == 0) { //ルーレット回転スタート
+					Rou_num = 0; //スロット変数初期化
 					RouDraw_flg = false; //画像表示再開
 					Roulette_Rotation = true; //ルーレット回転開始
 					Roulette_stop_Flg = true; //ルーレット回転中テキストオン
@@ -502,7 +506,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					StopSoundMem(roulette_sound);
 					PlaySoundMem(roulette_dec_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 				}
-				else if (Roulette == 2) { //移動開始
+				else if (Roulette == 2) { //ルーレット表示停止、移動開始
 					//イベントスロットフラグ and 分岐設定フラグがfalseの時 and 分岐設定変数が0の時
 					P1_PlayerMove_Flg = true; //主人公移動開始	
 					RouDraw_flg = true; //ルーレット画像表示停止
@@ -545,11 +549,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else if (Rou_rect_x == 400) {
 					Rou_num = 3; //3スロット
 				}
-				//2倍マスフラグがONなら2倍にする
-				if (two_times == true)
-				{
-					P1_PlayerMove_num *= 2;
-				}
 			}
 			else if (Rou_rect_y == 200) { //ルーレット切り取りy位置200の時
 				if (Rou_rect_x == 0) {
@@ -564,12 +563,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 
 			//分岐設定フラグ
-			if (Branch_flg == true && Roulette == 2) {
+			if (Branch_flg == true && Roulette == 2 && Branch_num == 0) {
 				//分岐処理
 				if (Rou_num > 3) {
 					Branch_num = 3; //分岐設定 3 = ↑
 				}
-				else {
+				else if (Rou_num > 0 && Rou_num <= 3) {
 					Branch_num = 4; //分岐設定 4 = ↓
 				}
 			}
@@ -580,7 +579,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//マス移動処理
 			else if(Branch_flg == false && EventRou_flg == false && Roulette == 0){
-				P1_PlayerMove_num = 6; //マス移動 デバック6固定
+				P1_PlayerMove_num = 3; //マス移動 デバック3固定
 			}
 
 			//2倍マスフラグがONなら2倍にする
@@ -607,7 +606,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 			//分岐判定処理
 			if (Branch_num > 0) {
-				if (P1_PlayerMove_num > 0) { //分岐マスを通過する時にマス移動が0以上の時
+				if (P1_PlayerMove_num > 0) { //分岐マスを通過する時
 					if (Branch_num == 1) { //右
 						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
 						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
@@ -619,17 +618,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						MoveX = -1.0f; //-X軸方向にスクロール
 					}
 					else if (Branch_num == 3) { //上
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY - 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = -1.0f; //-Y軸方向にスクロール
+						P1_PlayerMove_Branch_destination_Down_flg = true; //主人公分岐先設定フラグTrue ↓
 					}
 					else if (Branch_num == 4) { //下
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY + 1][PlayerX] = 2; //通路に主人公を通す
-						MoveY = 1.0f; //Y軸方向にスクロール
+						P1_PlayerMove_Branch_destination_Up_flg = true; //主人公分岐先設定フラグTrue ↑
 					}
-					Branch_flg = false; //分岐設定初期化
 					Branch_num = 0; //初期化
+					Branch_flg = false; //分岐設定初期化
 				}
 				else { //分岐マスで停止した時
 					Branch_flg = false; //分岐設定初期化
@@ -672,6 +667,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
+						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY][PlayerX + 1] == 6) {
+							Branch_flg = true;
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX + 1] == 9) {
@@ -718,6 +717,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								two_times = false;
 							}
 						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
+							Branch_flg = true;
+						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX - 1] == 9) {
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
@@ -736,7 +739,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						MoveX = -1.0f; //-X軸方向にスクロール
 						P1_LR_flg = 0; //向き切り替え 左
 					}
-					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY - 1][PlayerX] == 1 || MapData_P[PlayerY - 1][PlayerX] >= 4)) {//上移動
+					else if (MapData_P[PlayerY][PlayerX] == 2 && P1_PlayerMove_Branch_destination_Up_flg == false && 
+							(MapData_P[PlayerY - 1][PlayerX] == 1 ||  MapData_P[PlayerY - 1][PlayerX] >= 4 )) {//上移動
 						//移動回数が1の時
 						if (P1_PlayerMove_num == 1) {
 							//進んだ方向に「4」があれば、登録者数増加
@@ -763,6 +767,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								two_times = false;
 							}
 						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY - 1][PlayerX] == 6) {
+							Branch_flg = true;
+						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY - 1][PlayerX] == 9) {
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
@@ -781,7 +789,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						MoveY = -1.0f; //-Y軸方向にスクロール
 						P1_UD_flg = 1; //向き切り替え 上
 					}
-					else if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY + 1][PlayerX] == 1 || MapData_P[PlayerY + 1][PlayerX] >= 4)) {//下移動
+					else if (MapData_P[PlayerY][PlayerX] == 2 && P1_PlayerMove_Branch_destination_Down_flg == false && 
+							(MapData_P[PlayerY + 1][PlayerX] == 1 ||  MapData_P[PlayerY + 1][PlayerX] >= 4 )) {//下移動
 						//移動回数が1の時
 						if (P1_PlayerMove_num == 1) {
 							//進んだ方向に「4」があれば、登録者数増加
@@ -796,6 +805,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								P1_subscriber -= 100;
 								subscriber_down_time = 200;
 							}
+							
 							//進んだ方向に「7」があれば、次回ルーレット数2倍
 							if (MapData_P[PlayerY + 1][PlayerX] == 7) {
 								PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
@@ -807,6 +817,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							{
 								two_times = false;
 							}
+						}
+						//進んだ方向に「6」があれば、分岐処理
+						if (MapData_P[PlayerY + 1][PlayerX] == 6) {
+							Branch_flg = true;
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY + 1][PlayerX] == 9) {
@@ -831,7 +845,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 			}
 			
-			
 			MoveCounter = 0;
 		}
 		
@@ -846,6 +859,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//移動処理が終了したら停止中にする
 			if (MoveCounter == MOVE_FRAME) {
+				//分岐設定開始処理
 				if (Branch_flg == true) {
 					//初期化
 					Move = 0;
@@ -854,7 +868,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					RouDraw_flg = false; //画像表示再開
 				}
 				else {
-					//分岐設定開始処理
 					if (P1_PlayerMove_num > 1) { //移動回数が0以上の時
 						P1_PlayerMove_Flg = true; //もう一度移動させる
 						MoveCounter = 0;
@@ -867,6 +880,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						Roulette = 0; //Roulette 0へ移動
 						RouDraw_flg = false; //画像表示再開
 					}
+				}
+
+				//主人公分岐先設定フラグ初期化
+				if (P1_PlayerMove_Branch_destination_Up_flg == true) {
+					P1_PlayerMove_Branch_destination_Up_flg = false; //主人公分岐先設定フラグTrue ↑
+				}
+				else if (P1_PlayerMove_Branch_destination_Down_flg == true) {
+					P1_PlayerMove_Branch_destination_Down_flg = false; //主人公分岐先設定フラグTrue ↓
 				}
 
 				//プレイヤーの位置を変更する
@@ -890,6 +911,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		//ClearDrawScreen(); //画像クリア
 
+		//マップとプレイヤーを描画
+		GraphDraw(ScrollX, ScrollY);
+
+		//ルーレット表示停止処理
 		if (RouDraw_flg == false) {
 			//ルーレット描画処理
 			DrawRectGraphF(
@@ -901,9 +926,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				Rou_LR_flg //反転処理フラグ
 			);
 		}
-
-		//マップとプレイヤーを描画
-		GraphDraw(ScrollX, ScrollY);
 
 		//メッセージウィンドウ画像読み込み
 		DrawRectGraphF(
