@@ -339,7 +339,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
 	//ポート用変数
-	int Sendport, RecvPort; //send送る Recv受ける
+	int SendPort, RecvPort; //send送る Recv受ける
 
 	//送受信データ処理用
 	char StrBuf[256] = { "NULL" };
@@ -373,6 +373,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	}
 	if (DxLib_Init() < 0) {
 		return -1;
+	}
+
+	//モードのセレクト
+	int mode = SelectMode();
+
+	//windowの名前
+	if (mode == 0) {
+		SetWindowText("1P");
+		SendPort = 41; //41
+		RecvPort = 40; //40
+	}
+	else {
+		SetWindowText("2P");
+		SendPort = 40; //40
+		RecvPort = 41; //41
 	}
 
 	//描画先画面を裏画面にする
@@ -486,6 +501,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//タイトル画像
 	//static int Title_image = LoadGraph("image\\スロット.png");
 
+
+	//送受信用データ
+	char name[15] = "name";
+	//Data* data = new Data(x, y, name);
+
+	//IPの設定
+	IPDATA IP = IP_set();
+
+	//通信用ソケットハンドル
+	int NetUDPHandle = MakeUDPSocket(SendPort);
 
 	//ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
