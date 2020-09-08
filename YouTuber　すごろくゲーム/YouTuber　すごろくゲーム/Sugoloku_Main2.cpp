@@ -59,7 +59,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
 4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 2倍マス、8 = 分岐点終点(予定)
-9 = ゴールマス、10 = イベントマス、11 = 逆転マス) (150マス)*/
+9 = ゴールマス、10 = イベントマス、11 = 逆転マス 12 = 一方通行マス(左)) (150マス)*/
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -79,7 +79,7 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 4, 1,10, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0,10, 0 },
 	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
 	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
-	{ 0,10, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
+	{ 0,10, 12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
@@ -139,6 +139,7 @@ void GraphDraw(int ScrollX, int ScrollY)
 
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
 	static int image = LoadGraph("image\\プレイヤー1.png");
+	static int image2 = LoadGraph("image\\プレイヤー2.png");
 	static int back_img1 = LoadGraph("image\\背景テスト用.png");
 	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
 	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
@@ -351,6 +352,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool square_go_Flg = false; //ルーレットテキスト用フラグ
 	bool square_rest_Flg = true; //ルーレットテキスト用フラグ
 	bool Event_messagetime_Flg = false; //イベントテキスト用フラグ
+	bool Branch_destination_Flg = false; //分岐イベント用フラグ
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -455,7 +457,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	int Rou_num = 0;
 	//イベントスロット変数
 	int P1_EventRou_num = 0/*1Pプレイヤー*/, P2_EventRou_num = 0/*2Pプレイヤー*/;
-	//分岐設定変数 1 = →,2 = ←,3 = ↑,4 = ↓
+	//分岐設定変数 1 = ↑,2 = ↓ 
 	int Branch_num = 0;
 	//主人公移動回数
 	int P1_PlayerMove_num = 0/*1Pプレイヤー*/, P2_PlayerMove_num = 0/*2Pプレイヤー*/;
@@ -471,28 +473,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//タイトル画像
 	//static int Title_image = LoadGraph("image\\スロット.png");
 
+	//bool Player1_DrawFlg = false;
+	//bool Player2_DrawFlg = false;
+
+	//int PlayerChoice_num = 0;
+
+	//プレイヤー選択ループ
+	/*while (Player1_DrawFlg == false || Player2_DrawFlg == false) {
+		DrawFormatString(200, 300, GetColor(255, 255, 0), "どちらでプレイしますか。1 = 1P , 2 = 2P");
+		PlayerChoice_num = KeyInputNumber(0, 16, 1, 0, FALSE);
+		if (PlayerChoice_num == 1) {
+			Player1_DrawFlg = true;
+		}
+		else if (PlayerChoice_num == 2) {
+			Player2_DrawFlg = true;
+		}
+		else
+			DrawFormatString(200, 300, GetColor(255, 255, 0), "正しい数値を入力してください");
+	}*/
+
 	//ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
 		//画面を初期化
 		ClearDrawScreen();
 
-		//向き文字表示(デバッグ用・一応残しとく)
-		/*if (P1_LR_flg == 1)
-		{
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：右");
-		}
-		else if (P1_LR_flg == 0)
-		{
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：左");
-		}
-		else if (P1_UD_flg == 1)
-		{
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：上");
-		}
-		else if (P1_UD_flg == 0)
-		{
-			DrawFormatString(0, 50, GetColor(255, 255, 0), "選択方向選択：下");
-		}*/
+		
 
 		//移動中ではない場合キー入力を受け付ける
 		if (Move == 0) {
@@ -582,10 +587,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (Branch_flg == true && Roulette == 2 && Branch_num == 0) {
 				//分岐処理
 				if (Rou_num > 3) {
-					Branch_num = 3; //分岐設定 3 = ↑
+					Branch_num = 1; //分岐設定 1 = ↑
 				}
 				else if (Rou_num > 0 && Rou_num <= 3) {
-					Branch_num = 4; //分岐設定 4 = ↓
+					Branch_num = 2; //分岐設定 2 = ↓
 				}
 			}
 			//イベントスロット判定処理
@@ -595,12 +600,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			//マス移動処理
 			else if(Branch_flg == false && EventRou_flg == false && Roulette == 0){
-				P1_PlayerMove_num = 3; //マス移動 デバック3固定
-			}
-			//2倍マスフラグがONなら2倍にする
-			if (two_times == true)
-			{
-				P1_PlayerMove_num *= 2;
+				P1_PlayerMove_num = Rou_num; //マス移動 デバック3固定
+				//2倍マスフラグがONなら2倍にする
+				if (two_times == true){
+					P1_PlayerMove_num *= 2;
+				}
 			}
 			
 			//----------------------------------------------------------------------------------
@@ -621,20 +625,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			//分岐判定処理
 			if (Branch_num > 0) {
 				if (P1_PlayerMove_num > 0) { //分岐マスを通過する時
-					if (Branch_num == 1) { //右
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX + 1] = 2; //通路に主人公を通す
-						MoveX = 1.0f; //X軸方向にスクロール
-					}
-					else if (Branch_num == 2) { //左
-						MapData_P[PlayerY][PlayerX] = 3; //主人公が通った所は通れなくする
-						MapData_P[PlayerY][PlayerX - 1] = 2; //通路に主人公を通す
-						MoveX = -1.0f; //-X軸方向にスクロール
-					}
-					else if (Branch_num == 3) { //上
+					if (Branch_num == 1) { //上
 						P1_PlayerMove_Branch_destination_Down_flg = true; //主人公分岐先設定フラグTrue ↓
 					}
-					else if (Branch_num == 4) { //下
+					else if (Branch_num == 2) { //下
 						P1_PlayerMove_Branch_destination_Up_flg = true; //主人公分岐先設定フラグTrue ↑
 					}
 					Branch_num = 0; //初期化
@@ -655,7 +649,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else {
 					//主人公の周りにある道を確認して移動する
-					if (MapData_P[PlayerY][PlayerX] == 2 && (MapData_P[PlayerY][PlayerX + 1] == 1 || MapData_P[PlayerY][PlayerX + 1] >= 4)) {//右移動
+					if (MapData_P[PlayerY][PlayerX] == 2  && (MapData_P[PlayerY][PlayerX + 1] == 1 || 
+						MapData_P[PlayerY][PlayerX + 1] >= 4 && MapData_P[PlayerY][PlayerX + 1] != 12)) {//右移動
 						//移動回数が1の時
 						if (P1_PlayerMove_num == 1) {
 							//進んだ方向に「4」があれば、登録者数増加
@@ -695,7 +690,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 						//進んだ方向に「6」があれば、分岐処理
 						if (MapData_P[PlayerY][PlayerX + 1] == 6) {
-							Branch_flg = true;
+							Branch_flg = true;  //分岐イベント発生
+							Branch_destination_Flg = true; //分岐イベントテキスト表示
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX + 1] == 9) {
@@ -755,7 +751,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 						//進んだ方向に「6」があれば、分岐処理
 						if (MapData_P[PlayerY][PlayerX - 1] == 6) {
-							Branch_flg = true;
+							Branch_flg = true;  //分岐イベント発生
+							Branch_destination_Flg = true; //分岐イベントテキスト表示
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY][PlayerX - 1] == 9) {
@@ -776,7 +773,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						P1_LR_flg = 0; //向き切り替え 左
 					}
 					else if (MapData_P[PlayerY][PlayerX] == 2 && P1_PlayerMove_Branch_destination_Up_flg == false && 
-							(MapData_P[PlayerY - 1][PlayerX] == 1 ||  MapData_P[PlayerY - 1][PlayerX] >= 4 )) {//上移動
+							(MapData_P[PlayerY - 1][PlayerX] == 1 ||  MapData_P[PlayerY - 1][PlayerX] >= 4 &&
+							 MapData_P[PlayerY - 1][PlayerX] != 12)) {//上移動
 						//移動回数が1の時
 						if (P1_PlayerMove_num == 1) {
 							//進んだ方向に「4」があれば、登録者数増加
@@ -816,7 +814,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 						//進んだ方向に「6」があれば、分岐処理
 						if (MapData_P[PlayerY - 1][PlayerX] == 6) {
-							Branch_flg = true;
+							Branch_flg = true;  //分岐イベント発生
+							Branch_destination_Flg = true; //分岐イベントテキスト表示
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY - 1][PlayerX] == 9) {
@@ -837,7 +836,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						P1_UD_flg = 1; //向き切り替え 上
 					}
 					else if (MapData_P[PlayerY][PlayerX] == 2 && P1_PlayerMove_Branch_destination_Down_flg == false && 
-							(MapData_P[PlayerY + 1][PlayerX] == 1 ||  MapData_P[PlayerY + 1][PlayerX] >= 4 )) {//下移動
+							(MapData_P[PlayerY + 1][PlayerX] == 1 ||  MapData_P[PlayerY + 1][PlayerX] >= 4 &&
+							 MapData_P[PlayerY + 1][PlayerX] != 12)) {//下移動
 						//移動回数が1の時
 						if (P1_PlayerMove_num == 1) {
 							//進んだ方向に「4」があれば、登録者数増加
@@ -878,7 +878,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						}
 						//進んだ方向に「6」があれば、分岐処理
 						if (MapData_P[PlayerY + 1][PlayerX] == 6) {
-							Branch_flg = true;
+							Branch_flg = true;  //分岐イベント発生
+							Branch_destination_Flg = true; //分岐イベントテキスト表示
 						}
 						//(主人公マップの)進んだ方向に「9」があれば、ゴール処理
 						if (MapData_P[PlayerY + 1][PlayerX] == 9) {
@@ -1036,14 +1037,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Event_messagetime_Flg = false;
 		}
 
+		//分岐イベントテキスト表示
+		if (Branch_destination_Flg == true) {
+			if (Roulette == 0) {
+				DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
+				DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+			}
+			else if (Roulette == 2) {
+				//分岐先表示描画
+				if (Branch_num == 1) { //上
+					DrawFormatString(40, 505, GetColor(50, 255, 255), "移動先 : 上");
+				}
+				else if (Branch_num == 2) { //下
+					DrawFormatString(40, 505, GetColor(50, 255, 255), "移動先 : 下");
+				}
+				//プレイヤーが動くと描画停止
+				if (RouDraw_flg == true)
+					Branch_destination_Flg = false;
+			}
+		}
+
 		//ルーレットスタート指示テキスト
 		if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
 			&& square_rest_Flg == true && RouDraw_flg == false && goal_time == 0
 			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
 			&& Event_messagetime_Flg == false) {
 			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
-			if (two_times == true)
-			{
+			if (two_times == true){
 				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
 				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
 			}
@@ -1056,8 +1076,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (Roulette_stop_Flg == true && subscriber_up_time == 0 && subscriber_down_time == 0
 			&& two_times_messagetime == 0 && Event_messagetime_Flg == false) {
 			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットストップ");
-			if (two_times == true)
-			{
+			if (two_times == true){
 				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
 				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
 			}
@@ -1077,22 +1096,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				EventRou_flg3 = true;
 			}
 
-			if (two_times == true)
-			{
+			if (two_times == true){
 				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
 				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
 			}
 			//イベント発生中でルーレットの目が1～3の場合、チャンネル登録者数増加
-			if (EventRou_flg2 == true && P1_EventRou_num <= 3)
-			{
+			if (EventRou_flg2 == true && P1_EventRou_num <= 3){
 				PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
 				P1_subscriber += 500;//+500人
 				event_messagetime = 200;
 				EventRou_flg2 = false;
 			}
 			//イベント発生中でルーレットの目が4～6の場合、チャンネル登録者数増減少
-			else if (EventRou_flg2 == true && P1_EventRou_num >= 4)
-			{
+			else if (EventRou_flg2 == true && P1_EventRou_num >= 4){
 				PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
 				P1_subscriber -= 500; //-500人
 				event_messagetime = 200;
@@ -1121,41 +1137,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
 			&& Event_messagetime_Flg == false) {
 
-			if (P1_PlayerMove_num == 1){
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：0マス");
+			if (P1_PlayerMove_num == 1) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "マス到着");
 			}
-			else if (P1_PlayerMove_num == 2) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：1マス");
-			}
-			else if (P1_PlayerMove_num == 3) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：2マス");
-			}
-			else if (P1_PlayerMove_num == 4) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：3マス");
-			}
-			else if (P1_PlayerMove_num == 5) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：4マス");
-			}
-			else if (P1_PlayerMove_num == 6) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：5マス");
-			}
-			else if (P1_PlayerMove_num == 7) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：6マス");
-			}
-			else if (P1_PlayerMove_num == 8) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：7マス");
-			}
-			else if (P1_PlayerMove_num == 9) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：8マス");
-			}
-			else if (P1_PlayerMove_num == 10) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：9マス");
-			}
-			else if (P1_PlayerMove_num == 11) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：10マス");
-			}
-			else if (P1_PlayerMove_num == 12) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：11マス");
+			else if (P1_PlayerMove_num >= 2) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "あと：%dマス", P1_PlayerMove_num - 1);
 			}
 		}
 		else {
