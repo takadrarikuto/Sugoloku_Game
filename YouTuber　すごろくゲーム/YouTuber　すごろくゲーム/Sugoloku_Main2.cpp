@@ -9,6 +9,62 @@
 
 #define RECR_MAX 200 //ルーレット切り取り数
 
+bool Player1_DrawFlg = false;
+bool Player2_DrawFlg = false;
+
+//モードセレクト
+int SelectMode() {
+	int mode;
+
+	while (1) {
+		ClearDrawScreen();
+
+
+		DrawString(0, 0, "プレイヤー選択　0:1P　1:2P", GetColor(255, 255, 255));
+		mode = KeyInputNumber(0, 16, 1, 0, FALSE);
+		if (mode == 0) {
+			DrawString(0, 32, "プレイヤーは、1P", GetColor(255, 255, 255));
+			Player1_DrawFlg = true;
+		}
+		else {
+			DrawString(0, 32, "プレイヤーは、2P", GetColor(255, 255, 255));
+			Player2_DrawFlg = true;
+		}
+		DrawString(0, 64, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 80, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 96, 1, 0, FALSE))break;
+	}
+	return mode;
+}
+
+//IP入力
+IPDATA IP_set() {
+	IPDATA ip;
+
+	while (1)
+	{
+		ClearDrawScreen();
+
+		DrawString(0, 0, "IP入力(172.17.157.81)", GetColor(255, 255, 255));
+		ip.d1 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d2 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d3 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d4 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		DrawFormatString(0, 16, GetColor(255, 0, 0),
+			"IP:%d:%d:%d:%d",
+			ip.d1,
+			ip.d2,
+			ip.d3,
+			ip.d4
+		);
+
+		DrawString(0, 32, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 48, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 64, 1, 0, FALSE))break;
+	}
+	return ip;
+}
+
 /*マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール
 4 = 登録者増加、 5 = 登録者減少、6 = 分岐点、7 = 2倍マス、8 = イベントマス
 9 = 逆転マス)(150マス)*/
@@ -34,6 +90,7 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
 4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 2倍マス、8 = 分岐点終点(予定)
@@ -85,8 +142,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	int j, i;
 	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
-	bool Player1_DrawFlg = false;
-	bool Player2_DrawFlg = false;
 
 	//描画するマップチップの数をセット
 	DrawMapChipNumX = 800 / MAP_SIZE + 2;
@@ -366,20 +421,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Move = 0;
 
 	//プレイヤー----------------------------------
-	//画像の移動距離情報
-	float P1_x, P1_y, /*1Pプレイヤー*/P2_x, P2_y/*2Pプレイヤー*/;
-	//初期化 
-	P1_x = 350.0f; P1_y = 268.0f; //1Pプレイヤー
-	P2_x = 400.0f; P2_y = 268.0f; //2Pプレイヤー
 	//左右向きフラグ
 	bool P1_LR_flg = 1/*1Pプレイヤー*/, P2_LR_flg = 1/*2Pプレイヤー*/;
 	//上下向きフラグ
 	bool P1_UD_flg = 0/*1Pプレイヤー*/, P2_UD_flg = 0/*2Pプレイヤー*/;
-	//アニメーション用カウント
-	int P1_anim_cnt = 0/*1Pプレイヤー*/, P2_anim_cnt = 0/*2Pプレイヤー*/;
-	//切り取り位置
-	int P1_rect_x = 0/*1Pプレイヤー*/, P2_rect_x = 0/*2Pプレイヤー*/;
-	int P1_rect_y = 0/*1Pプレイヤー*/, P2_rect_y = 0/*2Pプレイヤー*/;
 	//--------------------------------------------
 	//ルーレット----------------------------------
 	//画像の位置情報
@@ -438,8 +483,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool Title_flg = false;
 	//タイトル画像
 	//static int Title_image = LoadGraph("image\\スロット.png");
-
-
+	/*Player1_DrawFlg = false;
+	Player2_DrawFlg = false;*/
 	//送受信用データ
 	char name[15] = "name";
 	//Data* data = new Data(x, y, name);
