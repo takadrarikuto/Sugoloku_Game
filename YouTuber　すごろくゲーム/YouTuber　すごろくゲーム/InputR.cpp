@@ -6,7 +6,8 @@ int SelectMode() {
 
 	while (1) {
 		ClearDrawScreen();
-
+		
+		
 		DrawString(0, 0, "プレイヤー選択　0:1P　1:2P", GetColor(255, 255, 255));
 		mode = KeyInputNumber(0, 16, 1, 0, FALSE);
 		if (mode == 0) {
