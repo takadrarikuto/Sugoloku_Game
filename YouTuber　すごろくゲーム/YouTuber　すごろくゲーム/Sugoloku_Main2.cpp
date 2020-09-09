@@ -85,6 +85,8 @@ void GraphDraw(int ScrollX, int ScrollY)
 	int j, i;
 	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
+	bool Player1_DrawFlg = false;
+	bool Player2_DrawFlg = false;
 
 	//描画するマップチップの数をセット
 	DrawMapChipNumX = 800 / MAP_SIZE + 2;
@@ -211,13 +213,24 @@ void GraphDraw(int ScrollX, int ScrollY)
 			//主人公用マップに2があれば「主人公」描画
 			if (MapData_P[i + MapDrawPointY][j + MapDrawPointX] == 2)
 			{
-				DrawRectGraphF(
-					j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
-					0, 0, //切り取り開始位置
-					MAP_SIZE, MAP_SIZE, //切り取るサイズ
-					image,  //切り取る元画像
-					TRUE //透過処理フラグ
-				);
+				if (Player1_DrawFlg == true) { //1Pプレイヤー
+					DrawRectGraphF(
+						j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+						0, 0, //切り取り開始位置
+						MAP_SIZE, MAP_SIZE, //切り取るサイズ
+						image,  //切り取る元画像
+						TRUE //透過処理フラグ
+					);
+				}
+				if (Player2_DrawFlg == true) { //2Pプレイヤー
+					DrawRectGraphF(
+						j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,  //描画位置
+						0, 0, //切り取り開始位置
+						MAP_SIZE, MAP_SIZE, //切り取るサイズ
+						image2,  //切り取る元画像
+						TRUE //透過処理フラグ
+					);
+				}
 			}
 		}
 	}
@@ -426,24 +439,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//タイトル画像
 	//static int Title_image = LoadGraph("image\\スロット.png");
 
-	//bool Player1_DrawFlg = false;
-	//bool Player2_DrawFlg = false;
-
-	//int PlayerChoice_num = 0;
-
-	//プレイヤー選択ループ
-	/*while (Player1_DrawFlg == false || Player2_DrawFlg == false) {
-		DrawFormatString(200, 300, GetColor(255, 255, 0), "どちらでプレイしますか。1 = 1P , 2 = 2P");
-		PlayerChoice_num = KeyInputNumber(0, 16, 1, 0, FALSE);
-		if (PlayerChoice_num == 1) {
-			Player1_DrawFlg = true;
-		}
-		else if (PlayerChoice_num == 2) {
-			Player2_DrawFlg = true;
-		}
-		else
-			DrawFormatString(200, 300, GetColor(255, 255, 0), "正しい数値を入力してください");
-	}*/
 
 	//送受信用データ
 	char name[15] = "name";
@@ -596,10 +591,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					}
 					Branch_num = 0; //初期化
 					Branch_flg = false; //分岐設定初期化
+					Branch_destination_Flg = false; //初期化
 				}
 				else { //分岐マスで停止した時
 					Branch_flg = false; //分岐設定初期化
 					P1_PlayerMove_Flg = false;
+					Branch_destination_Flg = false; //初期化
 				}
 			}
 
@@ -1003,20 +1000,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//分岐イベントテキスト表示
 		if (Branch_destination_Flg == true) {
 			if (Roulette == 0) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
 				DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
 				DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
 			}
 			else if (Roulette == 2) {
 				//分岐先表示描画
 				if (Branch_num == 1) { //上
-					DrawFormatString(40, 505, GetColor(50, 255, 255), "移動先 : 上");
+					DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 上");
 				}
 				else if (Branch_num == 2) { //下
-					DrawFormatString(40, 505, GetColor(50, 255, 255), "移動先 : 下");
+					DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 下");
 				}
-				//プレイヤーが動くと描画停止
-				if (RouDraw_flg == true)
-					Branch_destination_Flg = false;
 			}
 		}
 
@@ -1024,7 +1019,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
 			&& square_rest_Flg == true && RouDraw_flg == false && goal_time == 0
 			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
-			&& Event_messagetime_Flg == false) {
+			&& Event_messagetime_Flg == false && Branch_flg == false) {
 			DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
 			if (two_times == true){
 				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
