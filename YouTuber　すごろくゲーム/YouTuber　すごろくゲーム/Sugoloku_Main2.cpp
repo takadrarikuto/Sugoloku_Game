@@ -9,6 +9,62 @@
 
 #define RECR_MAX 200 //ルーレット切り取り数
 
+bool Player1_DrawFlg = false;
+bool Player2_DrawFlg = false;
+
+//モードセレクト
+int SelectMode() {
+	int mode;
+
+	while (1) {
+		ClearDrawScreen();
+
+
+		DrawString(0, 0, "プレイヤー選択　0:1P　1:2P", GetColor(255, 255, 255));
+		mode = KeyInputNumber(0, 16, 1, 0, FALSE);
+		if (mode == 0) {
+			DrawString(0, 32, "プレイヤーは、1P", GetColor(255, 255, 255));
+			Player1_DrawFlg = true;
+		}
+		else {
+			DrawString(0, 32, "プレイヤーは、2P", GetColor(255, 255, 255));
+			Player2_DrawFlg = true;
+		}
+		DrawString(0, 64, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 80, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 96, 1, 0, FALSE))break;
+	}
+	return mode;
+}
+
+//IP入力
+IPDATA IP_set() {
+	IPDATA ip;
+
+	while (1)
+	{
+		ClearDrawScreen();
+
+		DrawString(0, 0, "IP入力(172.17.157.81)", GetColor(255, 255, 255));
+		ip.d1 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d2 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d3 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		ip.d4 = KeyInputNumber(0, 16, 255, 0, FALSE);
+		DrawFormatString(0, 16, GetColor(255, 0, 0),
+			"IP:%d:%d:%d:%d",
+			ip.d1,
+			ip.d2,
+			ip.d3,
+			ip.d4
+		);
+
+		DrawString(0, 32, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 48, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 64, 1, 0, FALSE))break;
+	}
+	return ip;
+}
+
 /*マップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = スタート、3 = ゴール
 4 = 登録者増加、 5 = 登録者減少、6 = 分岐点、7 = 2倍マス、8 = イベントマス
 9 = 逆転マス)(150マス)*/
@@ -35,27 +91,6 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 
-	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
-	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 3,    9, 9, 9, 0, 8, 0, 0, 0, 1, 0 } ,
-	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 7, 4, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 5, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 7,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-
-	{ 0, 1, 1, 1, 5, 8, 1, 1, 1, 1,    4, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 7, 0 } ,
-	{ 0, 1, 1, 5, 1, 1, 1, 8, 1, 4,    1, 1, 5, 5, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 8, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 4, 1, 5, 1,    4, 1, 4, 4, 1, 5, 7, 0, 1, 0 } ,
-	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
-	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,*/
 };
 /*主人公用のマップのデータ(20マス×20マス)(0 = 壁、1 = 描画マス、2 = 主人公、3 = 通過後マス
 4 = 登録者増加、 5 = 登録者減少、 6 = 分岐点 7 = 2倍マス、8 = 分岐点終点(予定)
@@ -79,30 +114,9 @@ int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 	{ 0, 1, 0, 4, 1,10, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0,10, 0 },
 	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
 	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
-	{ 0,10, 12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
+	{ 0,10,12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	/*{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 1,    5, 1, 1, 1, 1, 4, 1, 1, 5, 0 } ,
-	{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 1, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 0, 9,    1, 1, 1, 0, 8, 0, 0, 0, 1, 0 } ,
-	{ 0, 5, 0, 0, 0, 0, 5, 0, 0, 0,    0, 0, 0, 0, 1, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 1, 1, 1, 1, 4, 0, 0, 0,    0, 0, 1, 4, 1, 0, 0, 0, 5, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 7,    4, 1, 1, 0, 0, 0, 0, 0, 4, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-
-	{ 0, 1, 1, 1, 5, 8, 1, 1, 1, 1,    4, 1, 1, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1, 0, 0, 0, 0, 7, 0 } ,
-	{ 0, 1, 1, 5, 1, 1, 1, 8, 1, 4,    1, 1, 5, 5, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 8, 0 } ,
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 1, 0 } ,
-	{ 0, 1, 0, 1, 1, 1, 4, 1, 5, 1,    4, 1, 4, 4, 1, 5, 7, 0, 1, 0 } ,
-	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 6, 4, 1, 0 } ,
-	{ 0, 0, 0, 1, 1, 1, 5, 1, 4, 5,    1, 1, 5, 5, 1, 4, 1, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ,*/
 };
 
 //プレイヤーの位置
@@ -128,8 +142,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	int j, i;
 	int MapDrawPointX, MapDrawPointY;		//描画するマップ座標値
 	int DrawMapChipNumX, DrawMapChipNumY;	//描画するマップチップの数
-	bool Player1_DrawFlg = false;
-	bool Player2_DrawFlg = false;
 
 	//描画するマップチップの数をセット
 	DrawMapChipNumX = 800 / MAP_SIZE + 2;
@@ -142,7 +154,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
 	static int image = LoadGraph("image\\プレイヤー1.png");
 	static int image2 = LoadGraph("image\\プレイヤー2.png");
-	static int back_img1 = LoadGraph("image\\背景テスト用.png");
 	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
 	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
 	static int squares_img1 = LoadGraph("image\\マス.png");//「1」
@@ -160,13 +171,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 			if (j + MapDrawPointX < 0 || i + MapDrawPointY < 0 ||
 				j + MapDrawPointX >= MAP_WIDTH || i + MapDrawPointY >= MAP_HEIGHT) continue;
 
-			//マップデータが0だったら壁を描画する(デバッグ用)
-			/*if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 0)
-			{
-				DrawBox(j * MAP_SIZE + ScrollX, i * MAP_SIZE + ScrollY,
-					j * MAP_SIZE + MAP_SIZE + ScrollX, i * MAP_SIZE + MAP_SIZE + ScrollY,
-					GetColor(0, 0, 255), TRUE);
-			}*/
 			//マップに1があれば「通常マス」描画
 			if (MapData[i + MapDrawPointY][j + MapDrawPointX] == 1) {
 				DrawRectGraphF(
@@ -284,18 +288,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 			}
 		}
 	}
-	//プレイヤーの描画
-	/*DrawRectGraphF(
-		400, 300 ,  //描画位置
-		0, 0, //切り取り開始位置
-		MAP_SIZE, MAP_SIZE, //切り取るサイズ
-		image,  //切り取る元画像
-		TRUE //透過処理フラグ
-	);*/
-
-	/*DrawBox((PlayerX - MapDrawPointX) * MAP_SIZE, (PlayerY - MapDrawPointY) * MAP_SIZE,
-		(PlayerX - MapDrawPointX + 1) * MAP_SIZE, (PlayerY - MapDrawPointY + 1) * MAP_SIZE,
-		GetColor(255, 255, 255), TRUE);*/
 
 	//---------------------------------------------------------------------------------
 	//UI部分背景
@@ -349,7 +341,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
-	SetBackgroundColor(0, 100, 0); //背景色
+	//SetBackgroundColor(0, 100, 0); //背景色
 
 	int Key, i;
 	int ScrollX, ScrollY;
@@ -394,8 +386,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
-	static int Rou_image = LoadGraph("image\\スロット.png");//ルーレット
+	static int Rou_image = LoadGraph("image\\スロット枠付き.png");//ルーレット
 	static int message_window_img = LoadGraph("image\\メッセージウィンドウ.png");//「9」
+	static int back_img1 = LoadGraph("image\\背景（仮）.jpg");
 
 	//BGM再生
 	PlaySoundFile("music\\メインBGM.mp3", DX_PLAYTYPE_LOOP);
@@ -428,20 +421,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Move = 0;
 
 	//プレイヤー----------------------------------
-	//画像の移動距離情報
-	float P1_x, P1_y, /*1Pプレイヤー*/P2_x, P2_y/*2Pプレイヤー*/;
-	//初期化 
-	P1_x = 350.0f; P1_y = 268.0f; //1Pプレイヤー
-	P2_x = 400.0f; P2_y = 268.0f; //2Pプレイヤー
 	//左右向きフラグ
 	bool P1_LR_flg = 1/*1Pプレイヤー*/, P2_LR_flg = 1/*2Pプレイヤー*/;
 	//上下向きフラグ
 	bool P1_UD_flg = 0/*1Pプレイヤー*/, P2_UD_flg = 0/*2Pプレイヤー*/;
-	//アニメーション用カウント
-	int P1_anim_cnt = 0/*1Pプレイヤー*/, P2_anim_cnt = 0/*2Pプレイヤー*/;
-	//切り取り位置
-	int P1_rect_x = 0/*1Pプレイヤー*/, P2_rect_x = 0/*2Pプレイヤー*/;
-	int P1_rect_y = 0/*1Pプレイヤー*/, P2_rect_y = 0/*2Pプレイヤー*/;
 	//--------------------------------------------
 	//ルーレット----------------------------------
 	//画像の位置情報
@@ -500,8 +483,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool Title_flg = false;
 	//タイトル画像
 	//static int Title_image = LoadGraph("image\\スロット.png");
-
-
+	/*Player1_DrawFlg = false;
+	Player2_DrawFlg = false;*/
 	//送受信用データ
 	char name[15] = "name";
 	//Data* data = new Data(x, y, name);
@@ -517,7 +500,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//画面を初期化
 		ClearDrawScreen();
 
-
+		//背景画像読み込み
+		DrawRectGraphF(
+			0, 50,  //描画位置
+			0, 0, //切り取り開始位置
+			800, 550, //切り取るサイズ
+			back_img1,  //切り取る元画像
+			FALSE //透過処理フラグ
+		);
 
 		//移動中ではない場合キー入力を受け付ける
 		if (Move == 0) {
@@ -1056,23 +1046,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					Event_messagetime_Flg = false;
 				}
 
-				//分岐イベントテキスト表示
-				if (Branch_destination_Flg == true) {
-					if (Roulette == 0) {
-						DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
-						DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
-						DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
-					}
-					else if (Roulette == 2) {
-						//分岐先表示描画
-						if (Branch_num == 1) { //上
-							DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 上");
-						}
-						else if (Branch_num == 2) { //下
-							DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 下");
-						}
-					}
+		//分岐イベントテキスト表示
+		if (Branch_destination_Flg == true) {
+			if (Roulette == 0) {
+				DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+				DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
+				DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+			}
+			else if (Roulette == 2) {
+				//分岐先表示描画
+				if (Branch_num == 1) { //上
+					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
 				}
+				else if (Branch_num == 2) { //下
+					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
+				}
+			}
+		}
 
 				//ルーレットスタート指示テキスト
 				if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
@@ -1149,10 +1139,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					square_go_Flg = false;
 				}
 
-				//あと何マス テキスト
-				if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
-					&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
-					&& Event_messagetime_Flg == false) {
+		//あと何マス テキスト
+		if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
+			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
+			&& Event_messagetime_Flg == false && Branch_destination_Flg == false) {
 
 					if (P1_PlayerMove_num == 1) {
 						DrawFormatString(40, 470, GetColor(255, 255, 255), "マス到着");
@@ -1183,12 +1173,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					goal_time = 0;
 				}
 
-				//デバッグ用ルーレット数字確認
-				DrawFormatString(0, 50, GetColor(50, 255, 255), "【デバッグ用】ルーレット数字：%d", Rou_num);
-				//デバッグ用イベントルーレット数字確認
-				DrawFormatString(0, 70, GetColor(50, 255, 255), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
-				//デバッグ用進むマス数確認
-				DrawFormatString(0, 90, GetColor(50, 255, 255), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
+		//デバッグ用ルーレット数字確認
+		DrawFormatString(0, 50, GetColor(0, 150, 0), "【デバッグ用】ルーレット数字：%d", Rou_num);
+		//デバッグ用イベントルーレット数字確認
+		DrawFormatString(0, 70, GetColor(0, 150, 0), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
+		//デバッグ用進むマス数確認
+		DrawFormatString(0, 90, GetColor(0, 150, 0), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
 
 				ScreenFlip(); //バックバッファと切り替え
 

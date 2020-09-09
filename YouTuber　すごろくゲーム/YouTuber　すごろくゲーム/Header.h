@@ -17,7 +17,9 @@ struct Pos
 //データクラスの定義
 class Data {
 private:
+
 public:
+
 	char name[16];
 	Pos pos;
 
