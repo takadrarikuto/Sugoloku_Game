@@ -99,7 +99,6 @@ void GraphDraw(int ScrollX, int ScrollY)
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
 	static int image = LoadGraph("image\\プレイヤー1.png");
 	static int image2 = LoadGraph("image\\プレイヤー2.png");
-	static int back_img1 = LoadGraph("image\\背景テスト用.png");
 	static int squares_start = LoadGraph("image\\STARTマス.png");//「2」
 	static int squares_goal = LoadGraph("image\\GOALマス.png");//「3」
 	static int squares_img1 = LoadGraph("image\\マス.png");//「1」
@@ -287,7 +286,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetGraphMode(800, 600, 32); //windowサイズ800*600 32bit
 	SetAlwaysRunFlag(TRUE); //バックグラウンドでも実行出来るようにする
 	SetDoubleStartValidFlag(TRUE); //多重起動の許可
-	SetBackgroundColor(0, 100, 0); //背景色
+	//SetBackgroundColor(0, 100, 0); //背景色
 
 	int Key, i;
 	int ScrollX, ScrollY;
@@ -332,8 +331,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//画像読み込み(「static int」でないと、メモリが増加し続けるので注意)
-	static int Rou_image = LoadGraph("image\\スロット.png");//ルーレット
+	static int Rou_image = LoadGraph("image\\スロット枠付き.png");//ルーレット
 	static int message_window_img = LoadGraph("image\\メッセージウィンドウ.png");//「9」
+	static int back_img1 = LoadGraph("image\\背景（仮）.jpg");
 
 	//BGM再生
 	PlaySoundFile("music\\メインBGM.mp3", DX_PLAYTYPE_LOOP);
@@ -455,7 +455,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//画面を初期化
 		ClearDrawScreen();
 
-		
+		//背景画像読み込み
+		DrawRectGraphF(
+			0, 50,  //描画位置
+			0, 0, //切り取り開始位置
+			800, 550, //切り取るサイズ
+			back_img1,  //切り取る元画像
+			FALSE //透過処理フラグ
+		);
 
 		//移動中ではない場合キー入力を受け付ける
 		if (Move == 0) {
@@ -1007,10 +1014,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			else if (Roulette == 2) {
 				//分岐先表示描画
 				if (Branch_num == 1) { //上
-					DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 上");
+					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
 				}
 				else if (Branch_num == 2) { //下
-					DrawFormatString(40, 470, GetColor(50, 255, 255), "移動先 : 下");
+					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
 				}
 			}
 		}
@@ -1093,7 +1100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//あと何マス テキスト
 		if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
 			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
-			&& Event_messagetime_Flg == false) {
+			&& Event_messagetime_Flg == false && Branch_destination_Flg == false) {
 
 			if (P1_PlayerMove_num == 1) {
 				DrawFormatString(40, 470, GetColor(255, 255, 255), "マス到着");
@@ -1125,11 +1132,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 
 		//デバッグ用ルーレット数字確認
-		DrawFormatString(0, 50, GetColor(50, 255, 255), "【デバッグ用】ルーレット数字：%d", Rou_num);
+		DrawFormatString(0, 50, GetColor(0, 150, 0), "【デバッグ用】ルーレット数字：%d", Rou_num);
 		//デバッグ用イベントルーレット数字確認
-		DrawFormatString(0, 70, GetColor(50, 255, 255), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
+		DrawFormatString(0, 70, GetColor(0, 150, 0), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
 		//デバッグ用進むマス数確認
-		DrawFormatString(0, 90, GetColor(50, 255, 255), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
+		DrawFormatString(0, 90, GetColor(0, 150, 0), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
 
 		ScreenFlip(); //バックバッファと切り替え
 
