@@ -297,10 +297,18 @@ void GraphDraw(int ScrollX, int ScrollY)
 	if (Player1_DrawFlg == true && P_subscriber != 0) {
 		P1_subscriber += P_subscriber;
 		P_subscriber = 0;
+		//0以下にならない処理
+		if (P1_subscriber <= 0) {
+			P1_subscriber = 0;
+		}
 	}
 	if (Player2_DrawFlg == true && P_subscriber != 0) {
 		P2_subscriber += P_subscriber;
 		P_subscriber = 0;
+		//0以下にならない処理
+		if (P2_subscriber <= 0) {
+			P2_subscriber = 0;
+		}
 	}
 
 	//---------------------------------------------------------------------------------
@@ -372,6 +380,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool square_rest_Flg = true; //ルーレットテキスト用フラグ
 	bool Event_messagetime_Flg = false; //イベントテキスト用フラグ
 	bool Branch_destination_Flg = false; //分岐イベント用フラグ
+	bool Goal_sound_Flg1 = false; //ゴール後移動音制御用フラグ
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -724,6 +733,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000; //1位 +10000人
@@ -785,6 +795,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -848,6 +859,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -911,6 +923,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -925,13 +938,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						P1_UD_flg = 0; //向き切り替え 下
 					}
 					Move = 1; //スクロール開始
-					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					if (Goal_sound_Flg1 == false) {
+						PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					}
 				}
 			}
 			
 			MoveCounter = 0;
 		}
-		
 
 				//移動中の場合は移動処理を行う
 				if (Move == 1) {
