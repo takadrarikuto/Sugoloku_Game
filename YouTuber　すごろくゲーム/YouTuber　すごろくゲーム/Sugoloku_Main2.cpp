@@ -447,7 +447,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ルーレット画像表示停止フラグ
 	bool RouDraw_flg = false;
 	//ルーレット画像表示停止タイム
-	int RouDraw_time = 0;	
+	int RouDraw_time = 0;
 
 	//2倍マス用フラグ
 	bool two_times = false;
@@ -1046,23 +1046,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					Event_messagetime_Flg = false;
 				}
 
-		//分岐イベントテキスト表示
-		if (Branch_destination_Flg == true) {
-			if (Roulette == 0) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
-				DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
-				DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
-			}
-			else if (Roulette == 2) {
-				//分岐先表示描画
-				if (Branch_num == 1) { //上
-					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
+				//分岐イベントテキスト表示
+				if (Branch_destination_Flg == true) {
+					if (Roulette == 0) {
+						DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+						DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
+						DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+					}
+					else if (Roulette == 2) {
+						//分岐先表示描画
+						if (Branch_num == 1) { //上
+							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
+						}
+						else if (Branch_num == 2) { //下
+							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
+						}
+					}
 				}
-				else if (Branch_num == 2) { //下
-					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
-				}
-			}
-		}
 
 				//ルーレットスタート指示テキスト
 				if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
@@ -1139,10 +1139,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					square_go_Flg = false;
 				}
 
-		//あと何マス テキスト
-		if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
-			&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
-			&& Event_messagetime_Flg == false && Branch_destination_Flg == false) {
+				//あと何マス テキスト
+				if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0
+					&& subscriber_up_time == 0 && subscriber_down_time == 0 && two_times_messagetime == 0
+					&& Event_messagetime_Flg == false && Branch_destination_Flg == false) {
 
 					if (P1_PlayerMove_num == 1) {
 						DrawFormatString(40, 470, GetColor(255, 255, 255), "マス到着");
@@ -1173,12 +1173,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					goal_time = 0;
 				}
 
-		//デバッグ用ルーレット数字確認
-		DrawFormatString(0, 50, GetColor(0, 150, 0), "【デバッグ用】ルーレット数字：%d", Rou_num);
-		//デバッグ用イベントルーレット数字確認
-		DrawFormatString(0, 70, GetColor(0, 150, 0), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
-		//デバッグ用進むマス数確認
-		DrawFormatString(0, 90, GetColor(0, 150, 0), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
+				//デバッグ用ルーレット数字確認
+				DrawFormatString(0, 50, GetColor(0, 150, 0), "【デバッグ用】ルーレット数字：%d", Rou_num);
+				//デバッグ用イベントルーレット数字確認
+				DrawFormatString(0, 70, GetColor(0, 150, 0), "【デバッグ用】イベントルーレット数字：%d", P1_EventRou_num);
+				//デバッグ用進むマス数確認
+				DrawFormatString(0, 90, GetColor(0, 150, 0), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
 
 				ScreenFlip(); //バックバッファと切り替え
 
@@ -1191,3 +1191,4 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			return 0;
 		}
 	}
+}
