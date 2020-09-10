@@ -886,8 +886,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 								two_times_messagetime = 200;
 							}
 							//進んだ方向が「7以外」なら、2倍マスフラグをOFFにする
-							if (MapData_P[PlayerY + 1][PlayerX] != 7 && two_times == true)
-							{
+							if (MapData_P[PlayerY + 1][PlayerX] != 7 && two_times == true){
 								two_times = false;
 							}
 							//進んだ方向に「10」があれば、イベント発生
@@ -1197,14 +1196,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//デバッグ用進むマス数確認
 		DrawFormatString(0, 90, GetColor(0, 150, 0), "【デバッグ用】進むマス数：%d", P1_PlayerMove_num);
 
-				ScreenFlip(); //バックバッファと切り替え
+		ScreenFlip(); //バックバッファと切り替え
 
-				//例外が発生したらプログラム終了
-				if (ProcessMessage() == -1) break;
-			}
-
-			DxLib_End(); //dxライブラリ終了処理
-
-			return 0;
-		}
+		//例外が発生したらプログラム終了
+		if (ProcessMessage() == -1) break;
 	}
+
+	DxLib_End(); //dxライブラリ終了処理
+
+	return 0;
+}
+		
+	
