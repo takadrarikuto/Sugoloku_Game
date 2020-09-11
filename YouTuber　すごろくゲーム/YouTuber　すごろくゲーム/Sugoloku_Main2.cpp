@@ -958,6 +958,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							squares_cnt1 -= 1;
 						}
 					}
+					/*if (P2_PlayerMove_Flg == true) {
+						//初期化
+						P2_PlayerMove_Flg = false;
+						//マスカウント(あと何マス)が0以上の時のみマスカウントを減らす
+						if (squares_cnt2 > 0) {
+							squares_cnt2 -= 1;
+						}
+					}*/
 					//移動処理が終了したら停止中にする
 					if (MoveCounter == MOVE_FRAME) {
 						//分岐設定開始処理
