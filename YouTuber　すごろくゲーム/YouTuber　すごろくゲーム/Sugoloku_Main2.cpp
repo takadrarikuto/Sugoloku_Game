@@ -19,20 +19,20 @@ int SelectMode() {
 	while (1) {
 		ClearDrawScreen();
 
-
-		DrawString(0, 0, "プレイヤー選択　0:1P　1:2P", GetColor(255, 255, 255));
-		mode = KeyInputNumber(0, 16, 1, 0, FALSE);
+		DrawString(0, 0, "すごろくゲーム", GetColor(255, 255, 255));
+		DrawString(0, 16, "プレイヤー選択　０:1P　１:2P", GetColor(255, 255, 255));
+		mode = KeyInputNumber(0, 32, 1, 0, FALSE);
 		if (mode == 0) {
-			DrawString(0, 32, "プレイヤーは、1P", GetColor(255, 255, 255));
+			DrawString(0, 48, "プレイヤーは、1P", GetColor(255, 255, 255));
 			Player1_DrawFlg = true;
 		}
 		else {
-			DrawString(0, 32, "プレイヤーは、2P", GetColor(255, 255, 255));
+			DrawString(0, 48, "プレイヤーは、2P", GetColor(255, 255, 255));
 			Player2_DrawFlg = true;
 		}
-		DrawString(0, 64, "これで良いですか？", GetColor(255, 255, 255));
-		DrawString(0, 80, "0...いいえ 1...はい", GetColor(255, 255, 255));
-		if (KeyInputNumber(0, 96, 1, 0, FALSE))break;
+		DrawString(0, 80, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 96, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 112, 1, 0, FALSE))break;
 	}
 	return mode;
 }
