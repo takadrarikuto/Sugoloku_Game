@@ -20,20 +20,20 @@ int SelectMode() {
 	while (1) {
 		ClearDrawScreen();
 
-
-		DrawString(0, 0, "プレイヤー選択　0:1P　1:2P", GetColor(255, 255, 255));
-		mode = KeyInputNumber(0, 16, 1, 0, FALSE);
+		DrawString(0, 0, "すごろくゲーム", GetColor(255, 255, 255));
+		DrawString(0, 16, "プレイヤー選択　０:1P　１:2P", GetColor(255, 255, 255));
+		mode = KeyInputNumber(0, 32, 1, 0, FALSE);
 		if (mode == 0) {
-			DrawString(0, 32, "プレイヤーは、1P", GetColor(255, 255, 255));
+			DrawString(0, 48, "プレイヤーは、1P", GetColor(255, 255, 255));
 			Player1_DrawFlg = true;
 		}
 		else {
-			DrawString(0, 32, "プレイヤーは、2P", GetColor(255, 255, 255));
+			DrawString(0, 48, "プレイヤーは、2P", GetColor(255, 255, 255));
 			Player2_DrawFlg = true;
 		}
-		DrawString(0, 64, "これで良いですか？", GetColor(255, 255, 255));
-		DrawString(0, 80, "0...いいえ 1...はい", GetColor(255, 255, 255));
-		if (KeyInputNumber(0, 96, 1, 0, FALSE))break;
+		DrawString(0, 80, "これで良いですか？", GetColor(255, 255, 255));
+		DrawString(0, 96, "0...いいえ 1...はい", GetColor(255, 255, 255));
+		if (KeyInputNumber(0, 112, 1, 0, FALSE))break;
 	}
 	return mode;
 }
@@ -369,6 +369,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	bool square_rest_Flg = true; //ルーレットテキスト用フラグ
 	bool Event_messagetime_Flg = false; //イベントテキスト用フラグ
 	bool Branch_destination_Flg = false; //分岐イベント用フラグ
+	bool Goal_sound_Flg1 = false; //ゴール後移動音制御用フラグ
 
 	//初期化
 	if (DxLib_Init() == -1) { //DXライブラリ初期化処理
@@ -461,7 +462,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//ルーレット画像表示停止フラグ
 	bool RouDraw_flg = false;
 	//ルーレット画像表示停止タイム
-	int RouDraw_time = 0;	
+	int RouDraw_time = 0;
 
 	//2倍マス用フラグ
 	bool two_times = false;
@@ -756,6 +757,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000; //1位 +10000人
@@ -817,6 +819,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -880,6 +883,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -943,6 +947,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 							PlaySoundMem(goal_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							PlaySoundMem(goal_cheers_sound, DX_PLAYTYPE_BACK, TRUE);//効果音再生
 							goal_time = 200;
+							Goal_sound_Flg1 = true;
 							//順位によって順位ボーナス加算
 							if (P1_subscriber > P2_subscriber) {
 								P_subscriber += 10000;
@@ -957,7 +962,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						P1_UD_flg = 0; //向き切り替え 下
 					}
 					Move = 1; //スクロール開始
-					PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					if (Goal_sound_Flg1 == false) {
+						PlaySoundMem(move_sound, DX_PLAYTYPE_BACK, TRUE);//移動音再生
+					}
 				}
 			}
 			
@@ -1094,23 +1101,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Event_messagetime_Flg = false;
 		}
 
-		//分岐イベントテキスト表示
-		if (Branch_destination_Flg == true) {
-			if (Roulette == 0) {
-				DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
-				DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
-				DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
-			}
-			else if (Roulette == 2) {
-				//分岐先表示描画
-				if (Branch_num == 1) { //上
-					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
+				//分岐イベントテキスト表示
+				if (Branch_destination_Flg == true) {
+					if (Roulette == 0) {
+						DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+						DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
+						DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+					}
+					else if (Roulette == 2) {
+						//分岐先表示描画
+						if (Branch_num == 1) { //上
+							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
+						}
+						else if (Branch_num == 2) { //下
+							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
+						}
+					}
 				}
-				else if (Branch_num == 2) { //下
-					DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
-				}
-			}
-		}
 
 			//ルーレットスタート指示テキスト
 			if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
