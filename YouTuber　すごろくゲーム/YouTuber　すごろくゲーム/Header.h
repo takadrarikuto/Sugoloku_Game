@@ -26,3 +26,17 @@ public:
 	//コンストラクタ
 	Data(float _x, float _y, char* _name);
 };
+
+struct Sub
+{
+	int sub_1P, sub_2P;
+};
+
+//チャンネル登録者数用変数(初期値：1000人)
+class Subscriber {
+public:
+	Sub sub;
+
+	//コンストラクタ
+	Subscriber(int sub_1p, int sub_2p);
+};
