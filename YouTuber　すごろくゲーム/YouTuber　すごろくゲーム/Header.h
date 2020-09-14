@@ -46,23 +46,23 @@ struct Squ
 	int squ_1P, squ_2P;
 };
 
-class Squares {
-public:
-	Squ squ;
-
-	//コンストラクタ
-	Squares(int squ_1p, int squ_2p);
-};
-
-struct Play
-{
-	bool Player1, Player2;
-};
-
-class Player {
-public:
-	Play play;
-
-	//コンストラクタ
-	Player(bool P1, bool P2);
-};
+//class Squares {
+//public:
+//	Squ squ;
+//
+//	//コンストラクタ
+//	Squares(int squ_1p, int squ_2p);
+//};
+//
+//struct Play
+//{
+//	bool Player1, Player2;
+//};
+//
+//class Player {
+//public:
+//	Play play;
+//
+//	//コンストラクタ
+//	Player(bool P1, bool P2);
+//};
