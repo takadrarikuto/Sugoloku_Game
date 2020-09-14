@@ -47,6 +47,7 @@ IPDATA IP_set() {
 	{
 		ClearDrawScreen();
 
+		//高寺端末は下記、河合端末は（172.17.157.81）
 		DrawString(0, 0, "IP入力(172.17.80.120)", GetColor(255, 255, 255));
 		ip.d1 = KeyInputNumber(0, 16, 255, 0, FALSE);
 		ip.d2 = KeyInputNumber(0, 16, 255, 0, FALSE);
@@ -73,22 +74,22 @@ IPDATA IP_set() {
 int MapData[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 5, 1, 1, 4, 1, 1, 4, 1, 1, 5, 0 },
-	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 0, 1, 1, 1, 5, 0, 0, 0, 0, 0, 4, 1, 5, 1, 0, 0, 1, 0 },
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 3, 1, 9, 9, 9, 0, 0, 8, 0, 0, 1, 0 },
+	{ 0, 2, 0, 1, 1, 4, 1, 5, 4, 5, 1, 1, 4, 1, 4, 4, 1, 5, 5, 0 },
+	{ 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0 },
+	{ 0, 1, 0, 4, 5, 1, 5, 0, 0, 0, 0, 0, 8, 5, 4, 8, 0, 0, 1, 0 },
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 3, 8, 8, 4, 5, 0, 0, 8, 0, 0, 4, 0 },
 	{ 0, 5, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0 },
-	{ 0, 1, 1, 1, 1, 7, 5, 0, 4, 1, 1, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
+	{ 0, 1, 5, 4, 1, 7, 5, 0, 4, 4, 5, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 0, 1, 8, 1, 0, 1, 7, 1, 0, 4, 0 },
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 1, 0 },
-	{ 0, 1, 5, 1, 1, 8, 1, 4, 1, 1, 4, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 1, 5, 1, 4, 7, 1, 8, 5, 0, 1, 8, 1, 0, 1, 7, 1, 0, 4, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 4, 0 },
+	{ 0, 1, 5, 1, 1, 8, 1, 4, 4, 1, 4, 0, 0, 0, 0, 0, 8, 0, 4, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
-	{ 0, 1, 5, 1, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
-	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 1, 1, 0, 1, 8, 1, 0, 1, 0 },
+	{ 0, 1, 5, 8, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
+	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 5, 5, 0, 1, 8, 1, 0, 1, 0 },
 	{ 0, 1, 0, 4, 1, 8, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0 },
 	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
+	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 5, 0 },
 	{ 0, 8, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -100,22 +101,22 @@ int MapData[MAP_HEIGHT][MAP_WIDTH] =
 int MapData_P[MAP_HEIGHT][MAP_WIDTH] =
 {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 2, 0, 1, 1, 4, 1, 1, 1, 5, 1, 1, 4, 1, 1, 4, 1, 1, 5, 0 },
-	{ 0, 1, 0,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 0, 1, 1, 1, 5, 0, 0, 0, 0, 0, 4, 1, 5, 1, 0, 0, 1, 0 },
-	{ 0, 4, 0, 0, 0, 0, 1, 0, 9, 1,11,11,11, 0, 0,10, 0, 0, 1, 0 },
+	{ 0, 2, 0, 1, 1, 4, 1, 5, 4, 5, 1, 1, 4, 1, 4, 4, 1, 5, 5, 0 },
+	{ 0, 1, 0,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0 },
+	{ 0, 1, 0, 4, 5, 1, 5, 0, 0, 0, 0, 0,10, 5, 4,10, 0, 0, 1, 0 },
+	{ 0, 4, 0, 0, 0, 0, 1, 0, 9,10,10, 4, 5, 0, 0,10, 0, 0, 4, 0 },
 	{ 0, 5, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0 },
-	{ 0, 1, 1, 1, 1, 7, 5, 0, 4, 1, 1, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
+	{ 0, 1, 5, 4, 1, 7, 5, 0, 4, 4, 5, 4, 5, 5, 4, 5, 0, 0, 1, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 5, 1, 1, 7, 1, 1, 5, 0, 1,10, 1, 0, 1, 7, 1, 0, 4, 0 },
-	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 1, 0 },
-	{ 0, 1, 5, 1, 1,10, 1, 4, 1, 1, 4, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+	{ 0, 1, 5, 1, 4, 7, 1,10, 5, 0, 1,10, 1, 0, 1, 7, 1, 0, 4, 0 },
+	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 5, 5, 0, 4, 0, 4, 0 },
+	{ 0, 1, 5, 1, 1,10, 1, 4, 4, 1, 4, 0, 0, 0, 0, 0,10, 0, 4, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
-	{ 0, 1, 5, 1, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
-	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 1, 1, 0, 1,10, 1, 0, 1, 0 },
+	{ 0, 1, 5,10, 0, 5, 1, 4, 0, 0, 0, 0, 4, 4, 4, 0, 5, 0, 7, 0 },
+	{ 0, 4, 0, 1, 0, 1, 0, 1, 0, 5, 1, 5, 5, 0, 1,10, 1, 0, 1, 0 },
 	{ 0, 1, 0, 4, 1,10, 0, 7, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0,10, 0 },
 	{ 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 1, 0 },
+	{ 0, 1, 0, 1, 4, 4, 4, 4, 5, 1, 4, 1, 4, 4, 1, 5, 1, 0, 5, 0 },
 	{ 0,10,12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 4, 5, 0 },
 	{ 0, 0, 0, 1, 5, 5, 5, 5, 4, 1, 5, 1, 5, 5, 1, 4, 1, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -133,6 +134,7 @@ int MoveCounter;
 //ポート用変数
 int Sendport, RecvPort; //send送る Recv受ける
 
+//チャンネル登録者数用変数(初期値：1000人)
 int P1_subscriber = 1000; //1P
 int P2_subscriber = 1000; //2P
 int P_subscriber = 0; //計算用
@@ -144,7 +146,7 @@ Subscriber::Subscriber(int sub_1p, int sub_2p)
 	sub.sub_2P = P2_subscriber;
 }
 
-//マス目カウント用(試作)
+//マス目カウント用
 int squares_cnt1 = 150;
 int squares_cnt2 = 150;
 
@@ -379,8 +381,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return -1;
 	}
 
-	
-
 	//モードのセレクト
 	int mode = SelectMode();
 
@@ -395,7 +395,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		SendPort = 40; //40
 		RecvPort = 41; //41
 	}
-
 
 	//描画先画面を裏画面にする
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -655,8 +654,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			else if (EventRou_flg == true && Roulette == 2) {
 				P1_EventRou_num = Rou_num; //イベントスロット
 			}
-			//マス移動処理
-			else if (Branch_flg == false && EventRou_flg == false && Roulette == 2) {
+			//マス移動処理(Roulette == 0)
+			else if (Branch_flg == false && EventRou_flg == false && Roulette == 0) {
 				P1_PlayerMove_num = Rou_num; //マス移動
 				//2倍マスフラグがONなら2倍にする
 				if (two_times == true) {
@@ -1101,23 +1100,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			Event_messagetime_Flg = false;
 		}
 
-				//分岐イベントテキスト表示
-				if (Branch_destination_Flg == true) {
-					if (Roulette == 0) {
-						DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
-						DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
-						DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+			//分岐イベントテキスト表示
+			if (Branch_destination_Flg == true) {
+				if (Roulette == 0) {
+					DrawFormatString(40, 470, GetColor(255, 255, 255), "Enterキーでルーレットスタート");
+					DrawFormatString(40, 505, GetColor(50, 255, 255), "分岐イベント発生");
+					DrawFormatString(40, 525, GetColor(255, 255, 255), "移動先を決めよう");
+				}
+				else if (Roulette == 2) {
+					//分岐先表示描画
+					if (Branch_num == 1) { //上
+						DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
 					}
-					else if (Roulette == 2) {
-						//分岐先表示描画
-						if (Branch_num == 1) { //上
-							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 上");
-						}
-						else if (Branch_num == 2) { //下
-							DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
-						}
+					else if (Branch_num == 2) { //下
+						DrawFormatString(40, 500, GetColor(50, 255, 255), "移動先 : 下");
 					}
 				}
+			}
 
 			//ルーレットスタート指示テキスト
 			if (Roulette_Flg == true && Roulette_stop_Flg == false && square_go_Flg == false
@@ -1158,41 +1157,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					EventRou_flg3 = true;
 				}
 
-			if (two_times == true && Branch_destination_Flg == false && Event_messagetime_Flg == false){
-				DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
-				DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
-			}
-			//イベント発生中でルーレットの目が1～3の場合、チャンネル登録者数増加
-			if (EventRou_flg2 == true && P1_EventRou_num <= 3){
-				PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
-				P_subscriber += 500;//+500人
-				event_messagetime = 200;
-				EventRou_flg2 = false;
-			}
-			//イベント発生中でルーレットの目が4～6の場合、チャンネル登録者数増減少
-			else if (EventRou_flg2 == true && P1_EventRou_num >= 4){
-				PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
-				P_subscriber -= 500; //-500人
-				event_messagetime = 200;
-				EventRou_flg2 = false;
-			}
-			//イベント用チャンネル登録者数増減テキスト
-			event_messagetime --;
-			if (P1_EventRou_num <= 3 && event_messagetime > 0) {
-				DrawFormatString(40, 470, GetColor(50, 255, 255), "チャンネル登録者数増加！");
-				DrawFormatString(40, 500, GetColor(255, 255, 255), "チャンネル登録者数が500人増えた！");
-			}
-			else if (P1_EventRou_num >= 4 && event_messagetime > 0) {
-				DrawFormatString(40, 470, GetColor(255, 50, 255), "チャンネル登録者数減少…");
-				DrawFormatString(40, 500, GetColor(255, 0, 0), "チャンネル登録者数が500人減った…");
+				if (two_times == true && Branch_destination_Flg == false && Event_messagetime_Flg == false){
+					DrawFormatString(40, 505, GetColor(50, 255, 255), "2倍チャンス！");
+					DrawFormatString(40, 525, GetColor(255, 255, 255), "ルーレットの出た目×2になります");
+				}
+				//イベント発生中でルーレットの目が1～3の場合、チャンネル登録者数増加
+				if (EventRou_flg2 == true && P1_EventRou_num <= 3){
+					PlaySoundMem(subscriber_up_sound, DX_PLAYTYPE_BACK, TRUE);//増加音再生
+					P_subscriber += 500;//+500人
+					event_messagetime = 200;
+					EventRou_flg2 = false;
+				}
+				//イベント発生中でルーレットの目が4～6の場合、チャンネル登録者数増減少
+				else if (EventRou_flg2 == true && P1_EventRou_num >= 4){
+					PlaySoundMem(subscriber_down_sound, DX_PLAYTYPE_BACK, TRUE);//減少音再生
+					P_subscriber -= 500; //-500人
+					event_messagetime = 200;
+					EventRou_flg2 = false;
+				}
+				//イベント用チャンネル登録者数増減テキスト
+				event_messagetime --;
+				if (P1_EventRou_num <= 3 && event_messagetime > 0) {
+					DrawFormatString(40, 470, GetColor(50, 255, 255), "チャンネル登録者数増加！");
+					DrawFormatString(40, 500, GetColor(255, 255, 255), "チャンネル登録者数が500人増えた！");
+				}
+				else if (P1_EventRou_num >= 4 && event_messagetime > 0) {
+					DrawFormatString(40, 470, GetColor(255, 50, 255), "チャンネル登録者数減少…");
+					DrawFormatString(40, 500, GetColor(255, 0, 0), "チャンネル登録者数が500人減った…");
+				}
+				else {
+					event_messagetime = 0;
+				}
 			}
 			else {
-				event_messagetime = 0;
+				square_go_Flg = false;
 			}
-		}
-		else {
-			square_go_Flg = false;
-		}
 
 			//あと何マス テキスト
 			if (square_rest_Flg == true && RouDraw_flg == true && goal_time == 0 && Branch_num == 0
